@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "867623556823",
+    "firebase_url": "https://k-project-dody.firebaseio.com",
+    "project_id": "k-project-dody",
+    "storage_bucket": "k-project-dody.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867623556823:android:3769ab5141a3f2e3",
+        "android_client_info": {
+          "package_name": "dunamikos.k_project_dodyversion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuMs3zrJSJACwceUrmIDtgr1KlhWMnI_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867623556823-uom9b9p8edik8f0cvietro57h5sqr42t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
