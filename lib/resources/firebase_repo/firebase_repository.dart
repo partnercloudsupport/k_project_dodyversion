@@ -3,7 +3,7 @@ import 'firebase_provider.dart';
 import 'package:meta/meta.dart';
 
 class FirebaseRepository {
-  final Firebase _firebase = Firebase();
+  static final Firebase _firebase = Firebase();
 
   Future<FirebaseUser> authenticateUser(
       {@required String email, @required String password}) async {

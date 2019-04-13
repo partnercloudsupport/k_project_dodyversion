@@ -4,16 +4,18 @@ import 'package:k_project_dodyversion/models/user_model.dart';
 import 'package:meta/meta.dart';
 
 class Firebase {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final Firestore _firestore = Firestore.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final Firestore _firestore = Firestore.instance;
   DocumentSnapshot userSnapshot;
 
-  bool _isAuthenticated = false;
+  static bool _isAuthenticated = false;
+
 
   Firebase() {
     _firestore.settings(
       timestampsInSnapshotsEnabled: true,
     );
+   
   }
 
 // Register user when they havent signed up

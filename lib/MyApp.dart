@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:k_project_dodyversion/resources/repository.dart';
-import 'package:k_project_dodyversion/ui/pages/home_page.dart';
+import 'package:k_project_dodyversion/ui/pages/login_page/login_page.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  final FirebaseRepository firebaseRepository;
 
-  MyApp({Key key, @required this.firebaseRepository}) : super(key: key);
+  MyApp({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(firebaseRepository: this.firebaseRepository),
+      home: LogInPage(),
     );
   }
 }

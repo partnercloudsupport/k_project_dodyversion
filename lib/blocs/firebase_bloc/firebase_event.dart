@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:k_project_dodyversion/models/models.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -7,14 +8,12 @@ abstract class FirebaseEvent extends Equatable {
 }
 
 class AuthenticateFirebaseEvent extends FirebaseEvent {
-  final String email;
-  final String hashedPassword;
+ final EmailAuth emailAuth;
 
   AuthenticateFirebaseEvent({
-    @required this.email,
-    @required this.hashedPassword,
-  })  : assert(email != null && hashedPassword != null),
-        super([email, hashedPassword]);
+    @required this.emailAuth,
+  })  : assert(emailAuth != null),
+        super([emailAuth]);
 
   @override
   String toString() => 'Attempt Authenticate User with Email and Password';

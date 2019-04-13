@@ -9,10 +9,9 @@ export 'package:k_project_dodyversion/blocs/firebase_bloc/firebase_event.dart';
 export 'package:k_project_dodyversion/blocs/firebase_bloc/firebase_state.dart';
 
 class FirebaseBloc extends Bloc<FirebaseEvent, FirebaseState> {
-  FirebaseRepository _firebaseRepository;
+  FirebaseRepository _firebaseRepository = FirebaseRepository();
 
-  FirebaseBloc({@required FirebaseRepository firebaseRepository}) {
-    this._firebaseRepository = firebaseRepository;
+  FirebaseBloc() {
   }
 
   @override
@@ -32,8 +31,8 @@ class FirebaseBloc extends Bloc<FirebaseEvent, FirebaseState> {
         
     yield AuthenticatingFirebaseState(); // Telling that the BloC is reaching the server
     FirebaseUser user = await _firebaseRepository.authenticateUser(
-      email: event.email,
-      password: event.hashedPassword,
+      email: event.emailAuth.email,
+      password: event.emailAuth.password,
     );
     
     yield AuthenticateSuccessState(uid: user.uid); // Telling that the BloC has successfully authenticating the user
