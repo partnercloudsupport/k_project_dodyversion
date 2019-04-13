@@ -142,13 +142,13 @@ class LogInContainer {
   }
 
   void _onEmailSubmitPressed() {
-    if (_parent.formKey.currentState.validate()) {
+    if (_parent.formKey.currentState.validate()) { // If nothing is wrong
       _parent.formKey.currentState.save(); // Save our form now.
 
       print('Printing the login data.');
       print('Email: ${_parent.emailAuth.email}');
       print('Password: ${_parent.emailAuth.password}');
-      _parent.onEmailSubmitPressed();
+      _parent.onEmailSubmitPressed(); // Dispatch event from parent
     }
   }
 }

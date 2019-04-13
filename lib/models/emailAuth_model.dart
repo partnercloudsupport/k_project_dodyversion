@@ -1,5 +1,10 @@
 import 'package:validate/validate.dart';
 
+
+/**
+ * This Model maps email and passwor into a single class.
+ * It also provides some Validation in the process.
+ */
 class EmailAuth {
   String _email;
   String _password;

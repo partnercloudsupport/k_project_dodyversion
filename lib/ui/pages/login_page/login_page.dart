@@ -9,9 +9,11 @@ class LogInPage extends StatefulWidget {
 }
 
 class LogInPageState extends State<LogInPage> {
-  int _containerType;
   FirebaseBloc _firebaseBloc;
-  LogInContainer _mContainer;
+  FirebaseBloc get firebaseBloc => _firebaseBloc;
+  
+  int _containerType;
+  LogInContainer _mContainer; // Getting new Container depends on the state of the page. 1: for email auth 2: for Google auth etc
 
   EmailAuth _emailAuth;
   EmailAuth get emailAuth => _emailAuth;
@@ -19,7 +21,7 @@ class LogInPageState extends State<LogInPage> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   GlobalKey<FormState> get formKey => _formKey;
 
-  @override
+  @override // Initiate Vairables
   void initState() {
     _firebaseBloc = FirebaseBloc();
     _containerType = LogInContainer.SHOWLOGINOPTION;
@@ -28,36 +30,22 @@ class LogInPageState extends State<LogInPage> {
     super.initState();
   }
 
-  get firebaseBloc => _firebaseBloc;
-
   void onEmailSubmitPressed() {
-    _firebaseBloc.dispatch(AuthenticateFirebaseEvent(
-        emailAuth: emailAuth));
+    _firebaseBloc.dispatch(EmailAuthenticationFirebaseEvent(emailAuth: emailAuth));
   }
 
   void onGoogleLoginPressed() {
-    setState(() {
-      _containerType = LogInContainer.GMAIL_LOGIN;
-    });
+    // setState(() {
+    //   _containerType = LogInContainer.GMAIL_LOGIN;
+    // });
+
+    _firebaseBloc.dispatch(GoogleAuthenticationFirebaseEvent());
   }
 
   void onEmailChoosePressed() {
     setState(() {
       _containerType = LogInContainer.EMAILPASS_LOGIN;
     });
-  }
-
-  String textStatus(FirebaseState state) {
-    if (state is InitialFirebaseState) {
-      return ("Initializing");
-    } else if (state is AuthenticatingFirebaseState) {
-      return ("Authenticating.. Please wait");
-    } else if (state is AuthenticateSuccessState) {
-      String uid = state.uid;
-      return ("$uid");
-    } else {
-      return ("FAILLL");
-    }
   }
 
   @override

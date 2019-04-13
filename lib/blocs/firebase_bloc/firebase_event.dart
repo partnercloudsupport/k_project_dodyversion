@@ -7,10 +7,15 @@ abstract class FirebaseEvent extends Equatable {
   FirebaseEvent([List props = const []]) : super(props);
 }
 
-class AuthenticateFirebaseEvent extends FirebaseEvent {
+class GoogleAuthenticationFirebaseEvent extends FirebaseEvent {
+   @override
+  String toString() => 'Authenticating user with his G Account';
+}
+
+class EmailAuthenticationFirebaseEvent extends FirebaseEvent {
  final EmailAuth emailAuth;
 
-  AuthenticateFirebaseEvent({
+  EmailAuthenticationFirebaseEvent({
     @required this.emailAuth,
   })  : assert(emailAuth != null),
         super([emailAuth]);
