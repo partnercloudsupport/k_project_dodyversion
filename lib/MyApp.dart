@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k_project_dodyversion/resources/repository.dart';
-import 'package:k_project_dodyversion/ui/pages/homePage.dart';
+import 'package:k_project_dodyversion/ui/pages/home_page.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
