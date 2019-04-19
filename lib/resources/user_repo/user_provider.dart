@@ -31,7 +31,7 @@ class UserProvider {
   //only own user
   void saveToDevice() {}
 
-  Future<UserModel> pullProfileFromCloud(String uid) async {
+  Future<UserModel> pullUserProfileFromCloud(String uid) async {
     DocumentSnapshot ds = await _firebaseRepo.pullUserDocument(uid);
     UserModel temp = new UserModel(null);
     temp.setFromMap(ds.data);
