@@ -5,6 +5,8 @@ import 'package:meta/meta.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Firebase {
+  static String uid;
+
   static final GoogleSignIn _googleSignIn = new GoogleSignIn(
     scopes: <String>[
       'profile',
@@ -13,10 +15,10 @@ class Firebase {
   );
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final Firestore _firestore = Firestore.instance;
-  DocumentSnapshot userSnapshot;
 
   static bool _isAuthenticated = false;
 
+  DocumentSnapshot userSnapshot;
   Firebase() {
     _firestore.settings(
       timestampsInSnapshotsEnabled: true,
@@ -42,7 +44,7 @@ class Firebase {
         print("Creating database for new Gmail User");
         _registerUserToFirestore(UserModel(user));
       }
-      ;
+      _setUID(user.uid);
     }
     return _googleAuth;
   }
@@ -57,6 +59,7 @@ class Firebase {
     _registerUserToFirestore(UserModel(user));
     _authenticateInFirestore(UserModel(user));
     _isAuthenticated = true;
+    _setUID(user.uid);
     return user;
   }
 
@@ -69,6 +72,7 @@ class Firebase {
     );
     _authenticateInFirestore(UserModel(user));
     _isAuthenticated = true;
+    _setUID(user.uid);
     return user;
   }
 
@@ -88,11 +92,13 @@ class Firebase {
   bool get isAuthenticated => _isAuthenticated;
 
   // This will keep returning snapshots of various state.
-  Future<Stream<QuerySnapshot>> pullSnapshotsFromQuery(String collection) async {
+  Future<Stream<QuerySnapshot>> pullSnapshotsFromQuery(
+      String collection) async {
     return _firestore.collection(collection).snapshots();
   }
 
-  Future<List<DocumentSnapshot>> pullDocumentFromSnaphot(QuerySnapshot qs) async {
+  Future<List<DocumentSnapshot>> pullDocumentFromSnaphot(
+      QuerySnapshot qs) async {
     return qs.documents;
   }
 
@@ -100,7 +106,11 @@ class Firebase {
       String collectionName, String documentName) async {
     return await _firestore
         .collection(collectionName)
-        .document('documentName')
+        .document(documentName)
         .get();
+  }
+
+  void _setUID(String muid) {
+    uid = muid;
   }
 }

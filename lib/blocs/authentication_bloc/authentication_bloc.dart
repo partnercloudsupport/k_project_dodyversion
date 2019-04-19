@@ -1,19 +1,24 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:k_project_dodyversion/blocs/authentication_bloc/authentication_event.dart';
 export 'package:k_project_dodyversion/blocs/authentication_bloc/authentication_event.dart';
 import 'package:k_project_dodyversion/blocs/authentication_bloc/authentication_state.dart';
+import 'package:k_project_dodyversion/models/user_model.dart';
 export 'package:k_project_dodyversion/blocs/authentication_bloc/authentication_state.dart';
 import 'package:k_project_dodyversion/resources/repository.dart';
+import 'package:k_project_dodyversion/resources/user_repo/user_provider.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   FirebaseRepository _firebaseRepository = FirebaseRepository();
+  UserRepository _userRepository;
 
   AuthenticationBloc() {}
 
   @override
-  AuthenticationState get initialState => LoggedOutState(); // TODO: implement initialState;
+  AuthenticationState get initialState =>
+      LoggedOutState(); // TODO: implement initialState;
 
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -38,6 +43,9 @@ class AuthenticationBloc
         yield LogginInGoogleFailedState();
         return;
       }
+      DocumentSnapshot dr = await _firebaseRepository.pullUserDocument(_firebaseRepository.uid);
+      UserProvider.mUser = new UserModel(null);
+      UserProvider.mUser.setFromMap(dr.data);
       yield LoggedInState();
     } catch (e) {
       yield LogginInGoogleFailedState();

@@ -24,6 +24,7 @@ class UserModel extends Equatable {
   String _profilePictureURL;
 
   UserModel(FirebaseUser user) {
+    if (user == null) return;
     _email = user.email;
     _uid = user.uid;
     _name = user.displayName;
@@ -32,13 +33,15 @@ class UserModel extends Equatable {
   void setFromMap(Map<String, dynamic> map) {
     //TODO:: figure out how to map MAP into STRINGS and what not
 
-    this._email = map["email"];
-    this._name = map["name"];
-    this._uid = map["uid"];
-    this._userName = map["userName"];
-    this._languages = map["languages"];
-    this._description = map["description"];
-    this._profilePictureURL = map["_profilePictureURL"];
+    this._email = map.containsKey("email") ? map["email"] : "";
+    this._name = map.containsKey("name") ? map["name"] : "";
+    this._uid = map.containsKey("uid") ? map["uid"] : "";
+    this._userName = map.containsKey("userName") ? map["userName"] : "";
+    this._languages = map.containsKey("languages") ? map["languages"] : "";
+    this._description =
+        map.containsKey("description") ? map["description"] : "";
+    this._profilePictureURL =
+        map.containsKey("_profilePictureURL") ? map["_profilePictureURL"] : "";
   }
 
   Map<String, String> getMap(int INFO_TYPE) {
@@ -62,6 +65,4 @@ class UserModel extends Equatable {
   String get name => this._name;
   String get uid => this._uid;
   String get email => this._email;
-  
-  copyw
 }

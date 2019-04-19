@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 
 class FirebaseRepository {
   static final Firebase _firebase = Firebase();
-  
 
   Future<GoogleSignInAuthentication> authenticateUserGoogleAuth() async {
     return await _firebase.authenticateUserGmail();
@@ -23,10 +22,17 @@ class FirebaseRepository {
     return await _firebase.registerUserEmail(email: email, password: password);
   }
 
-  Future<Stream<QuerySnapshot>> pullServicesSnapshots() async{
+  Future<Stream<QuerySnapshot>> pullServicesSnapshots() async {
     return await _firebase.pullSnapshotsFromQuery("services");
   }
-   Future<Stream<QuerySnapshot>> pullUsersSnapshots() async{
+
+  Future<Stream<QuerySnapshot>> pullUsersSnapshots() async {
     return await _firebase.pullSnapshotsFromQuery("users");
   }
+
+  Future<DocumentSnapshot> pullUserDocument(String uid) async {
+    return await _firebase.pullDocument('users', uid);
+  }
+
+  String get uid => Firebase.uid;
 }

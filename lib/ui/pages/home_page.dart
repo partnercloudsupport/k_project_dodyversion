@@ -50,6 +50,7 @@ class _HomePage extends State<HomePage> {
                 );
               },
             );
+          return Text("oops");
         },
       )),
       bottomNavigationBar: BottomAppBar(
@@ -63,6 +64,7 @@ class _HomePage extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             FloatingActionButton(
+              heroTag: "ulala1",
               onPressed: () => setState(() {
                     _firebaseBloc.dispatch(
                         PullServicesDataFromFiresStoreCloudEvent(query: "asd"));
@@ -71,10 +73,8 @@ class _HomePage extends State<HomePage> {
               child: Icon(Icons.add),
             ),
             FloatingActionButton(
-              onPressed: () => setState(() {
-                    _firebaseBloc.dispatch(
-                        PullServicesDataFromFiresStoreCloudEvent(query: "asd"));
-                  }),
+              heroTag: "ulala2",
+              onPressed: () => {Navigator.pushNamed(context, '/profilePage')},
               tooltip: 'User Profile',
               child: Icon(Icons.airplanemode_active),
             ),

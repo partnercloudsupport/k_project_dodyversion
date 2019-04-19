@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:k_project_dodyversion/ui/pages/home_page.dart';
 import 'package:k_project_dodyversion/ui/pages/login_page/login_page.dart';
+import 'package:k_project_dodyversion/ui/pages/user_page.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -19,10 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: defaultHomePage(),
-      routes: {
-        '/home': (context) => HomePage(),
-        '/loginPage': (context) => LogInPage(),
-      },
+      routes: kRoute(),
     );
   }
 
@@ -32,6 +30,7 @@ class MyApp extends StatelessWidget {
     return {
       '/home': (context) => HomePage(),
       '/loginPage': (context) => LogInPage(),
+      '/profilePage':(context) => UserProfilePage(),
     };
   }
 }
