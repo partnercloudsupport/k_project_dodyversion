@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Firebase {
-  final GoogleSignIn _googleSignIn = new GoogleSignIn(
+  static final GoogleSignIn _googleSignIn = new GoogleSignIn(
     scopes: <String>[
       'profile',
       'https://www.googleapis.com/auth/userinfo.profile',
@@ -24,10 +24,27 @@ class Firebase {
   }
 
   Future<GoogleSignInAuthentication> authenticateUserGmail() async {
-    GoogleSignInAccount _googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await _googleUser.authentication;
-    return googleAuth;
+    GoogleSignInAccount _googleUser;
+    GoogleSignInAuthentication _googleAuth;
+    try {
+      _googleUser = await _googleSignIn.signIn();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    } finally {
+      _googleAuth = await _googleUser.authentication;
+      final AuthCredential _credential = GoogleAuthProvider.getCredential(
+        accessToken: _googleAuth.accessToken,
+        idToken: _googleAuth.idToken,
+      );
+      final FirebaseUser user = await _auth.signInWithCredential(_credential);
+      if (await _authenticateInFirestore(UserModel(user)) == false) {
+        print("Creating database for new Gmail User");
+        _registerUserToFirestore(UserModel(user));
+      }
+      ;
+    }
+    return _googleAuth;
   }
 
 // Register user when they havent signed up
@@ -69,4 +86,21 @@ class Firebase {
   }
 
   bool get isAuthenticated => _isAuthenticated;
+
+  // This will keep returning snapshots of various state.
+  Future<Stream<QuerySnapshot>> pullSnapshotsFromQuery(String collection) async {
+    return _firestore.collection(collection).snapshots();
+  }
+
+  Future<List<DocumentSnapshot>> pullDocumentFromSnaphot(QuerySnapshot qs) async {
+    return qs.documents;
+  }
+
+  Future<DocumentSnapshot> pullDocument(
+      String collectionName, String documentName) async {
+    return await _firestore
+        .collection(collectionName)
+        .document('documentName')
+        .get();
+  }
 }

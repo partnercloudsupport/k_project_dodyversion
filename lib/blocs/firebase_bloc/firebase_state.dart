@@ -1,4 +1,6 @@
+
 import 'package:equatable/equatable.dart';
+import 'package:k_project_dodyversion/models/models.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -11,23 +13,18 @@ class InitialFirebaseState extends FirebaseState {
   String toString() => 'Initializing Firebase';
 }
 
-class AuthenticatingFirebaseState extends FirebaseState {
-  @override
-  String toString() => 'Authenticating...';
+class ServicesCollected extends FirebaseState {
+  final List<ServiceModel> _servicesList;
+
+  ServicesCollected(this._servicesList):super([_servicesList]);
+  List<ServiceModel> get serviceList => _servicesList;
 }
 
-class AuthenticateFailedState extends FirebaseState {
+class FireStoreLoading extends FirebaseState{
   @override
-  String toString() => 'Authentication Failed. Either the username or password is not correct';
+  String toString() => 'Firebase Firestore Loading';
 }
-
-class AuthenticateSuccessState extends FirebaseState {
-  final String uid;
-
-  AuthenticateSuccessState({@required this.uid})
-      : assert(uid != null),
-        super([uid]);
-
+class FireStoreFailed extends FirebaseState{
   @override
-  String toString() => 'Authentication Successed. UID :: $uid';
+  String toString() => "Firestore failed";
 }

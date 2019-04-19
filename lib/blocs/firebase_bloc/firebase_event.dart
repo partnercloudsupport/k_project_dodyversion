@@ -7,40 +7,39 @@ abstract class FirebaseEvent extends Equatable {
   FirebaseEvent([List props = const []]) : super(props);
 }
 
-class GoogleAuthenticationFirebaseEvent extends FirebaseEvent {
-   @override
-  String toString() => 'Authenticating user with his G Account';
-}
+class PullDataFromFiresStoreCloudEvent extends FirebaseEvent {
+  final String query;
 
-class EmailAuthenticationFirebaseEvent extends FirebaseEvent {
- final EmailAuth emailAuth;
-
-  EmailAuthenticationFirebaseEvent({
-    @required this.emailAuth,
-  })  : assert(emailAuth != null),
-        super([emailAuth]);
-
+  PullDataFromFiresStoreCloudEvent({
+    @required this.query,
+  })  : assert(query != null),
+        super([query]);
   @override
-  String toString() => 'Attempt Authenticate User with Email and Password';
-}
-
-class PullDataFromFiresStoreCloudEvent extends FirebaseEvent{
-   @override
   String toString() => 'Pulling data from firestore';
 }
 
-class PushDataToFiresStoreCloudEvent extends FirebaseEvent{
-   @override
-  String toString() => 'Pushing data from firestore';
+class PullServicesDataFromFiresStoreCloudEvent extends FirebaseEvent {
+  final String query;
 
+  PullServicesDataFromFiresStoreCloudEvent({
+    @required this.query,
+  })  : assert(query != null),
+        super([query]);
+  @override
+  String toString() => 'Pulling data from firestore';
 }
 
-class UpdateDataToFiresStoreCloudEvent extends FirebaseEvent{
-   @override
+class PushDataToFiresStoreCloudEvent extends FirebaseEvent {
+  @override
+  String toString() => 'Pushing data from firestore';
+}
+
+class UpdateDataToFiresStoreCloudEvent extends FirebaseEvent {
+  @override
   String toString() => 'Updating data from firestore';
 }
 
-class DeleteDataToFiresStoreCloudEvent extends FirebaseEvent{
-   @override
+class DeleteDataToFiresStoreCloudEvent extends FirebaseEvent {
+  @override
   String toString() => 'Deletingdata from firestore';
 }

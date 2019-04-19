@@ -9,11 +9,12 @@ class LogInPage extends StatefulWidget {
 }
 
 class LogInPageState extends State<LogInPage> {
-  FirebaseBloc _firebaseBloc;
-  FirebaseBloc get firebaseBloc => _firebaseBloc;
-  
+  AuthenticationBloc _authenticationBloc;
+  AuthenticationBloc get authenticationBloc => _authenticationBloc;
+
   int _containerType;
-  LogInContainer _mContainer; // Getting new Container depends on the state of the page. 1: for email auth 2: for Google auth etc
+  LogInContainer
+      _mContainer; // Getting new Container depends on the state of the page. 1: for email auth 2: for Google auth etc
 
   EmailAuth _emailAuth;
   EmailAuth get emailAuth => _emailAuth;
@@ -23,23 +24,23 @@ class LogInPageState extends State<LogInPage> {
 
   @override // Initiate Vairables
   void initState() {
-    _firebaseBloc = FirebaseBloc();
+    _authenticationBloc = AuthenticationBloc();
     _containerType = LogInContainer.SHOWLOGINOPTION;
     _mContainer = LogInContainer(this);
     _emailAuth = EmailAuth();
     super.initState();
   }
 
+// Disabled email button 
   void onEmailSubmitPressed() {
-    _firebaseBloc.dispatch(EmailAuthenticationFirebaseEvent(emailAuth: emailAuth));
+    return;
+    _authenticationBloc
+        .dispatch(LoggingInEmailAuthenticationEvent(emailAuth: emailAuth));
   }
 
   void onGoogleLoginPressed() {
-    // setState(() {
-    //   _containerType = LogInContainer.GMAIL_LOGIN;
-    // });
-
-    _firebaseBloc.dispatch(GoogleAuthenticationFirebaseEvent());
+    _authenticationBloc.dispatch(LoggingInGoogleAccountAuthenticationEvent());
+    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
   }
 
   void onEmailChoosePressed() {
@@ -47,9 +48,13 @@ class LogInPageState extends State<LogInPage> {
       _containerType = LogInContainer.EMAILPASS_LOGIN;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return _mContainer.getContainer(_containerType);
+  }
+  
+  @override
+  void dispose(){
+    super.dispose();
   }
 }

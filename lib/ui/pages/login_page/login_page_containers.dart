@@ -16,7 +16,7 @@ class LogInContainer {
   LogInPageState _parent;
 
   Widget getContainer(int type) {
-    if (_parent.firebaseBloc == null) throw Exception();
+    if (_parent.authenticationBloc == null) return null;
     switch (type) {
       case EMAILPASS_LOGIN:
         return _emailpassLogin();
@@ -31,8 +31,8 @@ class LogInContainer {
 
   Widget _emailpassLogin() {
     return BlocBuilder(
-      bloc: _parent.firebaseBloc,
-      builder: (BuildContext context, FirebaseState state) {
+      bloc: _parent.authenticationBloc,
+      builder: (BuildContext context, AuthenticationState state) {
         return Container(
             width: 1.7976931348623157e+308,
             height: 1.7976931348623157e+308,
@@ -79,9 +79,9 @@ class LogInContainer {
                     ),
                   ),
                   RaisedButton(
-                    child: Text("Log In"),
+                    child: Text("Continue"),
                     onPressed: _onEmailSubmitPressed,
-                  )
+                  ),
                 ],
               ),
             ));
@@ -91,8 +91,8 @@ class LogInContainer {
 
   Widget _showLoginOption() {
     return BlocBuilder(
-      bloc: _parent.firebaseBloc,
-      builder: (BuildContext context, FirebaseState state) {
+      bloc: _parent.authenticationBloc,
+      builder: (BuildContext context, AuthenticationState state) {
         return Container(
             width: 1.7976931348623157e+308,
             height: 1.7976931348623157e+308,
@@ -128,21 +128,27 @@ class LogInContainer {
     return null; //TODO
   }
 
-  String _textStatus(FirebaseState state) {
-    if (state is InitialFirebaseState) {
-      return ("Initializing");
-    } else if (state is AuthenticatingFirebaseState) {
+  String _textStatus(AuthenticationState state) {
+    if (state is LoggedOutState) {
+      return ("Logged out");
+    } else if (state is LoggingInEmailState) {
       return ("Authenticating.. Please wait");
-    } else if (state is AuthenticateSuccessState) {
-      String uid = state.uid;
+    } else if (state is LoggingInGoogleState) {
+      return ("Authenticating.. Please wait");
+    } else if (state is LoggedInState) {
+      String uid = "Authenticated!!!!";
+      // Navigator.pushNamed(_parent.context, '/home');
       return ("$uid");
-    } else {
+    } else if (state is LogginInGoogleFailedState){
       return ("FAILLL");
+    }else{
+      return state.toString();
     }
   }
 
   void _onEmailSubmitPressed() {
-    if (_parent.formKey.currentState.validate()) { // If nothing is wrong
+    if (_parent.formKey.currentState.validate()) {
+      // If nothing is wrong
       _parent.formKey.currentState.save(); // Save our form now.
 
       print('Printing the login data.');
@@ -151,4 +157,5 @@ class LogInContainer {
       _parent.onEmailSubmitPressed(); // Dispatch event from parent
     }
   }
+
 }

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:k_project_dodyversion/blocs/firebase_bloc/firebase_event.dart';
 import 'package:k_project_dodyversion/blocs/firebase_bloc/firebase_state.dart';
+import 'package:k_project_dodyversion/models/service_model.dart';
 import 'package:k_project_dodyversion/resources/repository.dart';
-import 'package:meta/meta.dart';
 export 'package:k_project_dodyversion/blocs/firebase_bloc/firebase_event.dart';
 export 'package:k_project_dodyversion/blocs/firebase_bloc/firebase_state.dart';
 
@@ -21,30 +21,31 @@ class FirebaseBloc extends Bloc<FirebaseEvent, FirebaseState> {
   Stream<FirebaseState> mapEventToState(
     FirebaseEvent event,
   ) async* {
-    if (event is EmailAuthenticationFirebaseEvent) {
-      yield* mapEmailAuthenticationFirebaseEventToState(event);
-    } else if (event is GoogleAuthenticationFirebaseEvent) {
-      yield* mapGoogleAuthenticationFirebaseEventToState(event);
+    if (event is PullServicesDataFromFiresStoreCloudEvent) {
+      yield* mapPullServicesDataFromFiresStoreCloudEventToState(event.query);
     }
   }
 
-  Stream<FirebaseState> mapEmailAuthenticationFirebaseEventToState(
-      EmailAuthenticationFirebaseEvent event) async* {
-    yield AuthenticatingFirebaseState(); // Telling that the BloC is reaching the server
-    FirebaseUser user = await _firebaseRepository.authenticateUserEmail(
-      email: event.emailAuth.email,
-      password: event.emailAuth.password,
-    );
-
-    yield AuthenticateSuccessState(
-        uid: user
-            .uid); // Telling that the BloC has successfully authenticating the user
-  }
-
-  Stream<FirebaseState> mapGoogleAuthenticationFirebaseEventToState(
-      GoogleAuthenticationFirebaseEvent event) async* {
-         yield AuthenticatingFirebaseState(); 
-         GoogleSignInAuthentication _googleSignInAuth =  await _firebaseRepository.authenticateUserGoogleAuth();
-         yield AuthenticateSuccessState(uid: _googleSignInAuth.accessToken);
+  Stream<FirebaseState> mapPullServicesDataFromFiresStoreCloudEventToState(
+      String query) async* {
+    yield FireStoreLoading();
+    try {
+      List<ServiceModel> smCollection = [];
+      print("asdasdasdsad I am in the bloc.dart");
+      Stream<QuerySnapshot> ss =
+          await _firebaseRepository.pullServicesSnapshots();
+      print("asdasdasdsad I am in the bloc.dart" );
+      await for (QuerySnapshot q in ss) {
+        smCollection.clear();
+        print("asdasdasdsad I am in the bloc.dart" + q.toString());
+        for (DocumentSnapshot ds in q.documents) {
+          smCollection.add(ServiceModel(ds));
+          print("asdasdasdsad I am in the bloc.dart" + ds.toString());
+        }
+        yield ServicesCollected(smCollection);
       }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }

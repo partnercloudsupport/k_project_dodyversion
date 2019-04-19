@@ -13,11 +13,15 @@ class HomePage extends StatefulWidget {
 
 // the 'widget' obj here is the HomePage from the State<>
 class _HomePage extends State<HomePage> {
-  var text = "HELLOO";
-
-  SystemUiOverlayStyle _currentStyle = SystemUiOverlayStyle.light;
   FirebaseBloc _firebaseBloc;
-  final _random = math.Random();
+
+  @override
+  void initState() {
+    super.initState();
+    _firebaseBloc = new FirebaseBloc();
+    _firebaseBloc
+        .dispatch(PullServicesDataFromFiresStoreCloudEvent(query: "asd"));
+  }
 
   @override
   void dispose() {
@@ -26,57 +30,58 @@ class _HomePage extends State<HomePage> {
   }
 
   @override
-  void initState() {
-    _firebaseBloc = FirebaseBloc();
-    super.initState();
-  }
-
-  void _changeColor() {
-    // _firebaseBloc.dispatch(AuthenticateFirebaseEvent(
-    //     email: "dodysenz@gmail.com", hashedPassword: "ulala123123"));
-
-    final color = Color.fromRGBO(
-      _random.nextInt(255),
-      _random.nextInt(255),
-      _random.nextInt(255),
-      1.0,
-    );
-    setState(() {
-      _currentStyle = SystemUiOverlayStyle.dark.copyWith(
-        statusBarColor: color,
-      );
-    });
-  }
-
-  String customText(FirebaseState state) {
-    if (state is InitialFirebaseState) {
-      return ("Initializing");
-    } else if (state is AuthenticatingFirebaseState) {
-      return ("Authenticating.. Please wait");
-    } else if (state is AuthenticateSuccessState) {
-      String uid = state.uid;
-      return ("$uid");
-    } else {
-      return ("FAILLL");
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Sample Code'),
+      ),
+      body: Container(
+          child: BlocBuilder(
         bloc: _firebaseBloc,
         builder: (BuildContext context, FirebaseState state) {
-          return Scaffold(
-            body: AnnotatedRegion(
-              value: _currentStyle,
-              child: Center(
-                child: RaisedButton(
-                  child: Text(customText(state)),
-                  onPressed: _changeColor,
-                ),
-              ),
+          if (state is FireStoreLoading) return Text("loading");
+          if (state is ServicesCollected)
+            return ListView.builder(
+              itemCount: state.serviceList.length,
+              padding: EdgeInsets.all(8.0),
+              itemBuilder: (BuildContext context, int i) {
+                return ListTile(
+                  title: Text(" ${state.serviceList[i].title}"),
+                );
+              },
+            );
+        },
+      )),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          height: 50.0,
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 50),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            FloatingActionButton(
+              onPressed: () => setState(() {
+                    _firebaseBloc.dispatch(
+                        PullServicesDataFromFiresStoreCloudEvent(query: "asd"));
+                  }),
+              tooltip: 'Refresh List',
+              child: Icon(Icons.add),
             ),
-          );
-        });
+            FloatingActionButton(
+              onPressed: () => setState(() {
+                    _firebaseBloc.dispatch(
+                        PullServicesDataFromFiresStoreCloudEvent(query: "asd"));
+                  }),
+              tooltip: 'User Profile',
+              child: Icon(Icons.airplanemode_active),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
   }
 }
