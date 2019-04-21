@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
+import 'package:k_project_dodyversion/models/models.dart';
 import 'dart:math' as math;
+
+import 'package:k_project_dodyversion/ui/pages/service_card.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -13,19 +16,18 @@ class HomePage extends StatefulWidget {
 
 // the 'widget' obj here is the HomePage from the State<>
 class _HomePage extends State<HomePage> {
-  FirebaseBloc _firebaseBloc;
+  ServiceBloc _serviceBloc;
 
   @override
   void initState() {
     super.initState();
-    _firebaseBloc = new FirebaseBloc();
-    _firebaseBloc
-        .dispatch(PullServicesDataFromFiresStoreCloudEvent(query: "asd"));
+    _serviceBloc = new ServiceBloc();
+    _serviceBloc.dispatch(LoadAllServices(query: "asd"));
   }
 
   @override
   void dispose() {
-    _firebaseBloc.dispose();
+    _serviceBloc.dispose();
     super.dispose();
   }
 
@@ -37,16 +39,16 @@ class _HomePage extends State<HomePage> {
       ),
       body: Container(
           child: BlocBuilder(
-        bloc: _firebaseBloc,
-        builder: (BuildContext context, FirebaseState state) {
-          if (state is FireStoreLoading) return Text("loading");
-          if (state is ServicesCollected)
+        bloc: _serviceBloc,
+        builder: (BuildContext context, ServiceState state) {
+          if (state is LoadingServices) return Text("loading");
+          if (state is LoadServicesSuccessful)
             return ListView.builder(
               itemCount: state.serviceList.length,
               padding: EdgeInsets.all(8.0),
               itemBuilder: (BuildContext context, int i) {
                 return ListTile(
-                  title: Text(" ${state.serviceList[i].title}"),
+                  title: ServiceCard(state.serviceList[i]),
                 );
               },
             );
@@ -66,8 +68,7 @@ class _HomePage extends State<HomePage> {
             FloatingActionButton(
               heroTag: "ulala1",
               onPressed: () => setState(() {
-                    _firebaseBloc.dispatch(
-                        PullServicesDataFromFiresStoreCloudEvent(query: "asd"));
+                    _serviceBloc.dispatch(LoadAllServices(query: "asd"));
                   }),
               tooltip: 'Refresh List',
               child: Icon(Icons.add),

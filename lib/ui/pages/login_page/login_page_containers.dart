@@ -93,6 +93,9 @@ class LogInContainer {
     return BlocBuilder(
       bloc: _parent.authenticationBloc,
       builder: (BuildContext context, AuthenticationState state) {
+
+        
+
         return Container(
             width: 1.7976931348623157e+308,
             height: 1.7976931348623157e+308,
@@ -137,7 +140,7 @@ class LogInContainer {
       return ("Authenticating.. Please wait");
     } else if (state is LoggedInState) {
       String uid = "Authenticated!!!!";
-      // Navigator.pushNamed(_parent.context, '/home');
+      // _parent.moveOn();
       return ("$uid");
     } else if (state is LogginInGoogleFailedState){
       return ("FAILLL");

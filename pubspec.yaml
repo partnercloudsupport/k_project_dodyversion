@@ -36,7 +36,7 @@ dependencies:
 
   #BloC
   bloc: ^0.11.2 ## import 'package:bloc/bloc.dart';
-  flutter_bloc: ^0.9.1 ## import 'package:flutter_bloc/flutter_bloc.dart';
+  flutter_bloc: '>0.9.1' ## import 'package:flutter_bloc/flutter_bloc.dart';
 
   #Validate :: to validate may user input such as Email Password etc.
   validate: ^1.7.0 ## import 'package:validate/validate.dart';

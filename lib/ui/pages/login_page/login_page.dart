@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
 import 'package:k_project_dodyversion/models/emailAuth_model.dart';
 import 'package:k_project_dodyversion/ui/pages/login_page/login_page_containers.dart';
@@ -28,10 +29,11 @@ class LogInPageState extends State<LogInPage> {
     _containerType = LogInContainer.SHOWLOGINOPTION;
     _mContainer = LogInContainer(this);
     _emailAuth = EmailAuth();
+
     super.initState();
   }
 
-// Disabled email button 
+// Disabled email button
   void onEmailSubmitPressed() {
     return;
     _authenticationBloc
@@ -40,7 +42,7 @@ class LogInPageState extends State<LogInPage> {
 
   void onGoogleLoginPressed() {
     _authenticationBloc.dispatch(LoggingInGoogleAccountAuthenticationEvent());
-    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    //  moveOn();
   }
 
   void onEmailChoosePressed() {
@@ -48,13 +50,75 @@ class LogInPageState extends State<LogInPage> {
       _containerType = LogInContainer.EMAILPASS_LOGIN;
     });
   }
+
+  void moveOn() {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return _mContainer.getContainer(_containerType);
+    return BlocListener(
+      bloc: _authenticationBloc,
+      listener: (BuildContext context, AuthenticationState state) {
+        if(state is LoggedInState){
+          moveOn();
+        }
+      },
+      child: BlocBuilder(
+        bloc: authenticationBloc,
+        builder: (BuildContext context, AuthenticationState state) {
+          return Container(
+              width: 1.7976931348623157e+308,
+              height: 1.7976931348623157e+308,
+              alignment: Alignment.center,
+              decoration: new BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Color(0xFFD3B8AE), Color(0xFFAFC9D2)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomRight,
+                    stops: [0.6, 1.0]),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(_textStatus(state)),
+                    RaisedButton(
+                      child: Text("log in with google account"),
+                      onPressed: onGoogleLoginPressed,
+                    ),
+                    RaisedButton(
+                      child: Text("log in with email"),
+                      onPressed: onEmailChoosePressed,
+                    )
+                  ],
+                ),
+              ));
+        },
+      ),
+    );
   }
-  
+
+  String _textStatus(AuthenticationState state) {
+    if (state is LoggedOutState) {
+      return ("Logged out");
+    } else if (state is LoggingInEmailState) {
+      return ("Authenticating.. Please wait");
+    } else if (state is LoggingInGoogleState) {
+      return ("Authenticating.. Please wait");
+    } else if (state is LoggedInState) {
+      String uid = "Authenticated!!!!";
+      return ("$uid");
+    } else if (state is LogginInGoogleFailedState) {
+      return ("FAILLL");
+    } else {
+      return state.toString();
+    }
+  }
+
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
   }
 }

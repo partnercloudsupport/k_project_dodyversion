@@ -21,31 +21,7 @@ class FirebaseBloc extends Bloc<FirebaseEvent, FirebaseState> {
   Stream<FirebaseState> mapEventToState(
     FirebaseEvent event,
   ) async* {
-    if (event is PullServicesDataFromFiresStoreCloudEvent) {
-      yield* mapPullServicesDataFromFiresStoreCloudEventToState(event.query);
-    }
+   return;
   }
 
-  Stream<FirebaseState> mapPullServicesDataFromFiresStoreCloudEventToState(
-      String query) async* {
-    yield FireStoreLoading();
-    try {
-      List<ServiceModel> smCollection = [];
-      print("asdasdasdsad I am in the bloc.dart");
-      Stream<QuerySnapshot> ss =
-          await _firebaseRepository.pullServicesSnapshots();
-      print("asdasdasdsad I am in the bloc.dart" );
-      await for (QuerySnapshot q in ss) {
-        smCollection.clear();
-        print("asdasdasdsad I am in the bloc.dart" + q.toString());
-        for (DocumentSnapshot ds in q.documents) {
-          smCollection.add(ServiceModel(ds));
-          print("asdasdasdsad I am in the bloc.dart" + ds.toString());
-        }
-        yield ServicesCollected(smCollection);
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
 }
