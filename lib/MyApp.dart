@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:k_project_dodyversion/ui/pages/home_page.dart';
 import 'package:k_project_dodyversion/ui/pages/login_page.dart';
 import 'package:k_project_dodyversion/ui/pages/user_page.dart';
+import 'package:k_project_dodyversion/ui/themes/theme.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -16,9 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title:
           'Flutter Code Sample for services.SystemChrome.setSystemUIOverlayStyle',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: KProjectTheme.getTheme(context),
       home: defaultHomePage(),
       routes: kRoute(),
     );

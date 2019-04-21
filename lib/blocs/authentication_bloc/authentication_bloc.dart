@@ -14,7 +14,7 @@ class AuthenticationBloc
   FirebaseRepository _firebaseRepository = FirebaseRepository();
   UserRepository _userRepository;
 
-  AuthenticationBloc() {}
+  AuthenticationBloc();
 
   @override
   AuthenticationState get initialState =>

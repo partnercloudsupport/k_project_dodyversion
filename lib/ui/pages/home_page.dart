@@ -5,7 +5,8 @@ import 'package:k_project_dodyversion/blocs/bloc.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'dart:math' as math;
 
-import 'package:k_project_dodyversion/ui/pages/service_card.dart';
+import 'package:k_project_dodyversion/ui/cards/service_card.dart';
+
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
