@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
 import 'package:k_project_dodyversion/models/emailAuth_model.dart';
-import 'package:k_project_dodyversion/ui/pages/login_page/login_page_containers.dart';
+import 'package:k_project_dodyversion/ui/Others/login_page_containers.dart';
 
 class LogInPage extends StatefulWidget {
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k_project_dodyversion/ui/pages/home_page.dart';
-import 'package:k_project_dodyversion/ui/pages/login_page/login_page.dart';
+import 'package:k_project_dodyversion/ui/pages/login_page.dart';
 import 'package:k_project_dodyversion/ui/pages/user_page.dart';
 
 class MyApp extends StatelessWidget {
