@@ -19,7 +19,7 @@ class ServiceCard extends StatelessWidget {
           children: <Widget>[
             ListTile(
               leading: Icon(Icons.album),
-              title: Text(_model.title),
+              title: Text(_model.serviceName),
               subtitle: Text(_model.description),
             ),
             ButtonTheme.bar(

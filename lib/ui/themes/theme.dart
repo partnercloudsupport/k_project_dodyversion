@@ -20,11 +20,6 @@ class KProjectTheme {
     colors: <Color>[GRADIENT_END_COLOR, GRADIENT_START_COLOR],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
-//  static final FontStyle BASIC_FONTSTYLE;
-//  static final FontStyle CONTENT_FONTSTYLE;
-//  static final FontStyle HEADER_FONTSTYLE;
-//  static final FontStyle MONOSPACE_FONTSTYLE;
-
   static const MaterialColor primarySwatch = MaterialColor(
     PRIMARY_COLOR_VALUE,
     <int, Color>{
@@ -58,6 +53,7 @@ class KProjectTheme {
   static getTheme(BuildContext context) {
     return ThemeData(
       primarySwatch: primarySwatch,
+      accentColor: SECONDARY_COLOR,
       textTheme: Theme.of(context).textTheme.copyWith(
             body1: new TextStyle(
               color: Colors.grey.shade800,
@@ -94,5 +90,12 @@ class KProjectTheme {
       fontSize: 64,
       letterSpacing: 10,
     );
+  }
+
+  static BoxDecoration getDecoration(bool whiteBackground) {
+    if (whiteBackground) {
+      return BoxDecoration(color: Colors.white);
+    }
+    return BoxDecoration(color: primarySwatch.shade100);
   }
 }
