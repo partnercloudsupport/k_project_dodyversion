@@ -21,7 +21,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (event is LoadUserEvent) {
       yield* mapLoadUserEvent(event.ownUser, event.uid);
     } else if (event is UpdateUserEvent) {
-      yield* mapUpdateUserEvent();
+      yield* mapUpdateUserEvent(event.userModel);
     }
   }
 
@@ -42,7 +42,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  Stream<UserState> mapUpdateUserEvent() {}
+  Stream<UserState> mapUpdateUserEvent(UserModel userModel) async* {
+    yield UpdatingUser();
+    _userRepository.updateCurrentUser(userModel);
+    yield UpdateUserSuccess();
+    dispatch(LoadUserEvent(true,""));
+  }
 }
 
 class UserModal {}

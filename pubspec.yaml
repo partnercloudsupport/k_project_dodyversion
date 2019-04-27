@@ -41,6 +41,8 @@ dependencies:
   #Validate :: to validate may user input such as Email Password etc.
   validate: ^1.7.0 ## import 'package:validate/validate.dart';
 
+  intl: 0.15.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -13,14 +13,16 @@ class UserRepository {
     if (UserProvider.mUser?.uid == uid) {
       print("user is own user");
       // return UserProvider.mUser;
-      _userProvider.pullUserProfileFromCloud(uid);
+      return _userProvider.pullUserProfileFromCloud(uid);
+      
     }
      print("user is other user");
     return _userProvider.pullUserProfileFromCloud(uid);
   }
 
-  void updateCurrentUser(um) {
+  void updateCurrentUser(UserModel um) {
     UserProvider.mUser = um;
+    _userProvider.saveToCloud(um.getMap());
   }
 
   String getCurrentUserName() {

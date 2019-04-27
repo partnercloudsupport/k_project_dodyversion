@@ -11,16 +11,16 @@ class FirebaseRepository {
     return await _firebase.authenticateUserGmail();
   }
 
-  Future<FirebaseUser> authenticateUserEmail(
-      {@required String email, @required String password}) async {
-    return await _firebase.authenticateUserEmail(
-        email: email, password: password);
-  }
+  // Future<FirebaseUser> authenticateUserEmail(
+  //     {@required String email, @required String password}) async {
+  //   return await _firebase.authenticateUserEmail(
+  //       email: email, password: password);
+  // }
 
-  Future<FirebaseUser> registerUser(
-      {@required String email, @required String password}) async {
-    return await _firebase.registerUserEmail(email: email, password: password);
-  }
+  // Future<FirebaseUser> registerUser(
+  //     {@required String email, @required String password}) async {
+  //   return await _firebase.registerUserEmail(email: email, password: password);
+  // }
 
   Future<Stream<QuerySnapshot>> pullServicesSnapshots() async {
     return await _firebase.pullSnapshotsFromQuery("services");
@@ -32,6 +32,10 @@ class FirebaseRepository {
 
   Future<DocumentSnapshot> pullUserDocument(String uid) async {
     return await _firebase.pullDocument('users', uid);
+  }
+
+  Future<int> pushUserDocument(String uid, Map<String, dynamic> data) async{
+    return await _firebase.pushDocument('users', uid, data);
   }
 
   String get uid => Firebase.uid;

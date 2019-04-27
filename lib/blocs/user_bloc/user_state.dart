@@ -40,3 +40,18 @@ class UserLoadedFailed extends UserState {
     return "Failed loading user";
   }
 }
+
+
+class UpdatingUser extends UserState {
+  @override
+  String toString() {
+    return ("Updating user to firestore");
+  }
+}
+
+class UpdateUserSuccess extends UserState {
+  @override
+  String toString() {
+    return "Update User Successful";
+  }
+}

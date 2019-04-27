@@ -5,6 +5,9 @@ import 'package:meta/meta.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Firebase {
+  final int FAIL = -1;
+  final int SUCCESS = 0;
+
   static String uid;
 
   static final GoogleSignIn _googleSignIn = new GoogleSignIn(
@@ -15,8 +18,6 @@ class Firebase {
   );
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final Firestore _firestore = Firestore.instance;
-
-  static bool _isAuthenticated = false;
 
   DocumentSnapshot userSnapshot;
   Firebase() {
@@ -40,56 +41,28 @@ class Firebase {
         idToken: _googleAuth.idToken,
       );
       final FirebaseUser user = await _auth.signInWithCredential(_credential);
-      if (await _authenticateInFirestore(UserModel(user)) == false) {
+      if (await _authenticateInFirestore(user.uid) == false) {
         print("Creating database for new Gmail User");
-        _registerUserToFirestore(UserModel(user));
+        _registerUserToFirestore(user);
       }
       _setUID(user.uid);
     }
     return _googleAuth;
   }
 
-// Register user when they havent signed up
-  Future<FirebaseUser> registerUserEmail(
-      {@required String email, @required String password}) async {
-    final FirebaseUser user = await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    _registerUserToFirestore(UserModel(user));
-    _authenticateInFirestore(UserModel(user));
-    _isAuthenticated = true;
-    _setUID(user.uid);
-    return user;
-  }
-
-// Authenticate user when they ALREADY HAVE SIGNED UP
-  Future<FirebaseUser> authenticateUserEmail(
-      {@required String email, @required String password}) async {
-    final FirebaseUser user = await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    _authenticateInFirestore(UserModel(user));
-    _isAuthenticated = true;
-    _setUID(user.uid);
-    return user;
-  }
-
-  Future<bool> _authenticateInFirestore(UserModel user) async {
-    userSnapshot =
-        await _firestore.collection("users").document(user.uid).get();
+  Future<bool> _authenticateInFirestore(String uid) async {
+    userSnapshot = await _firestore.collection("users").document(uid).get();
     return userSnapshot.exists;
   }
 
-  Future<void> _registerUserToFirestore(UserModel user) async {
+  Future<void> _registerUserToFirestore(FirebaseUser user) async {
+    UserModel temp = new UserModel(null);
+    temp.setFromFirebaseUser(user);
     await _firestore
         .collection("users")
-        .document(user.uid)
-        .setData(user.getMap(UserModel.PROFILE_INFO));
+        .document(temp.uid)
+        .setData(temp.getMap());
   }
-
-  bool get isAuthenticated => _isAuthenticated;
 
   // This will keep returning snapshots of various state.
   Future<Stream<QuerySnapshot>> pullSnapshotsFromQuery(
@@ -108,6 +81,20 @@ class Firebase {
         .collection(collectionName)
         .document(documentName)
         .get();
+  }
+
+  Future<int> pushDocument(String collectionName, String documentName,
+      Map<String, dynamic> data) async {
+    try {
+      await Firestore.instance
+          .collection(collectionName)
+          .document(documentName)
+          .setData(data);
+      return SUCCESS;
+    } catch (e) {
+      print(e.toString());
+      return FAIL;
+    }
   }
 
   void _setUID(String muid) {

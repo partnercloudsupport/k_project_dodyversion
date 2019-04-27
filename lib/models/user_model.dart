@@ -17,10 +17,6 @@ class UserModel extends Equatable {
   static const String FIREBASE_DOB = "dateOfBirth";
   static const String FIREBASE_JOINDATE = "joinDate";
 
-  static const int PROFILE_INFO = 0;
-  static const int CHATROOMS_INFO = 1;
-  static const int LISTINGS_INFO = 2;
-
   String _email;
   String _name;
   String _uid;
@@ -37,17 +33,26 @@ class UserModel extends Equatable {
 
   bool _isStranger;
 
-  UserModel(FirebaseUser user) {
-    if (user == null) return;
-    _email = user.email;
+  UserModel(Map<String, dynamic> map) {
+    _joinDate = TimeUtils.getCurrentTime();
+    if (map == null) {
+      _email = Constant.DEFAULT_STRING;
+      _name = Constant.DEFAULT_STRING;
+      _uid = Constant.DEFAULT_STRING;
+      _languages = Constant.DEFAULT_STRING;
+      _description = Constant.DEFAULT_STRING;
+      _profilePictureURL = Constant.DEFAULT_STRING;
+      _dateOfBirth = Constant.DEFAULT_INT;
+      return;
+    }
+    setFromMap(map);
+  }
+
+  void setFromFirebaseUser(FirebaseUser user) {
     _uid = user.uid;
     _name = user.displayName;
-
-    _languages = Constant.DEFAULT_STRING; // In t
-    _description = Constant.DEFAULT_STRING;
-    _profilePictureURL = Constant.DEFAULT_STRING;
-    _dateOfBirth = Constant.DEFAULT_INT;
-    _joinDate = TimeUtils.getCurrentTime();
+    _email = user.email;
+    _profilePictureURL = user.photoUrl;
   }
 
   void setFromMap(Map<String, dynamic> map) {
@@ -72,31 +77,28 @@ class UserModel extends Equatable {
     this._dateOfBirth = map.containsKey(FIREBASE_DOB)
         ? map[FIREBASE_DOB]
         : Constant.DEFAULT_INT;
-    this._joinDate = map.containsKey(FIREBASE_JOINDATE)
-        ? map[FIREBASE_JOINDATE]
-        : Constant.DEFAULT_INT;
   }
 
-  Map<String, dynamic> getMap(int INFO_TYPE) {
-    switch (INFO_TYPE) {
-      case PROFILE_INFO:
-        return <String, dynamic>{
-          FIREBASE_EMAIL: _email,
-          FIREBASE_NAME: _name,
-          FIREBASE_UID: _uid,
-          FIREBASE_LANGUAGES: _languages,
-          FIREBASE_DESC: _description,
-          FIREBASE_PICTUREURL: _profilePictureURL,
-          FIREBASE_DOB: _dateOfBirth,
-          FIREBASE_JOINDATE: _joinDate,
-        };
-    }
-
-    return null;
+  Map<String, dynamic> getMap() {
+    return <String, dynamic>{
+      FIREBASE_EMAIL: _email,
+      FIREBASE_NAME: _name,
+      FIREBASE_UID: _uid,
+      FIREBASE_LANGUAGES: _languages,
+      FIREBASE_DESC: _description,
+      FIREBASE_PICTUREURL: _profilePictureURL,
+      FIREBASE_DOB: _dateOfBirth,
+      FIREBASE_JOINDATE: _joinDate,
+    };
   }
 
   set isStranger(bool value) => _isStranger = value;
   bool get isStranger => _isStranger;
+
+  set name(String name) => _name = name;
+  set dateOfBirth(int dob) => _dateOfBirth = dob;
+  set languages(String lang) => _languages = lang;
+  set description(String desc) => _description = desc;
 
   String get email => _email;
   String get name => _name;
@@ -105,4 +107,15 @@ class UserModel extends Equatable {
   String get description => _description;
   String get profilePictureURL => _profilePictureURL;
   int get dateOfBirth => _dateOfBirth;
+
+  int get age {
+    if (_dateOfBirth < 0) {
+      return -1;
+    }
+    return TimeUtils.getAge(TimeUtils.convertMillisToDate(_dateOfBirth));
+  }
+
+  int get membershipDuration {
+    return TimeUtils.getAgeInDays(TimeUtils.convertMillisToDate(_joinDate));
+  }
 }

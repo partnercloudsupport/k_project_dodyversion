@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:k_project_dodyversion/ui/pages/home_page.dart';
 import 'package:k_project_dodyversion/ui/pages/login_page.dart';
+import 'package:k_project_dodyversion/ui/pages/user_edit_page.dart';
 import 'package:k_project_dodyversion/ui/pages/user_page.dart';
 import 'package:k_project_dodyversion/ui/themes/theme.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       '/home': (context) => HomePage(),
       '/loginPage': (context) => LogInPage(),
       '/profilePage':(context) => UserProfilePage(),
+      // '/editProfilePage':(context) => EditUserProfilePage(),
     };
   }
 }

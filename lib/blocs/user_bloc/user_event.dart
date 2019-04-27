@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:k_project_dodyversion/models/models.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -22,6 +23,11 @@ class LoadUserEvent extends UserEvent {
 }
 
 class UpdateUserEvent extends UserEvent {
+  UserModel _userModel;
+
+  UpdateUserEvent(this._userModel) : super([_userModel]);
+
+  UserModel get userModel => _userModel;
   @override
   String toString() {
     return ("updating user profile");

@@ -17,17 +17,14 @@ class UserProvider {
       //Load user from device
       isOwnUserAvailable = true;
     } else {
-     isOwnUserAvailable = false;
+      isOwnUserAvailable = false;
     }
   }
 
   //only own user
-  void updateUserFromMap(Map<String, dynamic> map) {
-    mUser.setFromMap(map);
+  Future<int> saveToCloud(Map<String, dynamic> data) async {
+    return await _firebaseRepo.pushUserDocument(mUser.uid, data);
   }
-
-  //only own user
-  void saveToCloud() {}
   //only own user
   void saveToDevice() {}
 

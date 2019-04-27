@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/user_bloc/user_bloc.dart';
 import 'package:k_project_dodyversion/blocs/user_bloc/user_event.dart';
 import 'package:k_project_dodyversion/blocs/user_bloc/user_state.dart';
+import 'package:k_project_dodyversion/ui/pages/user_edit_page.dart';
 import 'package:k_project_dodyversion/ui/themes/theme.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
 
@@ -69,6 +70,8 @@ class _UserProfilePageState extends State<UserProfilePage>
       return Text(state.userModel.name);
     } else if (state is UserLoadedFailed) {
       return Text("failed");
+    }else if (state is UpdateUserSuccess){
+      
     } else {
       return Text("null");
     }
@@ -86,6 +89,7 @@ class _UserProfilePageState extends State<UserProfilePage>
         child: ListView(
           scrollDirection: Axis.vertical,
           children: <Widget>[
+            /// First Card (Personal Data)
             Padding(
               padding: padding1,
               child: Card(
@@ -99,10 +103,10 @@ class _UserProfilePageState extends State<UserProfilePage>
                       ClipRRect(
                         borderRadius: BorderRadius.circular(50.0),
                         child: FadeInImage.assetNetwork(
-                          fit: BoxFit.fitHeight,
+                          fit: BoxFit.cover,
                           width: 100,
                           height: 100,
-                          image: 'https://picsum.photos/250?image=9',
+                          image: state.userModel.profilePictureURL,
                           placeholder:
                               Constant.ASSET_USERPROFILE_PLACEHOLDER_PATH,
                         ),
@@ -113,7 +117,9 @@ class _UserProfilePageState extends State<UserProfilePage>
                           Text(state.userModel.name),
                           Text(state.userModel.email),
                           Text(state.userModel.languages),
-                          Text(state.userModel.uid),
+                          Text("Age : ${state.userModel.age}"),
+                          Text(
+                              "Member for ${state.userModel.membershipDuration}"),
                         ],
                       ),
                     ],
@@ -121,6 +127,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ),
               ),
             ),
+
+            /// Second Card (Biography)
             Padding(
               padding: padding1,
               child: Card(
@@ -138,6 +146,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ),
               ),
             ),
+
+            /// Third Card (Education)
             Padding(
               padding: padding1,
               child: Card(
@@ -157,6 +167,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ),
               ),
             ),
+
+            /// Forth Card ( Experience )
             Padding(
               padding: padding1end,
               child: Card(
@@ -202,7 +214,14 @@ class _UserProfilePageState extends State<UserProfilePage>
     switch (index) {
       case 0:
         return FloatingActionButton(
-          onPressed: () => {},
+          heroTag: "FirstFAB",
+          onPressed: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            EditUserProfilePage(_userBloc)))
+              },
           tooltip: 'Edit Profile',
           child: Icon(Icons.edit),
         );
