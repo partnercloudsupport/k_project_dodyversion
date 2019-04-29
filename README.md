@@ -1,6 +1,6 @@
 # k_project_dodyversion
 
-K-Project app. This is dody&#x27;s buffer
+K-Project app.
 
 ## Getting Started
 
