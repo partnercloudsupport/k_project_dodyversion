@@ -19,23 +19,46 @@ class LoadServicesSuccessful extends ServiceState {
   }
 }
 
-class LoadingServices extends ServiceState {
+class LoadingState extends ServiceState {
   @override
   String toString() {
     return "loading...";
   }
 }
 
-class LransactionSuccessful extends ServiceState {
+class TransactionSuccessful extends ServiceState {
   @override
   String toString() {
     return "transaction Successful";
   }
 }
 
-class LransactionFailed extends ServiceState {
+class TransactionFailed extends ServiceState {
   @override
   String toString() {
     return "Transaction Failed";
+  }
+}
+
+class AddServiceSuccessful extends ServiceState {
+  @override
+  String toString() {
+    return "Service added succesfully";
+  }
+}
+
+
+class ResetState extends ServiceState {
+  @override
+  String toString() {
+    return "Service Reset";
+  }
+}
+
+
+class AddingNewServiceState extends ServiceState {
+  @override
+  String toString() {
+    return "Adding new service..";
   }
 }

@@ -16,6 +16,7 @@ class UserModel extends Equatable {
   static const String FIREBASE_PICTUREURL = "profilePictureURL";
   static const String FIREBASE_DOB = "dateOfBirth";
   static const String FIREBASE_JOINDATE = "joinDate";
+  static const String FIREBASE_SERVICEIDS = "servicesIDs";
 
   String _email;
   String _name;
@@ -27,7 +28,7 @@ class UserModel extends Equatable {
   int _joinDate;
 
   List<String> _chatRooms; //list of string of charoomIDS
-  List<String> _services; // list of string of ListingsIDs
+  List<dynamic> _servicesIDs; // list of string of ListingsIDs
   List<String> _ratingsAsBuyers;
   List<String> _ratingsAsSeller;
 
@@ -43,6 +44,7 @@ class UserModel extends Equatable {
       _description = Constant.DEFAULT_STRING;
       _profilePictureURL = Constant.DEFAULT_STRING;
       _dateOfBirth = Constant.DEFAULT_INT;
+      _servicesIDs = new List<String>(0);
       return;
     }
     setFromMap(map);
@@ -77,6 +79,9 @@ class UserModel extends Equatable {
     this._dateOfBirth = map.containsKey(FIREBASE_DOB)
         ? map[FIREBASE_DOB]
         : Constant.DEFAULT_INT;
+    this._servicesIDs = map.containsKey(FIREBASE_SERVICEIDS)
+        ? map[FIREBASE_SERVICEIDS]
+        : new List<String>(0);
   }
 
   Map<String, dynamic> getMap() {
@@ -89,24 +94,46 @@ class UserModel extends Equatable {
       FIREBASE_PICTUREURL: _profilePictureURL,
       FIREBASE_DOB: _dateOfBirth,
       FIREBASE_JOINDATE: _joinDate,
+      FIREBASE_SERVICEIDS: _servicesIDs,
     };
   }
 
-  set isStranger(bool value) => _isStranger = value;
-  bool get isStranger => _isStranger;
-
-  set name(String name) => _name = name;
-  set dateOfBirth(int dob) => _dateOfBirth = dob;
-  set languages(String lang) => _languages = lang;
-  set description(String desc) => _description = desc;
-
   String get email => _email;
+  set email(var value) {
+    _email = value;
+  }
+
   String get name => _name;
+  set name(var value) {
+    _name = value;
+  }
+
   String get uid => _uid;
+  set uid(var value) {
+    _uid = value;
+  }
+
   String get languages => _languages;
+  set languages(var value) {
+    _languages = value;
+  }
+
   String get description => _description;
+  set description(var value) {
+    _description = value;
+  }
+
   String get profilePictureURL => _profilePictureURL;
+  set profilePictureURL(var value) {
+    _profilePictureURL = value;
+  }
+
   int get dateOfBirth => _dateOfBirth;
+  set dateOfBirth(var value) {
+    _dateOfBirth = value;
+  }
+
+  List<dynamic> get serviceIDs => _servicesIDs;
 
   int get age {
     if (_dateOfBirth < 0) {

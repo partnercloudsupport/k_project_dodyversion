@@ -45,7 +45,7 @@ class ReviewChild {
   int get addedTime => _addedTime;
 }
 
-class Review {
+class ReviewModel {
   static const String FIREBASE_RID = "reviewID";
   static const String FIREBASE_RNAME = "reviewName";
   static const String FIREBASE_OID = "ownerName";

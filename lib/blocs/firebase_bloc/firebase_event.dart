@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:k_project_dodyversion/models/models.dart';
 import 'package:meta/meta.dart';
 
 @immutable
