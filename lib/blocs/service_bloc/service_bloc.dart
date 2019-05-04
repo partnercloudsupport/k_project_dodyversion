@@ -12,9 +12,10 @@ import 'package:bloc/bloc.dart';
 //TODO finish up bloc
 class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
   FirebaseRepository _firebaseRepository = FirebaseRepository();
+  ServiceRepository _serviceRepository = ServiceRepository();
 
   @override
-  ServiceState get initialState => LoadingServices();
+  ServiceState get initialState => LoadingState();
 
   @override
   Stream<ServiceState> mapEventToState(
@@ -22,12 +23,19 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
   ) async* {
     if (event is LoadAllServices) {
       yield* mapLoadAllServiceToState(event.query);
+      return;
+    } else if (event is AddServiceEvent) {
+      yield* mapAddServiceToState(event.serviceModel);
+      return;
+    } else if (event is ResetServiceEvent) {
+      yield* mapResetEventToState();
+      return;
     }
     return;
   }
 
   Stream<ServiceState> mapLoadAllServiceToState(String query) async* {
-    yield LoadingServices();
+    yield LoadingState();
     try {
       List<ServiceModel> smCollection = [];
       // print("asdasdasdsad I am in the bloc.dart");
@@ -46,5 +54,17 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Stream<ServiceState> mapAddServiceToState(serviceModel) async* {
+    yield AddingNewServiceState();
+    try {
+      await _serviceRepository.addService(serviceModel);
+      yield AddServiceSuccessful();
+    } catch (e) {}
+  }
+
+  Stream<ServiceState> mapResetEventToState() async* {
+    yield ResetState();
   }
 }

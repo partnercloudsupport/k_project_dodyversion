@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
-import 'package:k_project_dodyversion/models/models.dart';
-import 'dart:math' as math;
 
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
 
@@ -42,7 +39,7 @@ class _HomePage extends State<HomePage> {
           child: BlocBuilder(
         bloc: _serviceBloc,
         builder: (BuildContext context, ServiceState state) {
-          if (state is LoadingServices) return Text("loading");
+          if (state is LoadingState) return Text("loading");
           if (state is LoadServicesSuccessful)
             return ListView.builder(
               itemCount: state.serviceList.length,

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/resources/user_repo/user_provider.dart';
-import 'package:k_project_dodyversion/ui/themes/theme.dart';
 import 'package:k_project_dodyversion/utils/notification_utils.dart';
 import 'package:k_project_dodyversion/utils/time_utils.dart';
 
@@ -13,20 +11,14 @@ final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class EditUserProfilePage extends StatefulWidget {
-  UserBloc userbloc;
-  EditUserProfilePage(this.userbloc, {Key key}) : super(key: key);
+  EditUserProfilePage({Key key}) : super(key: key);
 
-  _EditUserProfilePageState createState() =>
-      _EditUserProfilePageState(userbloc);
+  _EditUserProfilePageState createState() => _EditUserProfilePageState();
 }
 
 class _EditUserProfilePageState extends State<EditUserProfilePage> {
   final TextEditingController _controller = new TextEditingController();
-
-  UserBloc _userBloc;
   UserModel _userModel;
-
-  _EditUserProfilePageState(this._userBloc) : assert(_userBloc != null);
 
   @override
   void initState() {
@@ -59,11 +51,9 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: _userBloc,
+      bloc: BlocProvider.of<UserBloc>(context),
       listener: (BuildContext context, UserState state) {
         if (state is UpdateUserSuccess) {
-          NotificationUtils.showMessage("Profile updated succesfully!",
-              _scaffoldKey, NotificationTone.POSITIVE);
           Navigator.pop(context, true);
         } else if (state is UpdatingUser) {
           NotificationUtils.showMessage(
@@ -158,7 +148,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                   },
                 ),
                 BlocBuilder(
-                  bloc: _userBloc,
+                  bloc: BlocProvider.of<UserBloc>(context),
                   builder: (BuildContext context, UserState state) {
                     return new Container(
                       padding: const EdgeInsets.only(left: 40.0, top: 20.0),
@@ -188,7 +178,8 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
           NotificationTone.NEGATIVE);
     } else {
       form.save(); //This invokes each onSaved event
-      _userBloc.dispatch(new UpdateUserEvent(_userModel));
+      BlocProvider.of<UserBloc>(context)
+          .dispatch(new UpdateUserEvent(_userModel));
       print('Form save called, newContact is now up to date...');
       print('========================================');
       print('Submitting to back end...');

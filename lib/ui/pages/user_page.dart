@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:k_project_dodyversion/blocs/user_bloc/user_bloc.dart';
-import 'package:k_project_dodyversion/blocs/user_bloc/user_event.dart';
-import 'package:k_project_dodyversion/blocs/user_bloc/user_state.dart';
-import 'package:k_project_dodyversion/ui/pages/user_edit_page.dart';
+import 'package:k_project_dodyversion/blocs/bloc.dart';
+import 'package:k_project_dodyversion/ui/pages/pages.dart';
 import 'package:k_project_dodyversion/ui/themes/theme.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
+import 'package:k_project_dodyversion/utils/notification_utils.dart';
+
+final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -14,15 +15,16 @@ class UserProfilePage extends StatefulWidget {
 
 class _UserProfilePageState extends State<UserProfilePage>
     with SingleTickerProviderStateMixin {
-  UserBloc _userBloc;
+  bool ownUserMode = true;
   TabController _controller;
   int _index;
+
+  UserBloc _userBloc = UserBloc();
+  ServiceBloc _serviceBloc = ServiceBloc();
 
   @override
   void initState() {
     super.initState();
-    _userBloc = new UserBloc();
-    _userBloc.dispatch(LoadUserEvent(true, "asd"));
     _controller = new TabController(
       length: 3,
       vsync: this,
@@ -33,33 +35,49 @@ class _UserProfilePageState extends State<UserProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
+    return BlocListener(
       bloc: _userBloc,
-      builder: (BuildContext context, UserState state) {
-        return Scaffold(
-          floatingActionButton: buildFAB(_index),
-          appBar: AppBar(
-            title: getUserName(state),
-            bottom: TabBar(
+      listener: (BuildContext context, UserState state) {
+        if (state is UpdateUserSuccess) {
+          NotificationUtils.showMessage("Profile is updated successfully",
+              scaffoldKey, NotificationTone.POSITIVE);
+          _userBloc.dispatch(LoadUserEvent(ownUserMode, ""));
+          return;
+        }
+        if (state is InitiateState) {
+          _userBloc.dispatch(LoadUserEvent(ownUserMode, ""));
+          return;
+        }
+      },
+      child: BlocBuilder(
+        bloc: _userBloc,
+        builder: (BuildContext context, UserState state) {
+          return Scaffold(
+            key: scaffoldKey,
+            floatingActionButton: buildFAB(_index),
+            appBar: AppBar(
+              title: getUserName(state),
+              bottom: TabBar(
+                controller: _controller,
+                tabs: <Widget>[
+                  Tab(text: "Profile"),
+                  Tab(text: "My Orders"),
+                  Tab(text: "My Services"),
+                ],
+              ),
+            ),
+            backgroundColor: KProjectTheme.primarySwatch.shade400,
+            body: TabBarView(
               controller: _controller,
-              tabs: <Widget>[
-                Tab(text: "Profile"),
-                Tab(text: "My Orders"),
-                Tab(text: "My Services"),
+              children: [
+                getProfileTab(state),
+                Icon(Icons.directions_transit),
+                Icon(Icons.directions_bike),
               ],
             ),
-          ),
-          backgroundColor: KProjectTheme.primarySwatch.shade400,
-          body: TabBarView(
-            controller: _controller,
-            children: [
-              getProfileTab(state),
-              Icon(Icons.directions_transit),
-              Icon(Icons.directions_bike),
-            ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -70,8 +88,7 @@ class _UserProfilePageState extends State<UserProfilePage>
       return Text(state.userModel.name);
     } else if (state is UserLoadedFailed) {
       return Text("failed");
-    }else if (state is UpdateUserSuccess){
-      
+    } else if (state is UpdateUserSuccess) {
     } else {
       return Text("null");
     }
@@ -83,6 +100,7 @@ class _UserProfilePageState extends State<UserProfilePage>
     var padding2 = EdgeInsets.fromLTRB(20, 20, 20, 10);
     var padding3 = EdgeInsets.fromLTRB(20, 10, 20, 10);
     if (state is UserLoadedSuccessfully) {
+      print("user service ids here : " + state.userModel.serviceIDs.toString());
       return Container(
         width: 1.7976931348623157e+308,
         height: 1.7976931348623157e+308,
@@ -215,13 +233,19 @@ class _UserProfilePageState extends State<UserProfilePage>
       case 0:
         return FloatingActionButton(
           heroTag: "FirstFAB",
-          onPressed: () => {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            EditUserProfilePage(_userBloc)))
-              },
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => BlocProviderTree(
+                        blocProviders: [
+                          BlocProvider<UserBloc>(bloc: _userBloc),
+                          BlocProvider<ServiceBloc>(bloc: _serviceBloc),
+                        ],
+                        child: EditUserProfilePage(),
+                      ),
+                ));
+          },
           tooltip: 'Edit Profile',
           child: Icon(Icons.edit),
         );
@@ -235,7 +259,19 @@ class _UserProfilePageState extends State<UserProfilePage>
         break;
       case 2:
         return FloatingActionButton(
-          onPressed: () => {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => BlocProviderTree(
+                        blocProviders: [
+                          BlocProvider<UserBloc>(bloc: _userBloc),
+                          BlocProvider<ServiceBloc>(bloc: _serviceBloc),
+                        ],
+                        child: AddServicePage(),
+                      ),
+                ));
+          },
           tooltip: 'Sell Services',
           child: Icon(Icons.add),
         );

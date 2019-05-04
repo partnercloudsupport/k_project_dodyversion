@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/resources/repository.dart';
 
-/**
- * Here the user data will be stored. It is a Singleton.
- */
+/// Here the user data will be stored. It is a Singleton.
 
 class UserProvider {
   static UserModel mUser;
@@ -25,6 +23,7 @@ class UserProvider {
   Future<int> saveToCloud(Map<String, dynamic> data) async {
     return await _firebaseRepo.pushUserDocument(mUser.uid, data);
   }
+
   //only own user
   void saveToDevice() {}
 

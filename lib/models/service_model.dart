@@ -1,28 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
+import 'package:k_project_dodyversion/utils/time_utils.dart';
 
 class ServiceModel {
   static const String FIREBASE_SID = "serviceID";
   static const String FIREBASE_SNAME = "serviceName";
   static const String FIREBASE_OID = "ownerName";
   static const String FIREBASE_ONAME = "ownerID";
+  static const String FIREBASE_LOCATION = "location";
   static const String FIREBASE_DESC = "description";
   static const String FIREBASE_DURATION = "serviceDurationInMinutes";
   static const String FIREBASE_PRICE = "price";
   static const String FIREBASE_RID = "reviewID";
   static const String FIREBASE_ATIME = "addedTime";
   static const String FIREBASE_LASTUPDATETIME = "lastUpdate";
+  static const String FIREBASE_CUSTOMERIDS = "customerIDs";
 
   String _serviceID;
   String _serviceName;
   String _ownerName;
   String _ownerID;
+  String _location;
   String _description;
   int _serviceDurationInMinutes;
   double _price;
   String _reviewID;
   int _addedTime;
   int _lastUpdate;
+  List<dynamic> _customerIDs;
 
   void setFromMap(Map<String, dynamic> map) {
     _serviceID = map.containsKey(FIREBASE_SID)
@@ -37,6 +42,9 @@ class ServiceModel {
     _ownerID = map.containsKey(FIREBASE_OID)
         ? map[FIREBASE_OID]
         : Constant.DEFAULT_STRING;
+    _location = map.containsKey(FIREBASE_LOCATION)
+        ? map[FIREBASE_LOCATION]
+        : Constant.DEFAULT_STRING;
     _description = map.containsKey(FIREBASE_DESC)
         ? map[FIREBASE_DESC]
         : Constant.DEFAULT_STRING;
@@ -49,28 +57,104 @@ class ServiceModel {
     _reviewID = map.containsKey(FIREBASE_RID)
         ? map[FIREBASE_RID]
         : Constant.DEFAULT_STRING;
+
     _addedTime = map.containsKey(FIREBASE_ATIME)
         ? map[FIREBASE_ATIME]
-        : Constant.DEFAULT_INT;
-    _lastUpdate = map.containsKey(FIREBASE_LASTUPDATETIME)
-        ? map[FIREBASE_LASTUPDATETIME]
-        : Constant.DEFAULT_INT;
+        : TimeUtils.getCurrentTime();
+
+    _customerIDs = map.containsKey(FIREBASE_CUSTOMERIDS)
+        ? map[FIREBASE_CUSTOMERIDS]
+        : new List<dynamic>(0);
+
+    _lastUpdate = TimeUtils.getCurrentTime();
   }
 
   ServiceModel(DocumentSnapshot docSnap) {
+    if (docSnap == null) {
+      print("SM is made null");
+
+      _serviceID = Constant.DEFAULT_STRING;
+      _serviceName = Constant.DEFAULT_STRING;
+      _ownerName = Constant.DEFAULT_STRING;
+      _ownerID = Constant.DEFAULT_STRING;
+      _location = Constant.DEFAULT_STRING;
+      _description = Constant.DEFAULT_STRING;
+      _serviceDurationInMinutes = Constant.DEFAULT_INT;
+      _price = Constant.DEFAULT_DOUBLE;
+      _reviewID = Constant.DEFAULT_STRING;
+      _addedTime = TimeUtils.getCurrentTime();
+      _customerIDs = new List<String>(0);
+      _lastUpdate = TimeUtils.getCurrentTime();
+      return;
+    }
     setFromMap(docSnap.data);
 
     print("SM is made " + _serviceName);
   }
 
+  Map<String, dynamic> getMap() {
+    return <String, dynamic>{
+      FIREBASE_SID: _serviceID,
+      FIREBASE_SNAME: _serviceName,
+      FIREBASE_OID: _ownerName,
+      FIREBASE_ONAME: _ownerID,
+      FIREBASE_LOCATION: _location,
+      FIREBASE_DESC: _description,
+      FIREBASE_DURATION: _serviceDurationInMinutes,
+      FIREBASE_PRICE: _price,
+      FIREBASE_RID: _reviewID,
+      FIREBASE_ATIME: _addedTime,
+      FIREBASE_LASTUPDATETIME: _lastUpdate,
+      FIREBASE_CUSTOMERIDS: _customerIDs,
+    };
+  }
+
   String get serviceID => _serviceID;
+  set serviceID(var value) {
+    _serviceID = value;
+    _reviewID = value;
+  }
+
   String get serviceName => _serviceName;
+  set serviceName(value) {
+    _serviceName = value;
+  }
+
   String get ownerName => _ownerName;
+  set ownerName(var value) {
+    _ownerName = value;
+  }
+
   String get ownerID => _ownerID;
+  set ownerID(var value) {
+    _ownerID = value;
+  }
+
   String get description => _description;
+  set description(var value) {
+    _description = value;
+  }
+
   int get serviceDuration => _serviceDurationInMinutes;
+  set serviceDuration(var value) {
+    _serviceDurationInMinutes = value;
+  }
+
   double get price => _price;
+  set price(var value) {
+    _price = value;
+  }
+
   String get reviewID => _reviewID;
+
   int get addedTime => _addedTime;
+  set addedTime(var value) {
+    _addedTime = value;
+  }
+
   int get lastUpdate => _lastUpdate;
+  set lastUpdate(var value) {
+    _lastUpdate = value;
+  }
+
 }
