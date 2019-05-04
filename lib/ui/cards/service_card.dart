@@ -27,11 +27,11 @@ class ServiceCard extends StatelessWidget {
               child: ButtonBar(
                 children: <Widget>[
                   FlatButton(
-                    child: Text('BUY TICKETS'),
+                    child: Text('DESCRIPTION'),
                     onPressed: () {/* ... */},
                   ),
                   FlatButton(
-                    child: Text('LISTEN'),
+                    child: Text('BUY'),
                     onPressed: () {/* ... */},
                   ),
                 ],

@@ -22,7 +22,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     ServiceEvent event,
   ) async* {
     if (event is LoadAllServices) {
-      yield* mapLoadAllServiceToState(event.query);
+      yield* mapLoadAllServiceToState();
       return;
     } else if (event is AddServiceEvent) {
       yield* mapAddServiceToState(event.serviceModel);
@@ -30,11 +30,13 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     } else if (event is ResetServiceEvent) {
       yield* mapResetEventToState();
       return;
+    } else if (event is LoadAllServicesWithQuery) {
+      yield* mapLoadAllServicesWithQuery(event.parameter, event.value);
     }
     return;
   }
 
-  Stream<ServiceState> mapLoadAllServiceToState(String query) async* {
+  Stream<ServiceState> mapLoadAllServiceToState() async* {
     yield LoadingState();
     try {
       List<ServiceModel> smCollection = [];
@@ -66,5 +68,27 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
 
   Stream<ServiceState> mapResetEventToState() async* {
     yield ResetState();
+  }
+
+  Stream<ServiceState> mapLoadAllServicesWithQuery(String parameter, String value) async* {
+    yield LoadingState();
+    try {
+      List<ServiceModel> smCollection = [];
+      // print("asdasdasdsad I am in the bloc.dart");
+      Stream<QuerySnapshot> ss = await _firebaseRepository
+          .pullServicesSnapshotsWithQuery(parameter, value);
+      // print("asdasdasdsad I am in the bloc.dart");
+      await for (QuerySnapshot q in ss) {
+        smCollection.clear();
+        // print("asdasdasdsad I am in the bloc.dart" + q.toString());
+        for (DocumentSnapshot ds in q.documents) {
+          smCollection.add(ServiceModel(ds));
+          // print("asdasdasdsad I am in the bloc.dart" + ds.toString());
+        }
+        yield LoadServicesSuccessful(smCollection);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

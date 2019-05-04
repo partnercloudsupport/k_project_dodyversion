@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
+import 'package:k_project_dodyversion/resources/user_repo/user_provider.dart';
+import 'package:k_project_dodyversion/ui/cards/service_card.dart';
 import 'package:k_project_dodyversion/ui/pages/pages.dart';
 import 'package:k_project_dodyversion/ui/themes/theme.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
@@ -71,8 +73,8 @@ class _UserProfilePageState extends State<UserProfilePage>
               controller: _controller,
               children: [
                 getProfileTab(state),
-                Icon(Icons.directions_transit),
                 Icon(Icons.directions_bike),
+                getMyServices(state),
               ],
             ),
           );
@@ -92,6 +94,27 @@ class _UserProfilePageState extends State<UserProfilePage>
     } else {
       return Text("null");
     }
+  }
+
+  Widget getMyServices(UserState state) {
+    _serviceBloc.dispatch(LoadAllServicesWithQuery(parameter: "ownerID", value: UserProvider.mUser.uid));
+    return BlocBuilder(
+      bloc: _serviceBloc,
+      builder: (BuildContext context, ServiceState state) {
+        if (state is LoadingState) return Text("loading");
+        if (state is LoadServicesSuccessful)
+          return ListView.builder(
+            itemCount: state.serviceList.length,
+            padding: EdgeInsets.all(8.0),
+            itemBuilder: (BuildContext context, int i) {
+              return ListTile(
+                title: ServiceCard(state.serviceList[i]),
+              );
+            },
+          );
+        return Text(state.toString());
+      },
+    );
   }
 
   Widget getProfileTab(UserState state) {

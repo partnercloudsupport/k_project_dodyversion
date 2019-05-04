@@ -7,13 +7,20 @@ abstract class ServiceEvent extends Equatable {
   ServiceEvent([List props = const []]) : super(props);
 }
 
-class LoadAllServices extends ServiceEvent {
-  final String query;
+class LoadAllServicesWithQuery extends ServiceEvent {
+  final String parameter;
+  final String value;
 
-  LoadAllServices({
-    @required this.query,
-  })  : assert(query != null),
-        super([query]);
+  LoadAllServicesWithQuery({
+    @required this.parameter,
+    @required this.value,
+  })  : assert(parameter != null && value != null),
+        super([parameter, value]);
+  @override
+  String toString() => 'Pulling data from firestore';
+}
+
+class LoadAllServices extends ServiceEvent {
   @override
   String toString() => 'Pulling data from firestore';
 }
@@ -39,7 +46,6 @@ class AddServiceEvent extends ServiceEvent {
   }
 }
 
-
 /// For owner only
 class ResetServiceEvent extends ServiceEvent {
   @override
@@ -47,7 +53,6 @@ class ResetServiceEvent extends ServiceEvent {
     return "Service Bloc reset";
   }
 }
-
 
 /// For owner only
 class UpdateServiceEvent extends ServiceEvent {

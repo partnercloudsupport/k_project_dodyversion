@@ -28,6 +28,11 @@ class FirebaseRepository {
     return await _firebase.pullSnapshotsFromCollection("services");
   }
 
+Future<Stream<QuerySnapshot>> pullServicesSnapshotsWithQuery(String parameter, String value) async {
+    return await _firebase.pullSnapshotsWithQuery("services", parameter, value,Condition.IS_EQUAL_TO);
+  }
+
+
 /// Pull all users ffrom user collection
   Future<Stream<QuerySnapshot>> pullUsersSnapshots() async {
     return await _firebase.pullSnapshotsFromCollection("users");

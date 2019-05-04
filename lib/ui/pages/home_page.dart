@@ -20,7 +20,7 @@ class _HomePage extends State<HomePage> {
   void initState() {
     super.initState();
     _serviceBloc = new ServiceBloc();
-    _serviceBloc.dispatch(LoadAllServices(query: "asd"));
+    _serviceBloc.dispatch(LoadAllServices());
   }
 
   @override
@@ -66,7 +66,7 @@ class _HomePage extends State<HomePage> {
             FloatingActionButton(
               heroTag: "ulala1",
               onPressed: () => setState(() {
-                    _serviceBloc.dispatch(LoadAllServices(query: "asd"));
+                    _serviceBloc.dispatch(LoadAllServices());
                   }),
               tooltip: 'Refresh List',
               child: Icon(Icons.add),
