@@ -33,7 +33,7 @@ class _HomePage extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sample Code'),
+        title: Text('Home Page'),
       ),
       body: Container(
           child: BlocBuilder(
