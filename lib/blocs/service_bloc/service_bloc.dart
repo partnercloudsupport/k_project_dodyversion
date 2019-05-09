@@ -9,7 +9,6 @@ export './service_state.dart';
 
 import 'package:bloc/bloc.dart';
 
-//TODO finish up bloc
 class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
   FirebaseRepository _firebaseRepository = FirebaseRepository();
   ServiceRepository _serviceRepository = ServiceRepository();
@@ -30,6 +29,10 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     } else if (event is ResetServiceEvent) {
       yield* mapResetEventToState();
       return;
+    } else if (event is LoadAllServicesWithQuery) {
+      yield* mapLoadAllServicesWithQuery(event.parameter, event.value);
+    } else if (event is LoadAllMyOrders) {
+      yield* mapLoadAllMyOrders(event.value);
     }
     return;
   }
@@ -66,5 +69,49 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
 
   Stream<ServiceState> mapResetEventToState() async* {
     yield ResetState();
+  }
+
+  Stream<ServiceState> mapLoadAllServicesWithQuery(
+      String parameter, String value) async* {
+    yield LoadingState();
+    try {
+      List<ServiceModel> smCollection = [];
+      // print("asdasdasdsad I am in the bloc.dart");
+      Stream<QuerySnapshot> ss =
+          await _firebaseRepository.pullMyServices(value);
+      // print("asdasdasdsad I am in the bloc.dart");
+      await for (QuerySnapshot q in ss) {
+        smCollection.clear();
+        // print("asdasdasdsad I am in the bloc.dart" + q.toString());
+        for (DocumentSnapshot ds in q.documents) {
+          smCollection.add(ServiceModel(ds));
+          // print("asdasdasdsad I am in the bloc.dart" + ds.toString());
+        }
+        yield LoadServicesSuccessful(smCollection);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Stream<ServiceState> mapLoadAllMyOrders(String value) async* {
+    yield LoadingState();
+    try {
+      List<ServiceModel> smCollection = [];
+      // print("asdasdasdsad I am in the bloc.dart");
+      Stream<QuerySnapshot> ss = await _firebaseRepository.pullMyOrders(value);
+      // print("asdasdasdsad I am in the bloc.dart");
+      await for (QuerySnapshot q in ss) {
+        smCollection.clear();
+        // print("asdasdasdsad I am in the bloc.dart" + q.toString());
+        for (DocumentSnapshot ds in q.documents) {
+          smCollection.add(ServiceModel(ds));
+          // print("asdasdasdsad I am in the bloc.dart" + ds.toString());
+        }
+        yield LoadServicesSuccessful(smCollection);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

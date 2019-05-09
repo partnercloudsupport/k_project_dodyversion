@@ -14,7 +14,7 @@ description: K-Project app. This is dody&#x27;s buffer
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -35,8 +35,8 @@ dependencies:
   equatable: ^0.2.3 ## import 'package:equatable/equatable.dart';
 
   #BloC
-  bloc: ^0.11.2 ## import 'package:bloc/bloc.dart';
-  flutter_bloc: '>0.9.1' ## import 'package:flutter_bloc/flutter_bloc.dart';
+  bloc: ^0.13.0 ## import 'package:bloc/bloc.dart';
+  flutter_bloc: ^0.13.0 ## import 'package:flutter_bloc/flutter_bloc.dart';
 
   #Validate :: to validate may user input such as Email Password etc.
   validate: ^1.7.0 ## import 'package:validate/validate.dart';

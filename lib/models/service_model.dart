@@ -5,8 +5,8 @@ import 'package:k_project_dodyversion/utils/time_utils.dart';
 class ServiceModel {
   static const String FIREBASE_SID = "serviceID";
   static const String FIREBASE_SNAME = "serviceName";
-  static const String FIREBASE_OID = "ownerName";
-  static const String FIREBASE_ONAME = "ownerID";
+  static const String FIREBASE_ONAME = "ownerName";
+  static const String FIREBASE_OID = "ownerID";
   static const String FIREBASE_LOCATION = "location";
   static const String FIREBASE_DESC = "description";
   static const String FIREBASE_DURATION = "serviceDurationInMinutes";
@@ -96,8 +96,8 @@ class ServiceModel {
     return <String, dynamic>{
       FIREBASE_SID: _serviceID,
       FIREBASE_SNAME: _serviceName,
-      FIREBASE_OID: _ownerName,
-      FIREBASE_ONAME: _ownerID,
+      FIREBASE_OID: _ownerID,
+      FIREBASE_ONAME: _ownerName,
       FIREBASE_LOCATION: _location,
       FIREBASE_DESC: _description,
       FIREBASE_DURATION: _serviceDurationInMinutes,
@@ -156,5 +156,4 @@ class ServiceModel {
   set lastUpdate(var value) {
     _lastUpdate = value;
   }
-
 }

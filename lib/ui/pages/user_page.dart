@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
-import 'package:k_project_dodyversion/ui/pages/pages.dart';
+import 'package:k_project_dodyversion/resources/user_repo/user_provider.dart';
+import 'package:k_project_dodyversion/ui/cards/service_card.dart';
+import 'package:k_project_dodyversion/ui/pages/user_edit_page.dart';
 import 'package:k_project_dodyversion/ui/themes/theme.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
 import 'package:k_project_dodyversion/utils/notification_utils.dart';
+
+import 'add_service_page.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -20,7 +24,8 @@ class _UserProfilePageState extends State<UserProfilePage>
   int _index;
 
   UserBloc _userBloc = UserBloc();
-  ServiceBloc _serviceBloc = ServiceBloc();
+  ServiceBloc _mServicesBloc = new ServiceBloc();
+  ServiceBloc _mOrdersBloc = new ServiceBloc();
 
   @override
   void initState() {
@@ -71,8 +76,9 @@ class _UserProfilePageState extends State<UserProfilePage>
               controller: _controller,
               children: [
                 getProfileTab(state),
-                Icon(Icons.directions_transit),
-                Icon(Icons.directions_bike),
+                getMyOrders(state),
+                // Text("asd"),
+                getMyServices(state),
               ],
             ),
           );
@@ -92,6 +98,56 @@ class _UserProfilePageState extends State<UserProfilePage>
     } else {
       return Text("null");
     }
+  }
+
+  Widget getMyServices(UserState state) {
+    _mServicesBloc.dispatch(LoadAllServicesWithQuery(
+        parameter: "ownerID", value: UserProvider.mUser.uid));
+    return BlocBuilder(
+      bloc: _mServicesBloc,
+      builder: (BuildContext context, ServiceState state) {
+        if (state is LoadingState) return Text("loading");
+        if (state is LoadServicesSuccessful) {
+          if (state.serviceList.length == 0)
+            return Center(child: Text("Sell Some Services!"));
+          return ListView.builder(
+            itemCount: state.serviceList.length,
+            padding: EdgeInsets.all(8.0),
+            itemBuilder: (BuildContext context, int i) {
+              return ListTile(
+                title: ServiceCard(state.serviceList[i]),
+              );
+            },
+          );
+        }
+        return Text(state.toString());
+      },
+    );
+  }
+
+  Widget getMyOrders(UserState state) {
+    _mOrdersBloc.dispatch(LoadAllMyOrders(value: UserProvider.mUser.uid));
+    return BlocBuilder(
+      bloc: _mOrdersBloc,
+      builder: (BuildContext context, ServiceState state) {
+        if (state is LoadingState) return Text("loading");
+        if (state is LoadServicesSuccessful) {
+          if (state.serviceList.length == 0)
+            return Center(child: Text("You have no orders yet!"));
+          return ListView.builder(
+            itemCount: state.serviceList.length,
+            padding: EdgeInsets.all(8.0),
+            itemBuilder: (BuildContext context, int i) {
+              return ListTile(
+                title: ServiceCard(state.serviceList[i]),
+              );
+            },
+          );
+        }
+
+        return Text(state.toString());
+      },
+    );
   }
 
   Widget getProfileTab(UserState state) {
@@ -240,7 +296,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                   builder: (BuildContext context) => BlocProviderTree(
                         blocProviders: [
                           BlocProvider<UserBloc>(bloc: _userBloc),
-                          BlocProvider<ServiceBloc>(bloc: _serviceBloc),
+                          BlocProvider<ServiceBloc>(bloc: _mServicesBloc),
                         ],
                         child: EditUserProfilePage(),
                       ),
@@ -251,11 +307,12 @@ class _UserProfilePageState extends State<UserProfilePage>
         );
         break;
       case 1:
-        return FloatingActionButton(
-          onPressed: () => {},
-          tooltip: 'Add Orders',
-          child: Icon(Icons.add),
-        );
+        // return FloatingActionButton(
+        //   onPressed: () => {},
+        //   tooltip: 'Add Orders',
+        //   child: Icon(Icons.add),
+        // );
+        return null;
         break;
       case 2:
         return FloatingActionButton(
@@ -263,11 +320,8 @@ class _UserProfilePageState extends State<UserProfilePage>
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => BlocProviderTree(
-                        blocProviders: [
-                          BlocProvider<UserBloc>(bloc: _userBloc),
-                          BlocProvider<ServiceBloc>(bloc: _serviceBloc),
-                        ],
+                  builder: (BuildContext context) => BlocProvider(
+                        bloc: _mServicesBloc,
                         child: AddServicePage(),
                       ),
                 ));
@@ -283,6 +337,8 @@ class _UserProfilePageState extends State<UserProfilePage>
   void dispose() {
     super.dispose();
     _controller.dispose();
+    _mOrdersBloc.dispose();
+    _mServicesBloc.dispose();
   }
 
   void _handleTabSelection() {

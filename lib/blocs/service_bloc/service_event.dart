@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/rendering.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:meta/meta.dart';
 
@@ -39,7 +40,6 @@ class AddServiceEvent extends ServiceEvent {
   }
 }
 
-
 /// For owner only
 class ResetServiceEvent extends ServiceEvent {
   @override
@@ -48,19 +48,24 @@ class ResetServiceEvent extends ServiceEvent {
   }
 }
 
+class LoadAllServicesWithQuery extends ServiceEvent {
+  final String parameter;
+  final String value;
+  LoadAllServicesWithQuery({this.parameter, this.value})
+      : super([parameter, value]);
 
-/// For owner only
-class UpdateServiceEvent extends ServiceEvent {
   @override
   String toString() {
-    return "Update a service";
+    return super.toString();
   }
 }
 
-/// For owner only
-class DeleteServiceState extends ServiceEvent {
+class LoadAllMyOrders extends ServiceEvent {
+  final String value;
+  LoadAllMyOrders({this.value}) : super([value]);
+
   @override
   String toString() {
-    return "delete Service";
+    return super.toString();
   }
 }
