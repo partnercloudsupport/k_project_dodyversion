@@ -11,10 +11,16 @@ abstract class ServiceEvent extends Equatable {
 class LoadAllServices extends ServiceEvent {
   final String query;
 
-  LoadAllServices({
-    @required this.query,
-  })  : assert(query != null),
-        super([query]);
+  LoadAllServicesWithQuery({
+    @required this.parameter,
+    @required this.value,
+  })  : assert(parameter != null && value != null),
+        super([parameter, value]);
+  @override
+  String toString() => 'Pulling data from firestore';
+}
+
+class LoadAllServices extends ServiceEvent {
   @override
   String toString() => 'Pulling data from firestore';
 }
