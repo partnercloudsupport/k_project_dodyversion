@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/rendering.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:meta/meta.dart';
 
@@ -11,16 +10,9 @@ abstract class ServiceEvent extends Equatable {
 class LoadAllServices extends ServiceEvent {
   final String query;
 
-  LoadAllServicesWithQuery({
-    @required this.parameter,
-    @required this.value,
-  })  : assert(parameter != null && value != null),
-        super([parameter, value]);
-  @override
-  String toString() => 'Pulling data from firestore';
-}
-
-class LoadAllServices extends ServiceEvent {
+  LoadAllServices({@required this.query})
+      : assert(query != null),
+        super([query]);
   @override
   String toString() => 'Pulling data from firestore';
 }

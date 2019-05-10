@@ -1,5 +1,5 @@
 name: k_project_dodyversion
-description: K-Project app. This is dody&#x27;s buffer
+description: K-Project app.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -14,7 +14,7 @@ description: K-Project app. This is dody&#x27;s buffer
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.0 <3.0.0"
+  sdk: ">=2.2.2 "
 
 dependencies:
   flutter:
@@ -25,11 +25,14 @@ dependencies:
   cupertino_icons: ^0.1.2
 
   #Auth stuff
-  firebase_auth: ^0.8.4+2 ## import 'package:google_sign_in/google_sign_in.dart';
-  google_sign_in: ^4.0.1 ## import 'package:firebase_auth/firebase_auth.dart';
+  firebase_auth: ^0.11.0 ## import 'package:google_sign_in/google_sign_in.dart';
+  google_sign_in:  ^4.0.1+3 ## import 'package:firebase_auth/firebase_auth.dart';
 
   #Firestore stuff
-  cloud_firestore: ^0.9.13 ## import 'package:cloud_firestore/cloud_firestore.dart';
+  cloud_firestore: ^0.11.0+1 ## import 'package:cloud_firestore/cloud_firestore.dart';
+  
+  #FIrebase Storage
+  firebase_storage: ^3.0.0 ## import 'package:firebase_storage/firebase_storage.dart';
 
   #Equatable 
   equatable: ^0.2.3 ## import 'package:equatable/equatable.dart';
@@ -41,7 +44,8 @@ dependencies:
   #Validate :: to validate may user input such as Email Password etc.
   validate: ^1.7.0 ## import 'package:validate/validate.dart';
 
-  intl: 0.15.7
+  #Localisation
+  intl: 0.15.7 
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k_project_dodyversion/models/service_model.dart';
+import 'package:k_project_dodyversion/ui/pages/pages.dart';
 
 @immutable
 class ServiceCard extends StatelessWidget {
@@ -9,11 +10,13 @@ class ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Card(
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
-        onTap: () {/* ... */},
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => ServicePage(_model))),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -27,7 +30,7 @@ class ServiceCard extends StatelessWidget {
               child: ButtonBar(
                 children: <Widget>[
                   FlatButton(
-                    child: Text('BUY SERVICE'),
+                    child: Text('MAKE OFFER'),
                     onPressed: () {/* ... */},
                   ),
                   FlatButton(

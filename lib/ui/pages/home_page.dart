@@ -4,7 +4,6 @@ import 'package:k_project_dodyversion/blocs/bloc.dart';
 
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
 
-
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
@@ -20,7 +19,7 @@ class _HomePage extends State<HomePage> {
   void initState() {
     super.initState();
     _serviceBloc = new ServiceBloc();
-    _serviceBloc.dispatch(LoadAllServices());
+    _serviceBloc.dispatch(LoadAllServices(query:"null"));
   }
 
   @override
@@ -66,7 +65,7 @@ class _HomePage extends State<HomePage> {
             FloatingActionButton(
               heroTag: "ulala1",
               onPressed: () => setState(() {
-                    _serviceBloc.dispatch(LoadAllServices());
+                    _serviceBloc.dispatch(LoadAllServices(query: "null"));
                   }),
               tooltip: 'Refresh List',
               child: Icon(Icons.add),
