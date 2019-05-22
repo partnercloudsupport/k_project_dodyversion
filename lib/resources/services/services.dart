@@ -1,7 +1,7 @@
-export 'cloud_firestore_services.dart';
+export 'cloud_firestore_service.dart';
 export 'connection_service.dart';
-export 'authentication_service.dart';
-export 'firebase_storage_services.dart';
+export 'google_auth_service.dart';
+export 'firebase_storage_service.dart';
 /// Services are allowed to ccommunicate to each other to achiecve similar goal.
 /// 
 /// Services must be static. So the state will not change throughou the app

@@ -13,6 +13,7 @@ import 'add_service_page.dart';
 final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class UserProfilePage extends StatefulWidget {
+  UserProfilePage({Key key}) : super(key: key);
   @override
   _UserProfilePageState createState() => _UserProfilePageState();
 }
@@ -176,13 +177,16 @@ class _UserProfilePageState extends State<UserProfilePage>
                     children: <Widget>[
                       ClipRRect(
                         borderRadius: BorderRadius.circular(50.0),
-                        child: FadeInImage.assetNetwork(
-                          fit: BoxFit.cover,
-                          width: 100,
-                          height: 100,
-                          image: state.userModel.profilePictureURL,
-                          placeholder:
-                              Constant.ASSET_USERPROFILE_PLACEHOLDER_PATH,
+                        child: GestureDetector(
+                          onTap: () {/*. . . .*/},
+                          child: FadeInImage.assetNetwork(
+                            fit: BoxFit.cover,
+                            width: 100,
+                            height: 100,
+                            image: state.userModel.profilePictureURL,
+                            placeholder:
+                                Constant.ASSET_USERPROFILE_PLACEHOLDER_PATH,
+                          ),
                         ),
                       ),
                       Column(

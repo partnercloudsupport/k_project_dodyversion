@@ -19,7 +19,7 @@ class _HomePage extends State<HomePage> {
   void initState() {
     super.initState();
     _serviceBloc = new ServiceBloc();
-    _serviceBloc.dispatch(LoadAllServices(query:"null"));
+    _serviceBloc.dispatch(LoadAllServices(query: "null"));
   }
 
   @override
@@ -40,46 +40,48 @@ class _HomePage extends State<HomePage> {
         builder: (BuildContext context, ServiceState state) {
           if (state is LoadingState) return Text("loading");
           if (state is LoadServicesSuccessful)
-            return ListView.builder(
-              itemCount: state.serviceList.length,
-              padding: EdgeInsets.all(8.0),
-              itemBuilder: (BuildContext context, int i) {
-                return ListTile(
-                  title: ServiceCard(state.serviceList[i]),
-                );
+            return RefreshIndicator(
+              child: ListView.builder(
+                itemCount: state.serviceList.length,
+                padding: EdgeInsets.all(8.0),
+                itemBuilder: (BuildContext context, int i) {
+                  return ListTile(
+                    title: ServiceCard(state.serviceList[i]),
+                  );
+                },
+              ),
+              onRefresh: () async {
+                await Future.delayed(Duration(milliseconds: 1000));
+                _serviceBloc.dispatch(LoadAllServices(query: "null"));
+                return null;
               },
             );
           return Text("oops");
         },
       )),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          height: 50.0,
-        ),
-      ),
-      floatingActionButton: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 50),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            FloatingActionButton(
-              heroTag: "ulala1",
-              onPressed: () => setState(() {
-                    _serviceBloc.dispatch(LoadAllServices(query: "null"));
-                  }),
-              tooltip: 'Refresh List',
-              child: Icon(Icons.add),
-            ),
-            FloatingActionButton(
-              heroTag: "ulala2",
-              onPressed: () => {Navigator.pushNamed(context, '/profilePage')},
-              tooltip: 'User Profile',
-              child: Icon(Icons.airplanemode_active),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: Padding(
+      //   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 50),
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.end,
+      //     children: <Widget>[
+      //       // FloatingActionButton(
+      //       //   heroTag: "ulala1",
+      //       //   onPressed: () => setState(() {
+      //       //         _serviceBloc.dispatch(LoadAllServices(query: "null"));
+      //       //       }),
+      //       //   tooltip: 'Refresh List',
+      //       //   child: Icon(Icons.add),
+      //       // ),
+      //       FloatingActionButton(
+      //         heroTag: "ulala2",
+      //         onPressed: () => {Navigator.pushNamed(context, '/profilePage')},
+      //         tooltip: 'User Profile',
+      //         child: Icon(Icons.airplanemode_active),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

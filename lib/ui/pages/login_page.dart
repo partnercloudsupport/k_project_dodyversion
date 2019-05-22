@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
+import 'package:k_project_dodyversion/ui/Widgets/bottom_nav_bar.dart';
 import 'package:k_project_dodyversion/ui/themes/theme.dart';
 
 class LogInPage extends StatefulWidget {
@@ -51,8 +52,10 @@ class LogInPageState extends State<LogInPage> {
   // }
 
   void moveOn() {
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    // Navigator.of(context)
+        // .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+        Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => BottomNavigationBarController()));
   }
 
   @override

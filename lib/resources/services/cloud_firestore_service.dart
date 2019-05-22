@@ -15,17 +15,10 @@ enum Condition {
 
 /// As much as possible follow the CRUD method.
 class FirestoreService {
+  String uid;
   static const int FAIL = -1;
   static const int SUCCESS = 0;
 
-  static String uid;
-
-  static final GoogleSignIn _googleSignIn = new GoogleSignIn(
-    scopes: <String>[
-      'profile',
-      'https://www.googleapis.com/auth/userinfo.profile',
-    ],
-  );
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final Firestore _firestore = Firestore.instance;
 
@@ -35,30 +28,6 @@ class FirestoreService {
       timestampsInSnapshotsEnabled: true,
       persistenceEnabled: true,
     );
-  }
-
-  Future<GoogleSignInAuthentication> authenticateUserGmail() async {
-    GoogleSignInAccount _googleUser;
-    GoogleSignInAuthentication _googleAuth;
-    try {
-      _googleUser = await _googleSignIn.signIn();
-    } catch (e) {
-      print(e.toString());
-      return null;
-    } finally {
-      _googleAuth = await _googleUser.authentication;
-      final AuthCredential _credential = GoogleAuthProvider.getCredential(
-        accessToken: _googleAuth.accessToken,
-        idToken: _googleAuth.idToken,
-      );
-      final FirebaseUser user = await _auth.signInWithCredential(_credential);
-      if (await _authenticateInFirestore(user.uid) == false) {
-        print("Creating database for new Gmail User");
-        _registerUserToFirestore(user);
-      }
-      _setUID(user.uid);
-    }
-    return _googleAuth;
   }
 
   Future<bool> _authenticateInFirestore(String uid) async {
