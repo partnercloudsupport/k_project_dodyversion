@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:k_project_dodyversion/ui/pages/pages.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
-  
 
 // this widget will only be built once
 // after login -> call this widget
@@ -25,16 +24,18 @@ class _BottomNavigationBarControllerState
   // Add your page here
   // Sequencing matter
   final List<Widget> pages = [
-    HomePage(key: PageStorageKey('Projects')),
-    UserProfilePage(
-      key: PageStorageKey('Alerts'),
+    HomePage(
+      key: PageStorageKey('Home'),
     ),
-    // Insights(
-    //     key: PageStorageKey('Insights')
-    // ),
-    // ProfilePage(
-    //   key: PageStorageKey('Profile')
-    // ),
+    ChatsPage(
+      key: PageStorageKey('Chats'),
+    ),
+    OrdersPage(
+      key: PageStorageKey('Orders'),
+    ),
+    UserProfilePage(
+      key: PageStorageKey('Profile'),
+    ),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -77,7 +78,7 @@ class _BottomNavigationBarControllerState
     return Scaffold(
       bottomNavigationBar: _bottomNavigationBar(_selectedIndex),
       body: PageStorage(
-        child: pages[_selectedIndex % 2],
+        child: pages[_selectedIndex % pages.length],
         bucket: bucket,
       ),
     );
