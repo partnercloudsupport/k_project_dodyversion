@@ -13,10 +13,12 @@ class ServiceCard extends StatelessWidget {
     return Card(
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => ServicePage(_model))),
+        onTap: () {
+          var route = new MaterialPageRoute(
+            builder: (BuildContext context) => ServicePage(_model),
+          );
+          Navigator.of(context).push(route);
+        },
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[

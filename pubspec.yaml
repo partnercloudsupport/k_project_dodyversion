@@ -48,7 +48,7 @@ dependencies:
   intl: 0.15.7 
 
   #A nicer bottom navbar
-  fancy_bottom_navigation: ^0.1.0 ##import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
+  fancy_bottom_navigation: ^0.3.2 ##import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
   
 
 dev_dependencies:

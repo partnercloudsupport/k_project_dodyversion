@@ -17,7 +17,6 @@ class MyApp extends StatelessWidget {
           'Flutter Code Sample for services.SystemChrome.setSystemUIOverlayStyle',
       theme: KProjectTheme.getTheme(context),
       home: defaultHomePage(),
-      routes: kRoute(),
     );
   }
 
