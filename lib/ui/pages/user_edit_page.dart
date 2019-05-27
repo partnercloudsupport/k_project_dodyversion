@@ -11,7 +11,8 @@ final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class EditUserProfilePage extends StatefulWidget {
-  EditUserProfilePage({Key key}) : super(key: key);
+  UserBloc userBloc;
+  EditUserProfilePage(this.userBloc, {Key key}) : super(key: key);
 
   _EditUserProfilePageState createState() => _EditUserProfilePageState();
 }
@@ -20,9 +21,11 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
   final TextEditingController _controller = new TextEditingController();
   UserModel _userModel;
 
+  var _userBloc;
   @override
   void initState() {
     super.initState();
+    _userBloc = widget.userBloc;
     _userModel = UserProvider.mUser;
     _controller.text = TimeUtils.convertDateToString(
         TimeUtils.convertMillisToDate(_userModel.dateOfBirth));
@@ -51,7 +54,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<UserBloc>(context),
+      bloc: _userBloc,
       listener: (BuildContext context, UserState state) {
         if (state is UpdateUserSuccess) {
           Navigator.pop(context, true);
@@ -148,7 +151,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                   },
                 ),
                 BlocBuilder(
-                  bloc: BlocProvider.of<UserBloc>(context),
+                  bloc: _userBloc,
                   builder: (BuildContext context, UserState state) {
                     return new Container(
                       padding: const EdgeInsets.only(left: 40.0, top: 20.0),
@@ -178,7 +181,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
           NotificationTone.NEGATIVE);
     } else {
       form.save(); //This invokes each onSaved event
-      BlocProvider.of<UserBloc>(context)
+      _userBloc
           .dispatch(new UpdateUserEvent(_userModel));
       print('Form save called, newContact is now up to date...');
       print('========================================');

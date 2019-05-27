@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
 import 'package:k_project_dodyversion/resources/user_repo/user_provider.dart';
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
+import 'package:k_project_dodyversion/ui/pages/pages.dart';
 import 'package:k_project_dodyversion/ui/themes/theme.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
 import 'package:k_project_dodyversion/utils/notification_utils.dart';
@@ -36,18 +37,6 @@ class _UserProfilePageState extends State<UserProfilePage>
     super.initState();
   }
 
-  Color getRandomColor() {
-    Random random = new Random();
-    var colors = [
-      Colors.red,
-      Colors.black,
-      Colors.cyan,
-      Colors.blue,
-      Colors.green
-    ];
-    return colors[random.nextInt(colors.length)];
-  }
-
   /// Todo :: ofinish up user page
   @override
   Widget build(BuildContext context) {
@@ -75,9 +64,21 @@ class _UserProfilePageState extends State<UserProfilePage>
                 key: scaffoldKey,
                 appBar: AppBar(
                   title: getUserName(state),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      tooltip: 'Edit Profile',
+                      onPressed: () {
+                        var route = new MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              EditUserProfilePage(_userBloc),
+                        );
+                        Navigator.push(context, route);
+                      },
+                    ),
+                  ],
                 ),
                 backgroundColor: KProjectTheme.primarySwatch.shade400,
-                // body: getProfileTab(state), // getMyServices(state),
                 body: getBody(state, serviceState),
               );
             },
@@ -102,6 +103,13 @@ class _UserProfilePageState extends State<UserProfilePage>
             ),
           ),
           myServicesSliver(serviceState),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Container(
+                height: 15,
+              ),
+            ]),
+          )
         ],
       );
     } else {
@@ -228,7 +236,7 @@ class _UserProfilePageState extends State<UserProfilePage>
   /// Forth Card ( Experience )
   Widget experienceCard(UserState state) {
     return Padding(
-      padding: padding1end,
+      padding: padding1,
       child: Card(
         child: Padding(
           padding: padding3,
