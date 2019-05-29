@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:k_project_dodyversion/models/user_model.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 enum Condition {
   IS_EQUAL_TO,
@@ -15,7 +14,7 @@ enum Condition {
 
 /// As much as possible follow the CRUD method.
 class FirestoreService {
-  String uid;
+  static String uid;
   static const int FAIL = -1;
   static const int SUCCESS = 0;
 
@@ -28,6 +27,18 @@ class FirestoreService {
       timestampsInSnapshotsEnabled: true,
       persistenceEnabled: true,
     );
+  }
+
+  Future<void> signInWithCredential(AuthCredential credential) async {
+    var firebaseUser = await _auth.signInWithCredential(credential);
+
+    // If user is new, create a new document for the user.
+    if (await _authenticateInFirestore(firebaseUser.uid) == false) {
+      print("Creating database for new Gmail User");
+      _registerUserToFirestore(firebaseUser);
+    }
+
+    _setUID(firebaseUser.uid);
   }
 
   Future<bool> _authenticateInFirestore(String uid) async {

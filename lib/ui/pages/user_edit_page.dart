@@ -183,10 +183,6 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
       form.save(); //This invokes each onSaved event
       _userBloc
           .dispatch(new UpdateUserEvent(_userModel));
-      print('Form save called, newContact is now up to date...');
-      print('========================================');
-      print('Submitting to back end...');
-      print('TODO - we will write the submission part next...');
     }
   }
 }

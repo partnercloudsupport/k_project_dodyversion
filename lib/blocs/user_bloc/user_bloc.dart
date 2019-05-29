@@ -17,7 +17,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> mapEventToState(
     UserEvent event,
   ) async* {
-    // TODO: implement mapEventToState
     if (event is LoadUserEvent) {
       yield* mapLoadUserEvent(event.ownUser, event.uid);
     } else if (event is UpdateUserEvent) {
@@ -50,4 +49,3 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 }
 
-class UserModal {}

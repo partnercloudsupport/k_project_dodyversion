@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:k_project_dodyversion/resources/services/services.dart';
 
 /// Anything with regard to authentication will go here
-/// 
-/// For ex. 
+///
+/// For ex.
 ///   1. google auth
-/// 
+///
 
 class GoogleAuthService {
   static final GoogleSignIn _googleSignIn = new GoogleSignIn(
@@ -17,31 +18,24 @@ class GoogleAuthService {
 
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-/// Future is used to see if the the auth is null or not. null means log in failed
-   Future<GoogleSignInAuthentication> authenticateUserGmail() async {
+  static GoogleSignInAuthentication googleAuth;
+
+  /// Future is used to see if the the auth is null or not. null means log in failed
+  Future<AuthCredential> authenticateUserGmail() async {
     GoogleSignInAccount _googleUser;
-    GoogleSignInAuthentication _googleAuth;
+    AuthCredential _credential;
     try {
       _googleUser = await _googleSignIn.signIn();
     } catch (e) {
       print(e.toString());
       return null;
     } finally {
-      _googleAuth = await _googleUser.authentication;
-      final AuthCredential _credential = GoogleAuthProvider.getCredential(
-        accessToken: _googleAuth.accessToken,
-        idToken: _googleAuth.idToken,
+      googleAuth = await _googleUser.authentication;
+      _credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
-      final FirebaseUser user = await _auth.signInWithCredential(_credential);
-
-
-      //// This one must be done in the repository.
-      // if (await _authenticateInFirestore(user.uid) == false) {
-      //   print("Creating database for new Gmail User");
-      //   _registerUserToFirestore(user);
-      // }
-      // _setUID(user.uid);
     }
-    return _googleAuth;
+    return _credential;
   }
 }

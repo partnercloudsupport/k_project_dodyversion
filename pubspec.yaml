@@ -50,6 +50,8 @@ dependencies:
   #A nicer bottom navbar
   fancy_bottom_navigation: ^0.3.2 ##import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
   
+  #To pick image from the gallery
+  image_picker: ^0.6.0+8 ##import 'package:image_picker/image_picker.dart';
 
 dev_dependencies:
   flutter_test:

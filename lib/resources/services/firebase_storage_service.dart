@@ -9,19 +9,27 @@ class FirebaseStorageService {
     storageBucket: "gs://k-project-dody.appspot.com/",
   );
 
-  Future<String> uploadFile(String localPath, String cloudPath) async {
+  Future<String> uploadFile(File file, String cloudPath) async {
     StorageReference _reference = _firebaseStorage.ref().child(cloudPath);
-    StorageUploadTask _uploadTask = _reference.putFile(File(localPath));
-    StorageTaskSnapshot _storageTaskSnapshot;
+    StorageUploadTask _uploadTask = _reference.putFile(file);
     String downloadURL = "";
-    bool _isError = false;
 
-    _uploadTask.onComplete.then((value) {
-      _storageTaskSnapshot = value;
-      downloadURL = _storageTaskSnapshot.ref.getDownloadURL().toString();
-      // _storageTaskSnapshot.
+    _uploadTask.onComplete.then((storageTaskSnapshot) {
+      downloadURL = storageTaskSnapshot.ref.getDownloadURL().toString();
     });
-    while (!_uploadTask.isComplete && !_uploadTask.isSuccessful) {}
+
+    while (!_uploadTask.isComplete) {}
     return downloadURL;
+  }
+
+  Future<dynamic> deleteFile(String cloudPath) async {
+    StorageReference _reference = _firebaseStorage.ref().child(cloudPath);
+    _reference.delete();
+  }
+
+  // Still not sure if I gonna use this but ill just leave it here
+  Future<dynamic> downloadFile(File file, String cloudPath) async {
+    StorageReference _reference = _firebaseStorage.ref().child(cloudPath);
+    StorageFileDownloadTask _downloadTask = _reference.writeToFile(file);
   }
 }

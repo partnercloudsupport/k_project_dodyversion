@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
@@ -32,7 +33,35 @@ class _HomePage extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
+        flexibleSpace: SafeArea(
+          child: Container(
+            height: 10e308,
+            child: Padding(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0xffffffff),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    children: <Widget>[
+                      Text("Search something"),
+                      Icon(Icons.search),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ),
+              ),
+              padding: EdgeInsets.only(
+                top: 10,
+                bottom: 10,
+                left: 10,
+                right: 10,
+              ),
+            ),
+          ),
+        ),
       ),
       body: Container(
           child: BlocBuilder(
