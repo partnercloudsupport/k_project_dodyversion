@@ -221,10 +221,8 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
           _scaffoldKey,
           NotificationTone.NEGATIVE);
     } else {
-    print("asd");
-
       form.save(); //This invokes each onSaved event
-      _userBloc.dispatch(new UpdateUserEvent(_userModel));
+      _userBloc.dispatch(UpdateUserEvent(_userModel));
     }
   }
 }

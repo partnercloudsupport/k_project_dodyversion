@@ -68,6 +68,17 @@ class _UserProfilePageState extends State<UserProfilePage>
                   title: getUserName(state),
                   actions: <Widget>[
                     IconButton(
+                      icon: Icon(Icons.add),
+                      tooltip: 'Add Services',
+                      onPressed: () {
+                        var route = new MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              AddServicePage(),
+                        );
+                        Navigator.push(context, route);
+                      },
+                    ),
+                    IconButton(
                       icon: Icon(Icons.edit),
                       tooltip: 'Edit Profile',
                       onPressed: () {
