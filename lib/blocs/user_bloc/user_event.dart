@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:meta/meta.dart';
@@ -23,7 +25,7 @@ class LoadUserEvent extends UserEvent {
 }
 
 class UpdateUserEvent extends UserEvent {
-  UserModel _userModel;
+  final UserModel _userModel;
 
   UpdateUserEvent(this._userModel) : super([_userModel]);
 
@@ -31,5 +33,15 @@ class UpdateUserEvent extends UserEvent {
   @override
   String toString() {
     return ("updating user profile");
+  }
+}
+
+class UpdateProfilePictureEvent extends UserEvent {
+  final File pictureFile;
+  UpdateProfilePictureEvent(this.pictureFile) : super([pictureFile]);
+
+  @override
+  String toString() {
+    return ("Updating profile picture");
   }
 }

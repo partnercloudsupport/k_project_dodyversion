@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:k_project_dodyversion/ui/pages/pages.dart';
 import 'package:k_project_dodyversion/ui/themes/theme.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
 import 'package:k_project_dodyversion/utils/notification_utils.dart';
+import 'package:image_picker/image_picker.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -149,6 +151,11 @@ class _UserProfilePageState extends State<UserProfilePage>
     }
   }
 
+  Future getImage() async {
+    File tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    print(tempImage.toString());
+  }
+
   Widget profileCard(UserLoadedSuccessfully state) {
     return Padding(
       padding: padding1,
@@ -163,7 +170,7 @@ class _UserProfilePageState extends State<UserProfilePage>
               ClipRRect(
                 borderRadius: BorderRadius.circular(50.0),
                 child: GestureDetector(
-                  onTap: () {/*. . . .*/},
+                  onTap: getImage,
                   child: FadeInImage.assetNetwork(
                     fit: BoxFit.cover,
                     width: 100,

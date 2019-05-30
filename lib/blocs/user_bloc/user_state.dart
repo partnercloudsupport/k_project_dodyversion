@@ -41,7 +41,6 @@ class UserLoadedFailed extends UserState {
   }
 }
 
-
 class UpdatingUser extends UserState {
   @override
   String toString() {
@@ -53,5 +52,24 @@ class UpdateUserSuccess extends UserState {
   @override
   String toString() {
     return "Update User Successful";
+  }
+}
+
+/// Upload Picture
+class UpdatingProfilePicture extends UserState {
+  @override
+  String toString() {
+    return "Updating Profile Picture";
+  }
+}
+
+class UpdateProfilePictureSuccessful extends UserState {
+  final String cloudPath;
+
+  UpdateProfilePictureSuccessful(this.cloudPath) : super([cloudPath]);
+
+  @override
+  String toString() {
+    return "Update Profile Picture Successful";
   }
 }

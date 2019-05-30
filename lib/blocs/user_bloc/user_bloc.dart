@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:k_project_dodyversion/blocs/user_bloc/user_event.dart';
 export 'package:k_project_dodyversion/blocs/user_bloc/user_event.dart';
 import 'package:k_project_dodyversion/blocs/user_bloc/user_state.dart';
@@ -21,6 +24,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* mapLoadUserEvent(event.ownUser, event.uid);
     } else if (event is UpdateUserEvent) {
       yield* mapUpdateUserEvent(event.userModel);
+    } else if (event is UpdateProfilePictureEvent) {
+      yield* mapUpdateProfilePictureEvent(event.pictureFile);
     }
   }
 
@@ -45,7 +50,24 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     yield UpdatingUser();
     _userRepository.updateCurrentUser(userModel);
     yield UpdateUserSuccess();
-    dispatch(LoadUserEvent(true,""));
+    dispatch(LoadUserEvent(true, ""));
+  }
+
+  Stream<UserState> mapUpdateProfilePictureEvent(File pictureFile) async* {
+    try {
+      yield UpdatingProfilePicture();
+      Stream<StorageTaskEvent> eventStream =
+          await _userRepository.updateProfilePicture(pictureFile);
+      await for (StorageTaskEvent event in eventStream) {
+        print("${event.snapshot.bytesTransferred} + bytes transferrrrred");
+        if (event.type == StorageTaskEventType.success) {
+          var url = await event.snapshot.ref.getDownloadURL();
+          yield UpdateProfilePictureSuccessful(url);
+          return;
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
-

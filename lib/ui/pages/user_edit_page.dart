@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/resources/user_repo/user_provider.dart';
 import 'package:k_project_dodyversion/utils/notification_utils.dart';
 import 'package:k_project_dodyversion/utils/time_utils.dart';
+import 'package:k_project_dodyversion/utils/utils.dart';
 
 final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -51,6 +55,17 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
     });
   }
 
+  Future getImage() async {
+    File tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (tempImage == null) {
+      NotificationUtils.showMessage(
+          "Uploading image cancelled", _scaffoldKey, NotificationTone.NEGATIVE);
+      return;
+    }
+    print(tempImage.toString());
+    _userBloc.dispatch(new UpdateProfilePictureEvent(tempImage));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -61,6 +76,14 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
         } else if (state is UpdatingUser) {
           NotificationUtils.showMessage(
               "Profile is updating!", _scaffoldKey, NotificationTone.POSITIVE);
+        } else if (state is UpdatingProfilePicture) {
+          NotificationUtils.showMessage("Uploading new image", _scaffoldKey);
+        } else if (state is UpdateProfilePictureSuccessful) {
+          setState(() {
+             _userModel.profilePictureURL = state.cloudPath;
+          });
+          NotificationUtils.showMessage(
+              "Profile picture updated", _scaffoldKey);
         }
       },
       child: Scaffold(
@@ -75,6 +98,24 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
             child: new ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      child: FadeInImage.assetNetwork(
+                        fit: BoxFit.cover,
+                        width: 100,
+                        height: 100,
+                        image: _userModel.profilePictureURL,
+                        placeholder:
+                            Constant.ASSET_USERPROFILE_PLACEHOLDER_PATH,
+                      ),
+                    ),
+                    RaisedButton(
+                      child: Text("Upload Image"),
+                      onPressed: getImage,
+                    )
+                  ],
+                ),
                 new TextFormField(
                   initialValue: _userModel.name,
                   decoration: const InputDecoration(
@@ -180,9 +221,10 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
           _scaffoldKey,
           NotificationTone.NEGATIVE);
     } else {
+    print("asd");
+
       form.save(); //This invokes each onSaved event
-      _userBloc
-          .dispatch(new UpdateUserEvent(_userModel));
+      _userBloc.dispatch(new UpdateUserEvent(_userModel));
     }
   }
 }
