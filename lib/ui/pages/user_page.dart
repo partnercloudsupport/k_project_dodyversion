@@ -1,10 +1,9 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
-import 'package:k_project_dodyversion/resources/user_repo/user_provider.dart';
+import 'package:k_project_dodyversion/resources/repository.dart';
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
 import 'package:k_project_dodyversion/ui/pages/pages.dart';
 import 'package:k_project_dodyversion/ui/themes/theme.dart';
@@ -35,7 +34,7 @@ class _UserProfilePageState extends State<UserProfilePage>
   @override
   void initState() {
     _mServicesBloc.dispatch(LoadAllServicesWithQuery(
-        parameter: "ownerID", value: UserProvider.mUser.uid));
+        parameter: "ownerID", value: UserRepository.mUser.uid));
     super.initState();
   }
 

@@ -45,8 +45,8 @@ class AuthenticationBloc
         return;
       }
       DocumentSnapshot dr = await _firebaseRepository.pullUserDocument(_firebaseRepository.uid);
-      UserProvider.mUser = new UserModel(null);
-      UserProvider.mUser.setFromMap(dr.data);
+      UserRepository.mUser = new UserModel(null);
+      UserRepository.mUser.setFromMap(dr.data);
       yield LoggedInState();
     } catch (e) {
       yield LogginInGoogleFailedState();

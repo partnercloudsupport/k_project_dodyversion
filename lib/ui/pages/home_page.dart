@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
 
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
+import 'package:k_project_dodyversion/ui/pages/pages.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -37,21 +38,29 @@ class _HomePage extends State<HomePage> {
           child: Container(
             height: 10e308,
             child: Padding(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0xffffffff),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Text("Search something"),
-                      Icon(Icons.search),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: GestureDetector(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xffffffff),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Text("Search something"),
+                        Icon(Icons.search),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
                   ),
                 ),
+                onTap: () {
+                  var route = new MaterialPageRoute(
+                    builder: (BuildContext context) => SearchPage(),
+                  );
+                  Navigator.of(context).push(route);
+                },
               ),
               padding: EdgeInsets.only(
                 top: 10,

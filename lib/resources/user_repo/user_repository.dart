@@ -1,43 +1,54 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/resources/services/services.dart';
 import 'package:k_project_dodyversion/resources/user_repo/user_provider.dart';
 
-class UserRepository {
-  static UserProvider _userProvider;
-  FirebaseStorageService _firebaseStorageService = FirebaseStorageService();
+import '../services/services.dart';
 
-  UserRepository() {
-    _userProvider = new UserProvider();
-  }
+class UserRepository {
+  static UserModel mUser;
+
+  FirebaseStorageService _firebaseStorageService = FirebaseStorageService();
+  FirestoreService _firestoreService = FirestoreService();
+
+  UserRepository() {}
 
   //Load profile form firestore
   Future<UserModel> loadUser(String uid) async {
-    if (UserProvider.mUser?.uid == uid) {
+    if (UserRepository.mUser?.uid == uid) {
       print("user is own user");
-      // return UserProvider.mUser;
-      return _userProvider.pullUserProfileFromCloud(uid);
+      // return UserRepository.mUser;
+      return _pullUserProfileFromCloud(uid);
     }
     print("user is other user");
-    return _userProvider.pullUserProfileFromCloud(uid);
+    return _pullUserProfileFromCloud(uid);
   }
 
   void updateCurrentUser(UserModel um) {
-    UserProvider.mUser = um;
-    _userProvider.saveToCloud(um.getMap());
+    UserRepository.mUser = um;
+    _firestoreService.pushDocument('users', um.uid, um.getMap());
   }
 
   String getCurrentUserName() {
-    if (UserProvider.mUser == null) {
+    if (UserRepository.mUser == null) {
       return "null";
     }
-    return UserProvider.mUser.name;
+    return UserRepository.mUser.name;
   }
 
-  Future<Stream<StorageTaskEvent>> updateProfilePicture(File pictureFile) async {
+  Future<Stream<StorageTaskEvent>> updateProfilePicture(
+      File pictureFile) async {
     return _firebaseStorageService.uploadFile(pictureFile,
-        UserProvider.mUser.uid, FirebaseStorageType.PROFILEPICTURE);
+        UserRepository.mUser.uid, FirebaseStorageType.PROFILEPICTURE);
+  }
+
+  Future<UserModel> _pullUserProfileFromCloud(String uid) async {
+    DocumentSnapshot ds = await _firestoreService.pullDocument('users', uid);
+    UserModel temp = new UserModel(null);
+    temp.setFromMap(ds.data);
+    return temp;
   }
 }

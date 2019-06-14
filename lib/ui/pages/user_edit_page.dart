@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
 import 'package:k_project_dodyversion/models/models.dart';
-import 'package:k_project_dodyversion/resources/user_repo/user_provider.dart';
+import 'package:k_project_dodyversion/resources/repository.dart';
 import 'package:k_project_dodyversion/utils/notification_utils.dart';
 import 'package:k_project_dodyversion/utils/time_utils.dart';
 import 'package:k_project_dodyversion/utils/utils.dart';
@@ -30,7 +30,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
   void initState() {
     super.initState();
     _userBloc = widget.userBloc;
-    _userModel = UserProvider.mUser;
+    _userModel = UserRepository.mUser;
     _controller.text = TimeUtils.convertDateToString(
         TimeUtils.convertMillisToDate(_userModel.dateOfBirth));
   }

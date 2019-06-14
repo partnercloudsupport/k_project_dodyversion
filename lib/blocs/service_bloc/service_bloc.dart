@@ -53,6 +53,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
           // print("asdasdasdsad I am in the bloc.dart" + ds.toString());
         }
         yield LoadServicesSuccessful(smCollection);
+        return;
       }
     } catch (e) {
       print(e.toString());
@@ -88,6 +89,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
           // print("asdasdasdsad I am in the bloc.dart" + ds.toString());
         }
         yield LoadServicesSuccessful(smCollection);
+        return;
       }
     } catch (e) {
       print(e.toString());

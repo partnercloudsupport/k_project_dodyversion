@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/service_bloc/service_bloc.dart';
-import 'package:k_project_dodyversion/resources/user_repo/user_provider.dart';
+import 'package:k_project_dodyversion/resources/repository.dart';
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
 
 /// This page is to show users who have bought my services
@@ -23,7 +23,7 @@ class _OrdersPageState extends State<OrdersPage> {
   }
 
   Widget getMyOrders() {
-    _mOrdersBloc.dispatch(LoadAllMyOrders(value: UserProvider.mUser.uid));
+    _mOrdersBloc.dispatch(LoadAllMyOrders(value: UserRepository.mUser.uid));
     return BlocBuilder(
       bloc: _mOrdersBloc,
       builder: (BuildContext context, ServiceState state) {

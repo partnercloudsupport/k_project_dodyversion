@@ -4,7 +4,7 @@ import 'package:k_project_dodyversion/resources/repository.dart';
 
 /// Here the user data will be stored. It is a Singleton.
 
-class UserProvider {
+class UserProvidera {
   static UserModel mUser;
   static bool isOwnUserAvailable = false;
 

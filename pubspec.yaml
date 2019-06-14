@@ -53,6 +53,9 @@ dependencies:
   #To pick image from the gallery
   image_picker: ^0.6.0+8 ##import 'package:image_picker/image_picker.dart';
 
+  #Search page
+  material_search: ^0.2.8 ##import 'package:material_search/material_search.dart';
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
