@@ -43,12 +43,18 @@ class _ChatroomsPageState extends State<ChatroomsPage> {
   }
 
   Widget buildItem(var index, DocumentSnapshot document) {
+    String peerName;
+
+    if (document.data['members'][0] == UserRepository.mUser.uid) {
+      peerName = document.data['names'][1];
+    } else {
+      peerName = document.data['names'][0];
+    }
     return GestureDetector(
       child: Card(
         child: Column(
           children: <Widget>[
-            Text(document.data['members'][0]),
-            Text(document.data['members'][1]),
+            Text(peerName),
             Text(document.data['lastMessage']),
           ],
         ),

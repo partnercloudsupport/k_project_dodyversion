@@ -3,6 +3,7 @@ import 'package:k_project_dodyversion/models/models.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:k_project_dodyversion/resources/user_repo/user_repository.dart';
+import 'package:k_project_dodyversion/ui/pages/pages.dart';
 import 'package:k_project_dodyversion/utils/widget_utils.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -103,6 +104,7 @@ class _ServicePageState extends State<ServicePage> {
       ),
       RaisedButton(
         child: Text("Chat"),
+        onPressed: _startChatting,
       )
     };
   }
@@ -115,6 +117,14 @@ class _ServicePageState extends State<ServicePage> {
             : Text("The seller is ${widget.model.ownerName}"),
       ),
     );
+  }
+
+  _startChatting() {
+    var route = new MaterialPageRoute(
+      builder: (BuildContext context) =>
+          ChatsPage(widget.model.ownerID, widget.model.ownerName),
+    );
+    Navigator.of(context).push(route);
   }
 
   _makeOffer() {

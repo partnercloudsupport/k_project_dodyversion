@@ -61,10 +61,18 @@ class _ChatsPageState extends State<ChatsPage> {
         Firestore.instance.collection('chatrooms').document(groupChatID);
     Firestore.instance.runTransaction((transaction) async {
       // Update the last message for quick retrival
-      await transaction.update(documentReference, {
-        'members': members,
-        'names': membersName,
-      });
+      try {
+        await transaction.update(documentReference, {
+          'members': members,
+          'names': membersName,
+        });
+      } catch (e) {
+        await transaction.set(documentReference, {
+          'lastMessage': 'asdfasdf',
+          'members': members,
+          'names': membersName,
+        });
+      }
     });
   }
 
@@ -73,7 +81,7 @@ class _ChatsPageState extends State<ChatsPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Chats"),
+        title: Text(widget.peerName),
       ),
       body: WillPopScope(
         child: Stack(
