@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:k_project_dodyversion/resources/services/services.dart';
 
 /// Anything with regard to authentication will go here
 ///
@@ -26,6 +25,9 @@ class GoogleAuthService {
     AuthCredential _credential;
     try {
       _googleUser = await _googleSignIn.signIn();
+      if (_googleUser == null) {
+        return null;
+      }
     } catch (e) {
       print(e.toString());
       return null;

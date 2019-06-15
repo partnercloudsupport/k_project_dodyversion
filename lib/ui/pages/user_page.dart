@@ -38,7 +38,6 @@ class _UserProfilePageState extends State<UserProfilePage>
     super.initState();
   }
 
-  /// Todo :: ofinish up user page
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -71,8 +70,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                       tooltip: 'Add Services',
                       onPressed: () {
                         var route = new MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              AddServicePage(),
+                          builder: (BuildContext context) => AddServicePage(),
                         );
                         Navigator.push(context, route);
                       },
@@ -131,6 +129,44 @@ class _UserProfilePageState extends State<UserProfilePage>
     }
   }
 
+  Widget profileCard(UserLoadedSuccessfully state) {
+    return Padding(
+      padding: padding1,
+      child: Card(
+        child: Padding(
+          padding: padding2,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(50.0),
+                child: FadeInImage.assetNetwork(
+                  fit: BoxFit.cover,
+                  width: 100,
+                  height: 100,
+                  image: state.userModel.profilePictureURL,
+                  placeholder: Constant.ASSET_USERPROFILE_PLACEHOLDER_PATH,
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(state.userModel.name),
+                  Text(state.userModel.email),
+                  Text(state.userModel.languages),
+                  Text("Age : ${state.userModel.age}"),
+                  Text("Member for ${state.userModel.membershipDuration}"),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget getUserName(UserState state) {
     if (state is LoadingUser) {
       return Text("Loading user");
@@ -160,53 +196,7 @@ class _UserProfilePageState extends State<UserProfilePage>
       );
     }
   }
-
-  Future getImage() async {
-    File tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
-    print(tempImage.toString());
-  }
-
-  Widget profileCard(UserLoadedSuccessfully state) {
-    return Padding(
-      padding: padding1,
-      child: Card(
-        child: Padding(
-          padding: padding2,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(50.0),
-                child: GestureDetector(
-                  onTap: getImage,
-                  child: FadeInImage.assetNetwork(
-                    fit: BoxFit.cover,
-                    width: 100,
-                    height: 100,
-                    image: state.userModel.profilePictureURL,
-                    placeholder: Constant.ASSET_USERPROFILE_PLACEHOLDER_PATH,
-                  ),
-                ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(state.userModel.name),
-                  Text(state.userModel.email),
-                  Text(state.userModel.languages),
-                  Text("Age : ${state.userModel.age}"),
-                  Text("Member for ${state.userModel.membershipDuration}"),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
+  
   Widget bioCard(UserLoadedSuccessfully state) {
     return Padding(
       padding: padding1,

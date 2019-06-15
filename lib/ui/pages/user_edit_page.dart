@@ -24,8 +24,8 @@ class EditUserProfilePage extends StatefulWidget {
 class _EditUserProfilePageState extends State<EditUserProfilePage> {
   final TextEditingController _controller = new TextEditingController();
   UserModel _userModel;
-
   var _userBloc;
+
   @override
   void initState() {
     super.initState();
@@ -35,12 +35,14 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
         TimeUtils.convertMillisToDate(_userModel.dateOfBirth));
   }
 
+  /// Pops up a date picker base on the current date
   Future _chooseDate(BuildContext context, String initialDateString) async {
     var now = new DateTime.now();
-    var initialDate = TimeUtils.convertStringToDate(initialDateString) ?? now;
-    initialDate = (initialDate.year >= 1900 && initialDate.isBefore(now)
+    var initialDate = TimeUtils.convertStringToDate(initialDateString) ??
+        now; // If not specified then use NOW
+    initialDate = initialDate.year >= 1900 && initialDate.isBefore(now)
         ? initialDate
-        : now);
+        : now;
 
     var result = await showDatePicker(
         context: context,
@@ -80,7 +82,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
           NotificationUtils.showMessage("Uploading new image", _scaffoldKey);
         } else if (state is UpdateProfilePictureSuccessful) {
           setState(() {
-             _userModel.profilePictureURL = state.cloudPath;
+            _userModel.profilePictureURL = state.cloudPath;
           });
           NotificationUtils.showMessage(
               "Profile picture updated", _scaffoldKey);
