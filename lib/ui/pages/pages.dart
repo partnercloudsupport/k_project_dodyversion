@@ -7,3 +7,4 @@ export 'service_page.dart';
 export 'orders_page.dart';
 export 'chats_page.dart';
 export 'search_page.dart';
+export 'chatrooms_page.dart';

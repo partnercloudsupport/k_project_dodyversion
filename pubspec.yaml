@@ -62,6 +62,13 @@ dependencies:
   #UUID
   uuid: ^2.0.2 ## https://pub.dev/packages/uuid#-installing-tab-
 
+  #Cached network image url
+  cached_network_image: ^0.8.0 ##https://pub.dev/packages/cached_network_image#-installing-tab-
+
+  #Pull to refresh
+  pull_to_refresh: ^1.4.4 #https://pub.dev/packages/pull_to_refresh#-installing-tab-
+
+    
 dev_dependencies:
   flutter_test:
     sdk: flutter

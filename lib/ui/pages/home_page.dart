@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
 import 'package:k_project_dodyversion/ui/pages/pages.dart';
@@ -13,6 +14,8 @@ class HomePage extends StatefulWidget {
   _HomePage createState() => _HomePage();
 }
 
+RefreshController _refreshController;
+
 // the 'widget' obj here is the HomePage from the State<>
 class _HomePage extends State<HomePage> {
   ServiceBloc _serviceBloc;
@@ -22,6 +25,7 @@ class _HomePage extends State<HomePage> {
     super.initState();
     _serviceBloc = new ServiceBloc();
     _serviceBloc.dispatch(LoadAllServices(query: "null"));
+    _refreshController = RefreshController(initialRefresh: false);
   }
 
   @override
@@ -78,7 +82,7 @@ class _HomePage extends State<HomePage> {
         builder: (BuildContext context, ServiceState state) {
           if (state is LoadingState) return Text("loading");
           if (state is LoadServicesSuccessful)
-            return RefreshIndicator(
+            return SmartRefresher(
               child: ListView.builder(
                 itemCount: state.serviceList.length,
                 padding: EdgeInsets.all(8.0),
@@ -91,8 +95,10 @@ class _HomePage extends State<HomePage> {
               onRefresh: () async {
                 await Future.delayed(Duration(milliseconds: 1000));
                 _serviceBloc.dispatch(LoadAllServices(query: "null"));
+                _refreshController.loadComplete();
                 return null;
               },
+              controller: _refreshController,
             );
           return Text("oops");
         },
