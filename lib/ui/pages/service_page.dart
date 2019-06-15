@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:k_project_dodyversion/resources/user_repo/user_repository.dart';
 import 'package:k_project_dodyversion/utils/widget_utils.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -76,6 +77,7 @@ class _ServicePageState extends State<ServicePage> {
               height: 100,
               color: Colors.black,
             ),
+            getOwner(),
             Container(
               height: 100,
               color: Colors.black,
@@ -97,10 +99,28 @@ class _ServicePageState extends State<ServicePage> {
     return {
       RaisedButton(
         child: Text("Make Offer"),
+        onPressed: _makeOffer,
       ),
       RaisedButton(
         child: Text("Chat"),
       )
     };
+  }
+
+  Widget getOwner() {
+    return Container(
+      child: Center(
+        child: (widget.model.ownerID == UserRepository.mUser.uid)
+            ? Text("This is your service")
+            : Text("The seller is ${widget.model.ownerName}"),
+      ),
+    );
+  }
+
+  _makeOffer() {
+    widget.model.customerIDs.add(UserRepository.mUser.uid);
+    print(widget.model.serviceName);
+    print(widget.model.ownerName);
+    print(widget.model.customerIDs);
   }
 }

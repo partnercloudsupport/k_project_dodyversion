@@ -4,7 +4,7 @@ import 'package:k_project_dodyversion/blocs/service_bloc/service_bloc.dart';
 import 'package:k_project_dodyversion/resources/repository.dart';
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
 
-/// This page is to show users who have bought my services
+/// This page is to show services that I have bought.
 class OrdersPage extends StatefulWidget {
   OrdersPage({Key key}) : super(key: key);
 

@@ -47,7 +47,6 @@ class AddServiceSuccessful extends ServiceState {
   }
 }
 
-
 class ResetState extends ServiceState {
   @override
   String toString() {
@@ -55,10 +54,25 @@ class ResetState extends ServiceState {
   }
 }
 
-
 class AddingNewServiceState extends ServiceState {
   @override
   String toString() {
     return "Adding new service..";
+  }
+}
+
+class AddingMedia extends ServiceState {
+  @override
+  String toString() {
+    return 'Adding Media';
+  }
+}
+
+class AddingMediaSuccessful extends ServiceState {
+  final String url;
+  AddingMediaSuccessful(this.url) : super([url]);
+  @override
+  String toString() {
+    return "Adding media successful";
   }
 }

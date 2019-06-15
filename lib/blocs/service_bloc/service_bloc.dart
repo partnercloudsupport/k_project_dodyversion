@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/resources/repository.dart';
 
@@ -33,6 +36,8 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       yield* mapLoadAllServicesWithQuery(event.parameter, event.value);
     } else if (event is LoadAllMyOrders) {
       yield* mapLoadAllMyOrders(event.value);
+    } else if (event is AddServiceMedia) {
+      yield* mapAddServiceMedia(event.pictureFile);
     }
     return;
   }
@@ -114,6 +119,24 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       }
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Stream<ServiceState> mapAddServiceMedia(File pictureFile) async* {
+    try {
+      yield AddingMedia();
+      Stream<StorageTaskEvent> eventStream =
+          await _serviceRepository.uploadMediaFile(pictureFile);
+      await for (StorageTaskEvent event in eventStream) {
+        print("${event.snapshot.bytesTransferred} + bytes transferrrrred");
+        if (event.type == StorageTaskEventType.success) {
+          var url = await event.snapshot.ref.getDownloadURL();
+          yield AddingMediaSuccessful(url);
+          return;
+        }
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

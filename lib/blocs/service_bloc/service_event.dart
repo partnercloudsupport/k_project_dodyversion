@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:meta/meta.dart';
@@ -65,5 +67,15 @@ class LoadAllMyOrders extends ServiceEvent {
   @override
   String toString() {
     return super.toString();
+  }
+}
+
+class AddServiceMedia extends ServiceEvent {
+  final File pictureFile;
+  AddServiceMedia(this.pictureFile) : super([pictureFile]);
+
+  @override
+  String toString() {
+    return ("Adding media into service");
   }
 }

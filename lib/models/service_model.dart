@@ -3,6 +3,7 @@ import 'package:k_project_dodyversion/utils/constant_utils.dart';
 import 'package:k_project_dodyversion/utils/time_utils.dart';
 
 class ServiceModel {
+  static const String FIREBASE_MEDIA = "serviceMediaList";
   static const String FIREBASE_SID = "serviceID";
   static const String FIREBASE_SNAME = "serviceName";
   static const String FIREBASE_ONAME = "ownerName";
@@ -16,6 +17,7 @@ class ServiceModel {
   static const String FIREBASE_LASTUPDATETIME = "lastUpdate";
   static const String FIREBASE_CUSTOMERIDS = "customerIDs";
 
+  List<dynamic> _mediaURLs;
   String _serviceID;
   String _serviceName;
   String _ownerName;
@@ -30,6 +32,15 @@ class ServiceModel {
   List<dynamic> _customerIDs;
 
   void setFromMap(Map<String, dynamic> map) {
+
+    // This makes the mediaURLs a growable list.
+    _mediaURLs = new List();
+    if (map.containsKey(FIREBASE_MEDIA)) {
+      _mediaURLs.addAll(map[FIREBASE_MEDIA]);
+    }
+    _mediaURLs = map.containsKey(FIREBASE_MEDIA)
+        ? map[FIREBASE_MEDIA]
+        : new List<dynamic>();
     _serviceID = map.containsKey(FIREBASE_SID)
         ? map[FIREBASE_SID]
         : Constant.DEFAULT_STRING;
@@ -62,9 +73,11 @@ class ServiceModel {
         ? map[FIREBASE_ATIME]
         : TimeUtils.getCurrentTime();
 
-    _customerIDs = map.containsKey(FIREBASE_CUSTOMERIDS)
-        ? map[FIREBASE_CUSTOMERIDS]
-        : new List<dynamic>(0);
+    // This makes the customerIDs a growable list.
+    _customerIDs = new List();
+    if (map.containsKey(FIREBASE_CUSTOMERIDS)) {
+      _customerIDs.addAll(map[FIREBASE_CUSTOMERIDS]);
+    }
 
     _lastUpdate = TimeUtils.getCurrentTime();
   }
@@ -73,6 +86,7 @@ class ServiceModel {
     if (docSnap == null) {
       print("SM is made null");
 
+      _mediaURLs = new List<String>();
       _serviceID = Constant.DEFAULT_STRING;
       _serviceName = Constant.DEFAULT_STRING;
       _ownerName = Constant.DEFAULT_STRING;
@@ -83,7 +97,7 @@ class ServiceModel {
       _price = Constant.DEFAULT_DOUBLE;
       _reviewID = Constant.DEFAULT_STRING;
       _addedTime = TimeUtils.getCurrentTime();
-      _customerIDs = new List<String>(0);
+      _customerIDs = new List<String>();
       _lastUpdate = TimeUtils.getCurrentTime();
       return;
     }
@@ -94,6 +108,7 @@ class ServiceModel {
 
   Map<String, dynamic> getMap() {
     return <String, dynamic>{
+      FIREBASE_MEDIA: _mediaURLs,
       FIREBASE_SID: _serviceID,
       FIREBASE_SNAME: _serviceName,
       FIREBASE_OID: _ownerID,
@@ -104,9 +119,19 @@ class ServiceModel {
       FIREBASE_PRICE: _price,
       FIREBASE_RID: _reviewID,
       FIREBASE_ATIME: _addedTime,
-      FIREBASE_LASTUPDATETIME: _lastUpdate,
       FIREBASE_CUSTOMERIDS: _customerIDs,
+      FIREBASE_LASTUPDATETIME: _lastUpdate,
     };
+  }
+
+  List<String> get mediaURLs => _mediaURLs.cast<String>();
+  set mediaURLs(var value) {
+    _mediaURLs = value;
+  }
+
+  List<String> get customerIDs => _customerIDs.cast<String>();
+  set customerIDs(var value) {
+    _customerIDs = value;
   }
 
   String get serviceID => _serviceID;

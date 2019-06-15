@@ -13,6 +13,10 @@ class FirebaseStorageService {
         _reference =
             _firebaseStorage.ref().child("profile_pictures").child(cloudPath);
         break;
+      case FirebaseStorageType.SERVICEMEDIA:
+        _reference =
+            _firebaseStorage.ref().child("service_media").child(cloudPath);
+        break;
       default:
         return null;
     }
@@ -33,4 +37,4 @@ class FirebaseStorageService {
   }
 }
 
-enum FirebaseStorageType { PROFILEPICTURE, SERVICEIMAGE }
+enum FirebaseStorageType { PROFILEPICTURE, SERVICEMEDIA }
