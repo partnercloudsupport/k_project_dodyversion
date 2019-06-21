@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:k_project_dodyversion/resources/user_repo/user_repository.dart';
+import 'package:k_project_dodyversion/resources/repository.dart';
 import 'package:k_project_dodyversion/ui/pages/pages.dart';
 import 'package:k_project_dodyversion/utils/widget_utils.dart';
 
