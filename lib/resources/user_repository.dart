@@ -4,9 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/resources/services/services.dart';
-import 'package:k_project_dodyversion/resources/user_repo/user_provider.dart';
 
-import '../services/services.dart';
+import 'services/services.dart';
 
 class UserRepository {
   static UserModel mUser;
