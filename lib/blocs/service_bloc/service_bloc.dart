@@ -84,16 +84,17 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       List<ServiceModel> smCollection = [];
       // print("asdasdasdsad I am in the bloc.dart");
       Stream<QuerySnapshot> ss =
-          await _firebaseRepository.pullMyServices(value);
-      // print("asdasdasdsad I am in the bloc.dart");
+          await _firebaseRepository.pullMyServicesWithQuery(parameter, value);
+      // print("asdasdasdsad I am in the bloc.dart lvl 2");
       await for (QuerySnapshot q in ss) {
         smCollection.clear();
-        // print("asdasdasdsad I am in the bloc.dart" + q.toString());
+        // print("asdasdasdsad I am in the bloc.dart" +q.documents.length.toString());
         for (DocumentSnapshot ds in q.documents) {
           smCollection.add(ServiceModel(ds));
-          // print("asdasdasdsad I am in the bloc.dart" + ds.toString());
+          // print("asdasdasdsad I am in the bloc.dart 234234" + ds.toString());
         }
         yield LoadServicesSuccessful(smCollection);
+        print("return");
         return;
       }
     } catch (e) {
@@ -116,6 +117,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
           // print("asdasdasdsad I am in the bloc.dart" + ds.toString());
         }
         yield LoadServicesSuccessful(smCollection);
+        return;
       }
     } catch (e) {
       print(e.toString());

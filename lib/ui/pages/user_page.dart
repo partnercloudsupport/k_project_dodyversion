@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
+import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/resources/repository.dart';
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
 import 'package:k_project_dodyversion/ui/pages/pages.dart';
@@ -34,7 +35,7 @@ class _UserProfilePageState extends State<UserProfilePage>
   @override
   void initState() {
     _mServicesBloc.dispatch(LoadAllServicesWithQuery(
-        parameter: "ownerID", value: UserRepository.mUser.uid));
+        parameter: ServiceModel.FIREBASE_OID, value: UserRepository.mUser.uid));
     super.initState();
   }
 
@@ -183,7 +184,13 @@ class _UserProfilePageState extends State<UserProfilePage>
   Widget myServicesSliver(ServiceState state) {
     if (state is LoadServicesSuccessful) {
       if (state.serviceList.length == 0)
-        return Center(child: Text("Sell Some Services!"));
+        return SliverList(
+          delegate: SliverChildListDelegate([
+            Center(
+              child: Text("Sell Some Services!"),
+            ),
+          ]),
+        );
 
       return SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
@@ -196,7 +203,7 @@ class _UserProfilePageState extends State<UserProfilePage>
       );
     }
   }
-  
+
   Widget bioCard(UserLoadedSuccessfully state) {
     return Padding(
       padding: padding1,
