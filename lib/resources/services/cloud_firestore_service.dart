@@ -10,6 +10,8 @@ enum Condition {
   LESS_THAN_OR_EQUAL_TO,
   ARRAY_CONTAINS,
   IS_NULL,
+
+  IN_BETWEEN,
 }
 
 /// As much as possible follow the CRUD method.
@@ -102,6 +104,12 @@ class FirestoreService {
         return _firestore
             .collection(collection)
             .where(attribute, isNull: value)
+            .snapshots();
+      case Condition.IN_BETWEEN:
+        return _firestore
+            .collection(collection)
+            .where(attribute, isGreaterThanOrEqualTo: value)
+            .where(attribute, isLessThanOrEqualTo: value + "z")
             .snapshots();
       default:
         return null;

@@ -48,19 +48,20 @@ class FirebaseRepository {
 
   /// pull the orders that the user have made
   Future<Stream<QuerySnapshot>> pullMyOrders(String uid) async {
-    return await _firebase.pullSnapshotsWithQuery("services",
+    return _firebase.pullSnapshotsWithQuery("services",
         ServiceModel.FIREBASE_CUSTOMERIDS, uid, Condition.ARRAY_CONTAINS);
   }
 
   /// pull the services that the user are selling
-  Future<Stream<QuerySnapshot>> pullMyServices(String uid) async {
-    return await _firebase.pullSnapshotsWithQuery(
-        "services", ServiceModel.FIREBASE_OID, uid, Condition.IS_EQUAL_TO);
+  Future<Stream<QuerySnapshot>> pullMyServicesWithQuery(
+      String parameter, String value) async {
+    return _firebase.pullSnapshotsWithQuery(
+        "services", parameter, value, Condition.IN_BETWEEN);
   }
 
   ///pull all the reivews of a user.
   Future<Stream<QuerySnapshot>> pullUserReview(String uid) async {
-    return await _firebase.pullSnapshotsWithQuery(
+    return _firebase.pullSnapshotsWithQuery(
         "reviews", ReviewModel.FIREBASE_OID, uid, Condition.IS_EQUAL_TO);
   }
 

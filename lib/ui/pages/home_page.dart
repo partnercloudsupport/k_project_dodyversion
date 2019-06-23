@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
+import 'package:k_project_dodyversion/models/models.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
@@ -19,6 +20,7 @@ RefreshController _refreshController;
 // the 'widget' obj here is the HomePage from the State<>
 class _HomePage extends State<HomePage> {
   ServiceBloc _serviceBloc;
+  String _searchText = "";
 
   @override
   void initState() {
@@ -52,18 +54,25 @@ class _HomePage extends State<HomePage> {
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       children: <Widget>[
-                        Text("Search something"),
+                        (_searchText.trim() == "")
+                            ? Text("Search something")
+                            : Text(_searchText),
                         Icon(Icons.search),
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
                   ),
                 ),
-                onTap: () {
+                onTap: () async {
                   var route = new MaterialPageRoute(
                     builder: (BuildContext context) => SearchPage(),
                   );
-                  Navigator.of(context).push(route);
+                  var temp = await Navigator.push(context, route);
+                  setState(() {
+                    _searchText = (temp == null) ? "" : temp;
+                    _serviceBloc.dispatch(LoadAllServicesWithQuery(
+                        parameter: ServiceModel.FIREBASE_SNAME, value: temp));
+                  });
                 },
               ),
               padding: EdgeInsets.only(
