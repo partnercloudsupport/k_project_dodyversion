@@ -69,7 +69,11 @@ class _HomePage extends State<HomePage> {
                   );
                   var temp = await Navigator.push(context, route);
                   setState(() {
-                    _searchText = (temp == null) ? "" : temp;
+                    if (temp == null) {
+                      _searchText = "";
+                      return;
+                    }
+                    _searchText = temp;
                     _serviceBloc.dispatch(LoadAllServicesWithQuery(
                         parameter: ServiceModel.FIREBASE_SNAME, value: temp));
                   });
