@@ -71,6 +71,7 @@ class _HomePage extends State<HomePage> {
                   setState(() {
                     if (temp == null) {
                       _searchText = "";
+                      _serviceBloc.dispatch(LoadAllServices(query: "null"));
                       return;
                     }
                     _searchText = temp;
