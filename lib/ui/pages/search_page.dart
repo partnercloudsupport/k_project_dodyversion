@@ -25,10 +25,12 @@ class _SearchPageState extends State<SearchPage> {
     _serviceBloc = ServiceBloc();
     _controller = TextEditingController();
     _controller.addListener(() {
-      setState(() {
-        _criteria = _controller.value.text;
-        _getResultsDebounced();
-      });
+      if (mounted) {
+        setState(() {
+          _criteria = _controller.value.text;
+          _getResultsDebounced();
+        });
+      }
     });
   }
 
@@ -55,9 +57,13 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     _resultsTimer = new Timer(new Duration(milliseconds: 400), () async {
-      setState(() {
-        _loading = true;
-      });
+      if (mounted) {
+        setState(() {
+          _loading = true;
+        });
+      } else {
+        return;
+      }
       getResults(_criteria);
     });
   }
@@ -74,19 +80,20 @@ class _SearchPageState extends State<SearchPage> {
       bloc: _serviceBloc,
       listener: (BuildContext context, ServiceState state) {
         print("state returned");
-
-        if (state is LoadingState) {
-          setState(() {
-            _loading = true;
-          });
-        } else if (state is LoadServicesSuccessful) {
-          setState(() {
-            _loading = false;
-            _list = new List<String>();
-            for (ServiceModel serviceModel in state.serviceList) {
-              _list.add(serviceModel.serviceName);
-            }
-          });
+        if (mounted) {
+          if (state is LoadingState) {
+            setState(() {
+              _loading = true;
+            });
+          } else if (state is LoadServicesSuccessful) {
+            setState(() {
+              _loading = false;
+              _list = new List<String>();
+              for (ServiceModel serviceModel in state.serviceList) {
+                _list.add(serviceModel.serviceName);
+              }
+            });
+          }
         }
       },
       child: Scaffold(
