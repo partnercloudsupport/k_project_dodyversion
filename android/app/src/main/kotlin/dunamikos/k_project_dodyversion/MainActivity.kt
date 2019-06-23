@@ -1,4 +1,4 @@
-package dunamikos.k_project_dodyversion
+package dunamikos.k_project
 
 import android.os.Bundle
 

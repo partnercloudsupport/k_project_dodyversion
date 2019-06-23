@@ -8,12 +8,54 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:867623556823:android:a40cedcea661d7b3",
+        "android_client_info": {
+          "package_name": "dunamikos.k_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867623556823-uom9b9p8edik8f0cvietro57h5sqr42t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuMs3zrJSJACwceUrmIDtgr1KlhWMnI_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867623556823-uom9b9p8edik8f0cvietro57h5sqr42t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:867623556823:android:3769ab5141a3f2e3",
         "android_client_info": {
           "package_name": "dunamikos.k_project_dodyversion"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "867623556823-vbjga4afbq5061kb5btagi054hhdbl7v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dunamikos.k_project_dodyversion",
+            "certificate_hash": "882590a8e8d4a04573fe433503089c58016b6ff9"
+          }
+        },
+        {
+          "client_id": "867623556823-uom9b9p8edik8f0cvietro57h5sqr42t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBuMs3zrJSJACwceUrmIDtgr1KlhWMnI_4"
