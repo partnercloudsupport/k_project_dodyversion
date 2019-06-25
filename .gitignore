@@ -9,6 +9,9 @@
 .history
 .svn/
 
+# Visual Code stuff
+.code*
+
 # IntelliJ related
 *.iml
 *.ipr
