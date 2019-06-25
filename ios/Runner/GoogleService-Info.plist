@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>867623556823-rb3vdtb9o8n4q7tauqq696nf0caaul06.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.867623556823-rb3vdtb9o8n4q7tauqq696nf0caaul06</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>867623556823-vec93su4c30f8ulljf57pletd3malfdt.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCjnlP9ZLWIqnExufR8WcC5x4HWqA3NT6A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>867623556823</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>dunamikos.kProjectDodyversion</string>
+	<key>PROJECT_ID</key>
+	<string>k-project-dody</string>
+	<key>STORAGE_BUCKET</key>
+	<string>k-project-dody.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:867623556823:ios:fe42a147eb662106</string>
+	<key>DATABASE_URL</key>
+	<string>https://k-project-dody.firebaseio.com</string>
+</dict>
+</plist>
