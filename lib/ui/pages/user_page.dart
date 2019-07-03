@@ -225,7 +225,7 @@ class _UserProfilePageState extends State<UserProfilePage>
   }
 
   /// Third Card (Education)
-  Widget educationCard(UserState state) {
+  Widget educationCard(UserLoadedSuccessfully state) {
     return Padding(
       padding: padding1,
       child: Card(
@@ -236,7 +236,7 @@ class _UserProfilePageState extends State<UserProfilePage>
               Text("Past Experience"),
               Row(
                 children: <Widget>[
-                  RaisedButton(child: Text("asd")),
+                  RaisedButton(child: Text(state.userModel.almamaters[2])),
                   RaisedButton(child: Text("asd")),
                 ],
               ),
