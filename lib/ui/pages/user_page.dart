@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/resources/repository.dart';
+import 'package:k_project_dodyversion/ui/Widgets/past_experiences_card.dart';
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
 import 'package:k_project_dodyversion/ui/pages/pages.dart';
 import 'package:k_project_dodyversion/ui/themes/theme.dart';
@@ -224,8 +225,17 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
-  /// Third Card (Education)
+  /// Third Card ( Experience )
   Widget educationCard(UserLoadedSuccessfully state) {
+    var numOfCards = state.userModel.pastExperiences.length / 3;
+    List<Widget> expericeCards = new List<Widget>(numOfCards.toInt());
+    for (int i = 0; i < numOfCards; i++) {
+      expericeCards[i] = PastExperienceCard(
+          data: state.userModel.pastExperiences
+              .getRange(i * 3, (i + 1) * 3)
+              .toList()
+              .cast<String>());
+    }
     return Padding(
       padding: padding1,
       child: Card(
@@ -233,12 +243,13 @@ class _UserProfilePageState extends State<UserProfilePage>
           padding: padding3,
           child: Column(
             children: <Widget>[
-              Text("Past Experience"),
+              Text("Educations"),
+              Container(
+                constraints: BoxConstraints(maxHeight: 10),
+              ),
               Row(
-                children: <Widget>[
-                  RaisedButton(child: Text(state.userModel.almamaters[2])),
-                  RaisedButton(child: Text("asd")),
-                ],
+                children: expericeCards,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
               ),
             ],
           ),
@@ -247,8 +258,17 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
-  /// Forth Card ( Experience )
-  Widget experienceCard(UserState state) {
+  /// Forth Card (Education)
+  Widget experienceCard(UserLoadedSuccessfully state) {
+    var numOfCards = state.userModel.almamaters.length / 3;
+    List<Widget> expericeCards = new List<Widget>(numOfCards.toInt());
+    for (int i = 0; i < numOfCards; i++) {
+      expericeCards[i] = PastExperienceCard(
+          data: state.userModel.almamaters
+              .getRange(i * 3, (i + 1) * 3)
+              .toList()
+              .cast<String>());
+    }
     return Padding(
       padding: padding1,
       child: Card(
@@ -256,12 +276,13 @@ class _UserProfilePageState extends State<UserProfilePage>
           padding: padding3,
           child: Column(
             children: <Widget>[
-              Text("Past Education"),
+              Text("Past Experience"),
+              Container(
+                constraints: BoxConstraints(maxHeight: 10),
+              ),
               Row(
-                children: <Widget>[
-                  RaisedButton(child: Text("asd")),
-                  RaisedButton(child: Text("asd")),
-                ],
+                children: expericeCards,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
               ),
             ],
           ),
