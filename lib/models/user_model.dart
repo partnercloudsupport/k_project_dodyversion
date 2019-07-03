@@ -3,10 +3,9 @@ import 'package:equatable/equatable.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
 import 'package:k_project_dodyversion/utils/time_utils.dart';
 
-/**
- *  Display of User’s Basic Information including but not limited to: username, full name,
- *  profile picture, languages, user-written description of their experiences
- */
+///  Display of User’s Basic Information including but not limited to: username, full name,
+///  profile picture, languages, user-written description of their experiences
+
 class UserModel extends Equatable {
   static const String FIREBASE_EMAIL = "email";
   static const String FIREBASE_NAME = "name";
@@ -17,6 +16,8 @@ class UserModel extends Equatable {
   static const String FIREBASE_DOB = "dateOfBirth";
   static const String FIREBASE_JOINDATE = "joinDate";
   static const String FIREBASE_SERVICEIDS = "servicesIDs";
+  static const String FIREBASE_ALMAMATERS = "almamaters";
+  static const String FIREBASE_PASTEXPERIENCES = "pastExperiences";
 
   String _email;
   String _name;
@@ -27,12 +28,23 @@ class UserModel extends Equatable {
   int _dateOfBirth;
   int _joinDate;
 
-  List<String> _chatRooms; //list of string of charoomIDS
   List<dynamic> _servicesIDs; // list of string of ListingsIDs
+
   List<String> _ratingsAsBuyers;
   List<String> _ratingsAsSeller;
 
-  bool _isStranger;
+  ///
+  /// Unique data structure for these almamaters and pastExperiences
+  ///
+  /// Limitations : 3 almamaters and past experiences max
+  ///
+  /// Data Structure :
+  ///   [0] : Image url
+  ///   [1] : Name of the object
+  ///   [2] : Description
+  ///
+  List<dynamic> _almamaters; // list of string of ListingsIDs
+  List<dynamic> _pastExperiences; // list of string of ListingsIDs
 
   UserModel(Map<String, dynamic> map) {
     _joinDate = TimeUtils.getCurrentTime();
@@ -45,6 +57,8 @@ class UserModel extends Equatable {
       _profilePictureURL = Constant.DEFAULT_STRING;
       _dateOfBirth = Constant.DEFAULT_INT;
       _servicesIDs = new List<String>(0);
+      _almamaters = new List<String>(0);
+      _pastExperiences = new List<String>(0);
       return;
     }
     setFromMap(map);
@@ -82,6 +96,12 @@ class UserModel extends Equatable {
     this._servicesIDs = map.containsKey(FIREBASE_SERVICEIDS)
         ? map[FIREBASE_SERVICEIDS]
         : new List<String>(0);
+    this._almamaters = map.containsKey(FIREBASE_ALMAMATERS)
+        ? map[FIREBASE_ALMAMATERS]
+        : new List<String>(0);
+    this._pastExperiences = map.containsKey(FIREBASE_PASTEXPERIENCES)
+        ? map[FIREBASE_PASTEXPERIENCES]
+        : new List<String>(0);
   }
 
   Map<String, dynamic> getMap() {
@@ -95,6 +115,8 @@ class UserModel extends Equatable {
       FIREBASE_DOB: _dateOfBirth,
       FIREBASE_JOINDATE: _joinDate,
       FIREBASE_SERVICEIDS: _servicesIDs,
+      FIREBASE_ALMAMATERS: _almamaters,
+      FIREBASE_PASTEXPERIENCES: _pastExperiences,
     };
   }
 
@@ -144,5 +166,15 @@ class UserModel extends Equatable {
 
   int get membershipDuration {
     return TimeUtils.getAgeInDays(TimeUtils.convertMillisToDate(_joinDate));
+  }
+
+  List<dynamic> get almamaters => _almamaters;
+  set almamaters(var value) {
+    _almamaters = value;
+  }
+
+  List<dynamic> get pastExperiences => _pastExperiences;
+  set pastExperiences(var value) {
+    _pastExperiences = value;
   }
 }

@@ -55,7 +55,7 @@ class UpdateUserSuccess extends UserState {
   }
 }
 
-/// Upload Picture
+/// Upload Profile Picture
 class UpdatingProfilePicture extends UserState {
   @override
   String toString() {
@@ -71,5 +71,24 @@ class UpdateProfilePictureSuccessful extends UserState {
   @override
   String toString() {
     return "Update Profile Picture Successful";
+  }
+}
+
+/// Upload PastExperiences Picture
+class UpdatingPastExperiencesPicture extends UserState {
+  @override
+  String toString() {
+    return "Updating Past Experiences Picture";
+  }
+}
+
+class UpdatePastExperiencesPictureSuccessful extends UserState {
+  final String cloudPath;
+
+  UpdatePastExperiencesPictureSuccessful(this.cloudPath) : super([cloudPath]);
+
+  @override
+  String toString() {
+    return "Update Past Experiences Successful";
   }
 }

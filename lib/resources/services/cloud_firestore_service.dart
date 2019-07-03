@@ -57,9 +57,7 @@ class FirestoreService {
         .setData(temp.getMap());
   }
 
-/**
- * Read
- */
+  /// Read
 
   // This will keep returning snapshots of various state.
   Future<Stream<QuerySnapshot>> pullSnapshotsFromCollection(
@@ -129,9 +127,8 @@ class FirestoreService {
         .get();
   }
 
-/**
- * Create/Update
- */
+  /// Create/Update
+
   Future<String> pushDocumentWithRandomID(
       String collectionName, Map<String, dynamic> data) async {
     DocumentReference dr = _firestore.collection(collectionName).document();
@@ -158,14 +155,8 @@ class FirestoreService {
     }
   }
 
-/**
- * Delete
- */
+  /// Delete
   Future<void> deleteDocument(
-      String collectionName, String documentName) async {
-    return _firestore
-        .collection(collectionName)
-        .document(documentName)
-        .delete();
-  }
+          String collectionName, String documentName) async =>
+      _firestore.collection(collectionName).document(documentName).delete();
 }

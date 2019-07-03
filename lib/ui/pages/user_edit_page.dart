@@ -15,7 +15,7 @@ final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class EditUserProfilePage extends StatefulWidget {
-  UserBloc userBloc;
+  final UserBloc userBloc;
   EditUserProfilePage(this.userBloc, {Key key}) : super(key: key);
 
   _EditUserProfilePageState createState() => _EditUserProfilePageState();
@@ -193,18 +193,13 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                     _userModel.description = desc;
                   },
                 ),
-                BlocBuilder(
-                  bloc: _userBloc,
-                  builder: (BuildContext context, UserState state) {
-                    return new Container(
-                      padding: const EdgeInsets.only(left: 40.0, top: 20.0),
-                      child: new RaisedButton(
-                          child: const Text('Submit'),
-                          onPressed: () {
-                            _submitForm();
-                          }),
-                    );
-                  },
+                new Container(
+                  padding: const EdgeInsets.only(left: 40.0, top: 20.0),
+                  child: new RaisedButton(
+                      child: const Text('Submit'),
+                      onPressed: () {
+                        _submitForm();
+                      }),
                 ),
               ],
             ),

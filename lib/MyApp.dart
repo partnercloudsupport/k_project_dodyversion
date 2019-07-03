@@ -5,7 +5,6 @@ import 'package:k_project_dodyversion/ui/themes/theme.dart';
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
-  //TODO ->> locally save this variable
   bool isLoggedIn = false;
 
   MyApp({Key key}) : super(key: key);
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
     return {
       '/home': (context) => HomePage(),
       '/loginPage': (context) => LogInPage(),
-      '/profilePage':(context) => UserProfilePage(),
+      '/profilePage': (context) => UserProfilePage(),
       // '/editProfilePage':(context) => EditUserProfilePage(),
     };
   }

@@ -26,6 +26,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* mapUpdateUserEvent(event.userModel);
     } else if (event is UpdateProfilePictureEvent) {
       yield* mapUpdateProfilePictureEvent(event.pictureFile);
+    } else if (event is UpdatePastExperiencePictureEvent) {
+      yield* mapUpdateProfilePictureEvent(event.pictureFile);
     }
   }
 
@@ -63,6 +65,24 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         if (event.type == StorageTaskEventType.success) {
           var url = await event.snapshot.ref.getDownloadURL();
           yield UpdateProfilePictureSuccessful(url);
+          return;
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Stream<UserState> mapUpdatePastExperiencesEvent(File pictureFile) async* {
+    try {
+      yield UpdatingPastExperiencesPicture();
+      Stream<StorageTaskEvent> eventStream =
+          await _userRepository.updatePastExperiencePicture(pictureFile);
+      await for (StorageTaskEvent event in eventStream) {
+        print("${event.snapshot.bytesTransferred} + bytes transferrrrred");
+        if (event.type == StorageTaskEventType.success) {
+          var url = await event.snapshot.ref.getDownloadURL();
+          yield UpdatePastExperiencesPictureSuccessful(url);
           return;
         }
       }
