@@ -1,19 +1,17 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/resources/repository.dart';
+import 'package:k_project_dodyversion/ui/Widgets/past_experience_edit_aler_dialog.dart';
 import 'package:k_project_dodyversion/ui/Widgets/past_experiences_card.dart';
 import 'package:k_project_dodyversion/ui/cards/service_card.dart';
 import 'package:k_project_dodyversion/ui/pages/pages.dart';
 import 'package:k_project_dodyversion/ui/themes/theme.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
 import 'package:k_project_dodyversion/utils/notification_utils.dart';
-import 'package:image_picker/image_picker.dart';
 
-final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class UserProfilePage extends StatefulWidget {
   UserProfilePage({Key key}) : super(key: key);
@@ -29,6 +27,11 @@ class _UserProfilePageState extends State<UserProfilePage>
   var padding3 = EdgeInsets.fromLTRB(20, 10, 20, 10);
 
   bool ownUserMode = true;
+  int numOfAlmamaters = 0;
+  List<String> almamaters = [];
+  int numOfPastExperiences = 0;
+  List<String> pastExperiences = [];
+  UserModel um;
 
   UserBloc _userBloc = UserBloc();
   ServiceBloc _mServicesBloc = new ServiceBloc();
@@ -45,15 +48,19 @@ class _UserProfilePageState extends State<UserProfilePage>
     return BlocListener(
       bloc: _userBloc,
       listener: (BuildContext context, UserState state) {
-        if (state is UpdateUserSuccess) {
+        if (state is UpdateUserSuccess ||
+            state is UpdatePastExperiencesPictureSuccessful) {
           NotificationUtils.showMessage("Profile is updated successfully",
-              scaffoldKey, NotificationTone.POSITIVE);
+              _scaffoldKey, NotificationTone.POSITIVE);
+          _userBloc.dispatch(LoadUserEvent(ownUserMode, ""));
+          return;
+        } else if (state is InitiateState) {
           _userBloc.dispatch(LoadUserEvent(ownUserMode, ""));
           return;
         }
-        if (state is InitiateState) {
-          _userBloc.dispatch(LoadUserEvent(ownUserMode, ""));
-          return;
+
+        if (state is UserLoadedSuccessfully) {
+          um = state.userModel;
         }
       },
       child: BlocBuilder(
@@ -63,7 +70,7 @@ class _UserProfilePageState extends State<UserProfilePage>
             bloc: _mServicesBloc,
             builder: (BuildContext context, ServiceState serviceState) {
               return Scaffold(
-                key: scaffoldKey,
+                key: _scaffoldKey,
                 appBar: AppBar(
                   title: getUserName(state),
                   actions: <Widget>[
@@ -227,31 +234,35 @@ class _UserProfilePageState extends State<UserProfilePage>
 
   /// Third Card ( Experience )
   Widget educationCard(UserLoadedSuccessfully state) {
-    var numOfCards = state.userModel.pastExperiences.length / 3;
-    List<Widget> expericeCards = new List<Widget>(numOfCards.toInt());
-    for (int i = 0; i < numOfCards; i++) {
-      expericeCards[i] = PastExperienceCard(
-          data: state.userModel.pastExperiences
-              .getRange(i * 3, (i + 1) * 3)
-              .toList()
-              .cast<String>());
+    almamaters = state.userModel.almamaters.cast<String>();
+    numOfAlmamaters = almamaters.length ~/ 3;
+    List<Widget> educationCards = new List<Widget>(numOfAlmamaters);
+    for (int i = 0; i < numOfAlmamaters; i++) {
+      educationCards[i] = PastExperienceCard(
+          onTap: () {},
+          data:
+              almamaters.getRange(i * 3, (i + 1) * 3).toList().cast<String>());
     }
     return Padding(
       padding: padding1,
-      child: Card(
-        child: Padding(
-          padding: padding3,
-          child: Column(
-            children: <Widget>[
-              Text("Educations"),
-              Container(
-                constraints: BoxConstraints(maxHeight: 10),
-              ),
-              Row(
-                children: expericeCards,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-              ),
-            ],
+      child: GestureDetector(
+        onLongPress: _addEducation,
+        child: Card(
+          child: Padding(
+            padding: padding3,
+            child: Column(
+              children: <Widget>[
+                Text("Educations"),
+                Container(
+                  constraints: BoxConstraints(maxHeight: 10),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: educationCards,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -260,31 +271,38 @@ class _UserProfilePageState extends State<UserProfilePage>
 
   /// Forth Card (Education)
   Widget experienceCard(UserLoadedSuccessfully state) {
-    var numOfCards = state.userModel.almamaters.length / 3;
-    List<Widget> expericeCards = new List<Widget>(numOfCards.toInt());
-    for (int i = 0; i < numOfCards; i++) {
+    pastExperiences = state.userModel.pastExperiences.cast<String>();
+    numOfPastExperiences = pastExperiences.length ~/ 3;
+    List<Widget> expericeCards = new List<Widget>(numOfPastExperiences.toInt());
+    for (int i = 0; i < numOfPastExperiences; i++) {
       expericeCards[i] = PastExperienceCard(
-          data: state.userModel.almamaters
+          index: i,
+          onTap: () {},
+          data: pastExperiences
               .getRange(i * 3, (i + 1) * 3)
               .toList()
               .cast<String>());
     }
     return Padding(
       padding: padding1,
-      child: Card(
-        child: Padding(
-          padding: padding3,
-          child: Column(
-            children: <Widget>[
-              Text("Past Experience"),
-              Container(
-                constraints: BoxConstraints(maxHeight: 10),
-              ),
-              Row(
-                children: expericeCards,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-              ),
-            ],
+      child: GestureDetector(
+        onLongPress: _addExperience,
+        child: Card(
+          child: Padding(
+            padding: padding3,
+            child: Column(
+              children: <Widget>[
+                Text("Past Experience"),
+                Container(
+                  constraints: BoxConstraints(maxHeight: 10),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: expericeCards,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -300,6 +318,70 @@ class _UserProfilePageState extends State<UserProfilePage>
       return Text("failed");
     } else {
       return Text("null");
+    }
+  }
+
+  Future<void> _addExperience() async {
+    if (numOfPastExperiences == 3) {
+      return showDialog<void>(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+              content: Container(
+                child: Text("You can only post 3 past experiences"),
+              ),
+            );
+          });
+    } else {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return PastExperienceAlertDialog(
+              _userBloc, PastExperienceType.PastExperience, um);
+        },
+      );
+    }
+  }
+
+  Future<void> _addEducation() async {
+    if (numOfAlmamaters == 3) {
+      return showDialog<void>(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+              content: Container(
+                child: Text("You can only post 3 past educations"),
+              ),
+            );
+          });
+    } else {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return PastExperienceAlertDialog(
+              _userBloc, PastExperienceType.Almamater, um);
+        },
+      );
     }
   }
 

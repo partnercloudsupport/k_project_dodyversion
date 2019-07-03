@@ -45,3 +45,14 @@ class UpdateProfilePictureEvent extends UserEvent {
     return ("Updating profile picture");
   }
 }
+
+
+class UpdatePastExperiencePictureEvent extends UserEvent {
+  final File pictureFile;
+  UpdatePastExperiencePictureEvent(this.pictureFile) : super([pictureFile]);
+
+  @override
+  String toString() {
+    return ("Updating Past Experience picture");
+  }
+}

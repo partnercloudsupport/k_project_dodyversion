@@ -193,18 +193,13 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
                     _userModel.description = desc;
                   },
                 ),
-                BlocBuilder(
-                  bloc: _userBloc,
-                  builder: (BuildContext context, UserState state) {
-                    return new Container(
-                      padding: const EdgeInsets.only(left: 40.0, top: 20.0),
-                      child: new RaisedButton(
-                          child: const Text('Submit'),
-                          onPressed: () {
-                            _submitForm();
-                          }),
-                    );
-                  },
+                new Container(
+                  padding: const EdgeInsets.only(left: 40.0, top: 20.0),
+                  child: new RaisedButton(
+                      child: const Text('Submit'),
+                      onPressed: () {
+                        _submitForm();
+                      }),
                 ),
               ],
             ),

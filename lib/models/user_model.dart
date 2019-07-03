@@ -170,5 +170,12 @@ class UserModel extends Equatable {
   }
 
   List<dynamic> get almamaters => _almamaters;
+  set almamaters(var value) {
+    _almamaters = value;
+  }
+
   List<dynamic> get pastExperiences => _pastExperiences;
+  set pastExperiences(var value) {
+    _pastExperiences = value;
+  }
 }

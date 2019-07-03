@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:k_project_dodyversion/utils/utils.dart';
 
 class PastExperienceCard extends StatefulWidget {
-  PastExperienceCard({Key key, this.data})
+  PastExperienceCard({Key key, this.data, this.onTap, this.index})
       : assert(data.length == 3),
         super(key: key);
+
   List<String> data;
+  GestureTapCallback onTap;
+  int index;
+
   _PastExperienceCardState createState() => _PastExperienceCardState();
 }
 
@@ -13,10 +17,10 @@ class _PastExperienceCardState extends State<PastExperienceCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: widget.onTap,
       child: new Container(
         constraints: BoxConstraints(
-          maxWidth: 130,
+          maxWidth: 100,
         ),
         child: Column(
           children: <Widget>[
