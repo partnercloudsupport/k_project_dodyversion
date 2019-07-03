@@ -13,8 +13,6 @@ class UserRepository {
   FirebaseStorageService _firebaseStorageService = FirebaseStorageService();
   FirestoreService _firestoreService = FirestoreService();
 
-  UserRepository() {}
-
   //Load profile form firestore
   Future<UserModel> loadUser(String uid) async {
     if (UserRepository.mUser?.uid == uid) {
@@ -45,14 +43,12 @@ class UserRepository {
     return temp;
   }
 
-  
   Future<Stream<StorageTaskEvent>> updateProfilePicture(
       File pictureFile) async {
     return _firebaseStorageService.uploadFile(pictureFile,
         UserRepository.mUser.uid, FirebaseStorageType.PROFILEPICTURE);
   }
 
-  
   Future<Stream<StorageTaskEvent>> updatePastExperiencePicture(
       File pictureFile) async {
     return _firebaseStorageService.uploadFile(pictureFile,

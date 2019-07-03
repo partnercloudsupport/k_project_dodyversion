@@ -15,7 +15,7 @@ final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class EditUserProfilePage extends StatefulWidget {
-  UserBloc userBloc;
+  final UserBloc userBloc;
   EditUserProfilePage(this.userBloc, {Key key}) : super(key: key);
 
   _EditUserProfilePageState createState() => _EditUserProfilePageState();

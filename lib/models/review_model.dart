@@ -1,8 +1,7 @@
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
 
-/**
- * Each review geos here
- */
+/// Each review geos here
+
 class ReviewChild {
   static const String FIREBASE_RID = "reviewerID";
   static const String FIREBASE_RNAME = "reviewerName";

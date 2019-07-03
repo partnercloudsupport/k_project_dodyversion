@@ -6,9 +6,9 @@ class PastExperienceCard extends StatefulWidget {
       : assert(data.length == 3),
         super(key: key);
 
-  List<String> data;
-  GestureTapCallback onTap;
-  int index;
+  final List<String> data;
+  final GestureTapCallback onTap;
+  final int index;
 
   _PastExperienceCardState createState() => _PastExperienceCardState();
 }

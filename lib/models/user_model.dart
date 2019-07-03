@@ -3,10 +3,9 @@ import 'package:equatable/equatable.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
 import 'package:k_project_dodyversion/utils/time_utils.dart';
 
-/**
- *  Display of User’s Basic Information including but not limited to: username, full name,
- *  profile picture, languages, user-written description of their experiences
- */
+///  Display of User’s Basic Information including but not limited to: username, full name,
+///  profile picture, languages, user-written description of their experiences
+
 class UserModel extends Equatable {
   static const String FIREBASE_EMAIL = "email";
   static const String FIREBASE_NAME = "name";

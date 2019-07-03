@@ -11,13 +11,11 @@ import 'package:k_project_dodyversion/resources/repository.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   FirebaseRepository _firebaseRepository = FirebaseRepository();
-  UserRepository _userRepository;
 
   AuthenticationBloc();
 
   @override
-  AuthenticationState get initialState =>
-      LoggedOutState(); // TODO: implement initialState;
+  AuthenticationState get initialState => LoggedOutState();
 
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -40,7 +38,8 @@ class AuthenticationBloc
         yield LogginInGoogleFailedState();
         return;
       }
-      DocumentSnapshot dr = await _firebaseRepository.pullUserDocument(_firebaseRepository.uid);
+      DocumentSnapshot dr =
+          await _firebaseRepository.pullUserDocument(_firebaseRepository.uid);
       UserRepository.mUser = new UserModel(null);
       UserRepository.mUser.setFromMap(dr.data);
       yield LoggedInState();
@@ -48,5 +47,4 @@ class AuthenticationBloc
       yield LogginInGoogleFailedState();
     }
   }
-
 }
