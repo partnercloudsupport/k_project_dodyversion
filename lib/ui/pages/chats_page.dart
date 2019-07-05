@@ -20,7 +20,9 @@ class ChatConstant {
 class ChatsPage extends StatefulWidget {
   final String peerID;
   final String peerName;
-  ChatsPage(this.peerID, this.peerName, {Key key}) : super(key: key);
+  final String peerProfilePicture;
+  ChatsPage(this.peerID, this.peerName, this.peerProfilePicture, {Key key})
+      : super(key: key);
 
   _ChatsPageState createState() => _ChatsPageState();
 }
@@ -31,8 +33,7 @@ class _ChatsPageState extends State<ChatsPage> {
   var themeColor = Colors.red;
   var listMessage;
   int messageCount = 20;
-  var peerAvatar =
-      "https://firebasestorage.googleapis.com/v0/b/k-project-dody.appspot.com/o/service_media%2F19bb2430-8f3e-11e9-be10-d57d5a664ece?alt=media&token=0988d318-e28a-43d5-ad7a-94a30857e61f";
+  var peerAvatar;
   String groupChatID;
   var id = UserRepository.mUser.uid;
   final ScrollController listScrollController = new ScrollController();
@@ -46,15 +47,25 @@ class _ChatsPageState extends State<ChatsPage> {
     super.initState();
     List members;
     List membersName;
+    List membersProfilePicture;
+    peerAvatar = widget.peerProfilePicture;
     // _refreshController = RefreshController(initialRefresh: true);
     if (id.hashCode <= widget.peerID.hashCode) {
       groupChatID = '$id-${widget.peerID}';
       members = [id, widget.peerID];
       membersName = [UserRepository.mUser.name, widget.peerName];
+      membersProfilePicture = [
+        UserRepository.mUser.profilePictureURL,
+        widget.peerProfilePicture
+      ];
     } else {
       groupChatID = '${widget.peerID}-$id';
       members = [widget.peerID, id];
       membersName = [widget.peerName, UserRepository.mUser.name];
+      membersProfilePicture = [
+        widget.peerProfilePicture,
+        UserRepository.mUser.profilePictureURL
+      ];
     }
     isLoading = false;
     var documentReference =
@@ -65,12 +76,14 @@ class _ChatsPageState extends State<ChatsPage> {
         await transaction.update(documentReference, {
           'members': members,
           'names': membersName,
+          'membersProfilePicture': membersProfilePicture,
         });
       } catch (e) {
         await transaction.set(documentReference, {
           'lastMessage': 'asdfasdf',
           'members': members,
           'names': membersName,
+          'membersProfilePicture': membersProfilePicture,
         });
       }
     });

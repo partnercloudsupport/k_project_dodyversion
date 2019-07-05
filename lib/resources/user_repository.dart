@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/resources/services/services.dart';
+import 'package:k_project_dodyversion/ui/pages/pages.dart';
 
 import 'services/services.dart';
 
@@ -41,8 +42,25 @@ class UserRepository {
           ServiceModel.FIREBASE_OWNER_PROFILE_PICTURE_URL: um.profilePictureURL,
         });
       }
-      batchWrite.commit();
-      return;
+      Firestore.instance
+          .collection('chatrooms')
+          .where('members', arrayContains: um.uid)
+          .snapshots()
+          .listen((onData) {
+        for (DocumentSnapshot doc in onData.documents) {
+          List<dynamic> temp = doc.data['members'];
+
+          doc.data['names'][temp.indexOf(um.uid)] = um.name;
+          doc.data['profilePictureURLs'][temp.indexOf(um.uid)] =
+              um.profilePictureURL;
+          batchWrite.updateData(doc.reference, {
+            'names': doc.data['names'],
+            'profilePictureURLs': doc.data['profilePictureURLs'],
+          });
+        }
+        batchWrite.commit();
+        return;
+      });
     });
   }
 

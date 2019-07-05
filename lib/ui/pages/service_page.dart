@@ -118,8 +118,8 @@ class _ServicePageState extends State<ServicePage> {
 
   _startChatting() {
     var route = new MaterialPageRoute(
-      builder: (BuildContext context) =>
-          ChatsPage(widget._model.ownerID, widget._model.ownerName),
+      builder: (BuildContext context) => ChatsPage(widget._model.ownerID,
+          widget._model.ownerName, widget._model.ownerProfilePictureURL),
     );
     Navigator.of(context).push(route);
   }

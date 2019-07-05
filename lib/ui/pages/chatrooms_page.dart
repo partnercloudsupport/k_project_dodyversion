@@ -64,12 +64,16 @@ class _ChatroomsPageState extends State<ChatroomsPage> {
           builder: (BuildContext context) {
             if (document.data['members'][0] == UserRepository.mUser.uid) {
               return ChatsPage(
-                  document.data['members'][1], document.data['names'][1]);
+                  document.data['members'][1],
+                  document.data['names'][1],
+                  document.data['membersProfilePicture'][1]);
               // document.data['members'][1]);
             }
             // return ChatsPage(document.data['members'][0]);
             return ChatsPage(
-                document.data['members'][0], document.data['names'][0]);
+                document.data['members'][0],
+                document.data['names'][0],
+                document.data['membersProfilePicture'][0]);
           },
         );
         Navigator.of(context).push(route);
