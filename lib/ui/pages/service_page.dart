@@ -9,9 +9,9 @@ import 'package:k_project_dodyversion/utils/widget_utils.dart';
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class ServicePage extends StatefulWidget {
-  final ServiceModel model;
-  ServicePage(this.model, {Key key})
-      : assert(model != null),
+  final ServiceModel _model;
+  ServicePage(this._model, {Key key})
+      : assert(_model != null),
         super(key: key);
 
   _ServicePageState createState() => _ServicePageState();
@@ -25,64 +25,49 @@ class _ServicePageState extends State<ServicePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(widget.model.serviceName),
+        title: Text(widget._model.serviceName),
       ),
       body: getBody(),
-      // body: Container(
-      //   child: Center(
-      //     child: Column(children: <Widget>[
-      //       ...displayModelData(),
-      //       ...displayActionButtons(),
-      //       Text(widget.model.serviceID),
-      //     ]),
-      //   ),
-      // ),
     );
   }
 
   Widget getBody() {
+    List<Widget> items = WidgetUtils.mapListToWidgetList(
+        widget._model.mediaURLs, (index, img, length) {
+      if (length == 0) {
+        return Container(
+          child: Center(
+            child: Text("No picture"),
+          ),
+        );
+      }
+      return Container(
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          child: Image.network(
+            img,
+            fit: BoxFit.cover,
+            width: 1000,
+          ),
+        ),
+      );
+    });
+
+    items.add(Center(child: Text("ADD new")));
     return CustomScrollView(
       slivers: <Widget>[
         SliverList(
           delegate: SliverChildListDelegate([
             CarouselSlider(
-              viewportFraction: 0.9,
-              aspectRatio: 16 / 9,
-              autoPlay: (widget.model.mediaURLs.length == 0) ? false : true,
-              enlargeCenterPage: true,
-              pauseAutoPlayOnTouch: Duration(seconds: 3),
-              items: WidgetUtils.mapListToWidgetList(widget.model.mediaURLs,
-                  (index, img, length) {
-                if (length == 0) {
-                  return Container(
-                    child: Center(
-                      child: Text("No picture"),
-                    ),
-                  );
-                }
-                return Container(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    child: Image.network(
-                      img,
-                      fit: BoxFit.cover,
-                      width: 1000,
-                    ),
-                  ),
-                );
-              }),
+              viewportFraction: 1.0,
+              aspectRatio: 1 / 1,
+              // autoPlay: (widget._model.mediaURLs.length == 0) ? false : true,
+              // enlargeCenterPage: true,
+              // pauseAutoPlayOnTouch: Duration(seconds: 3),
+              items: items,
             ),
             ...displayModelData(),
             ...displayActionButtons(),
-            Container(
-              height: 100,
-              color: Colors.black,
-            ),
-            getOwner(),
-            Container(
-              height: 100,
-              color: Colors.black,
-            ),
           ]),
         ),
       ],
@@ -91,16 +76,20 @@ class _ServicePageState extends State<ServicePage> {
 
   Set<Widget> displayModelData() {
     return {
-      Text(widget.model.serviceName),
-      Text(widget.model.serviceID),
+      Text(widget._model.serviceName),
+      Text(widget._model.serviceID),
     };
   }
 
+  // Your own service should not have button
   Set<Widget> displayActionButtons() {
+    if (widget._model.isMyService) {
+      return {};
+    }
     return {
       RaisedButton(
         child: Text("Make Offer"),
-        onPressed: _makeOffer,
+        onPressed: (widget._model.isBoughtByMe) ? null : _makeOffer,
       ),
       RaisedButton(
         child: Text("Chat"),
@@ -112,9 +101,9 @@ class _ServicePageState extends State<ServicePage> {
   Widget getOwner() {
     return Container(
       child: Center(
-        child: (widget.model.ownerID == UserRepository.mUser.uid)
+        child: (widget._model.ownerID == UserRepository.mUser.uid)
             ? Text("This is your service")
-            : Text("The seller is ${widget.model.ownerName}"),
+            : Text("The seller is ${widget._model.ownerName}"),
       ),
     );
   }
@@ -122,15 +111,15 @@ class _ServicePageState extends State<ServicePage> {
   _startChatting() {
     var route = new MaterialPageRoute(
       builder: (BuildContext context) =>
-          ChatsPage(widget.model.ownerID, widget.model.ownerName),
+          ChatsPage(widget._model.ownerID, widget._model.ownerName),
     );
     Navigator.of(context).push(route);
   }
 
   _makeOffer() {
-    widget.model.customerIDs.add(UserRepository.mUser.uid);
-    print(widget.model.serviceName);
-    print(widget.model.ownerName);
-    print(widget.model.customerIDs);
+    widget._model.customerIDs.add(UserRepository.mUser.uid);
+    print(widget._model.serviceName);
+    print(widget._model.ownerName);
+    print(widget._model.customerIDs);
   }
 }

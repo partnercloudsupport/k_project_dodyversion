@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:k_project_dodyversion/resources/user_repository.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
 import 'package:k_project_dodyversion/utils/time_utils.dart';
 
@@ -31,8 +32,10 @@ class ServiceModel {
   int _lastUpdate;
   List<dynamic> _customerIDs;
 
-  void setFromMap(Map<String, dynamic> map) {
+  bool isMyService;
+  bool isBoughtByMe;
 
+  void setFromMap(Map<String, dynamic> map) {
     // This makes the mediaURLs a growable list.
     _mediaURLs = new List();
     if (map.containsKey(FIREBASE_MEDIA)) {
@@ -80,11 +83,15 @@ class ServiceModel {
     }
 
     _lastUpdate = TimeUtils.getCurrentTime();
+
+    // Check if this is my service;
+    isMyService = _ownerID == UserRepository.mUser.uid;
+    isBoughtByMe = _customerIDs.contains(UserRepository.mUser.uid);
   }
 
   ServiceModel(DocumentSnapshot docSnap) {
     if (docSnap == null) {
-      print("SM is made null");
+      // print("SM is made null");
 
       _mediaURLs = new List<String>();
       _serviceID = Constant.DEFAULT_STRING;
@@ -102,7 +109,6 @@ class ServiceModel {
       return;
     }
     setFromMap(docSnap.data);
-
     print("SM is made " + _serviceName);
   }
 
