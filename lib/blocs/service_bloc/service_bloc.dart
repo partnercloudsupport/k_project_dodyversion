@@ -38,6 +38,8 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       yield* mapLoadAllMyOrders(event.value);
     } else if (event is AddServiceMedia) {
       yield* mapAddServiceMedia(event.pictureData);
+    } else if (event is UpdateService) {
+      yield* mapUpdateServiceToState(event.serviceModel);
     }
     return;
   }
@@ -69,6 +71,14 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     yield AddingNewServiceState();
     try {
       await _serviceRepository.addService(serviceModel);
+      yield AddServiceSuccessful();
+    } catch (e) {}
+  }
+
+  Stream<ServiceState> mapUpdateServiceToState(serviceModel) async* {
+    yield AddingNewServiceState();
+    try {
+      await _serviceRepository.updateService(serviceModel);
       yield AddServiceSuccessful();
     } catch (e) {}
   }

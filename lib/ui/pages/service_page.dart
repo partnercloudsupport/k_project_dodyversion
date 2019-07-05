@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:k_project_dodyversion/blocs/bloc.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -19,6 +20,13 @@ class ServicePage extends StatefulWidget {
 
 class _ServicePageState extends State<ServicePage> {
   _ServicePageState();
+  ServiceBloc _serviceBloc;
+
+  @override
+  void initState() {
+    _serviceBloc = ServiceBloc();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +68,7 @@ class _ServicePageState extends State<ServicePage> {
               viewportFraction: 1.0,
               aspectRatio: 1 / 1,
               enableInfiniteScroll: false,
+
               // autoPlay: (widget._model.mediaURLs.length == 0) ? false : true,
               // enlargeCenterPage: true,
               // pauseAutoPlayOnTouch: Duration(seconds: 3),
@@ -116,7 +125,11 @@ class _ServicePageState extends State<ServicePage> {
   }
 
   _makeOffer() {
-    widget._model.customerIDs.add(UserRepository.mUser.uid);
+    setState(() {
+      widget._model.customerIDs.add(UserRepository.mUser.uid);
+      widget._model.isBoughtByMe = true;
+    });
+    _serviceBloc.dispatch(UpdateService(widget._model));
     print(widget._model.serviceName);
     print(widget._model.ownerName);
     print(widget._model.customerIDs);

@@ -80,3 +80,15 @@ class AddServiceMedia extends ServiceEvent {
     return ("Adding media into service");
   }
 }
+
+class UpdateService extends ServiceEvent {
+  final ServiceModel _serviceModel;
+
+  UpdateService(this._serviceModel) : super([_serviceModel]);
+
+  get serviceModel => _serviceModel;
+  @override
+  String toString() {
+    return "Update service from firestore";
+  }
+}
