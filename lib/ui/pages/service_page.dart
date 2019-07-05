@@ -52,8 +52,6 @@ class _ServicePageState extends State<ServicePage> {
         ),
       );
     });
-
-    items.add(Center(child: Text("ADD new")));
     return CustomScrollView(
       slivers: <Widget>[
         SliverList(
@@ -61,6 +59,7 @@ class _ServicePageState extends State<ServicePage> {
             CarouselSlider(
               viewportFraction: 1.0,
               aspectRatio: 1 / 1,
+              enableInfiniteScroll: false,
               // autoPlay: (widget._model.mediaURLs.length == 0) ? false : true,
               // enlargeCenterPage: true,
               // pauseAutoPlayOnTouch: Duration(seconds: 3),

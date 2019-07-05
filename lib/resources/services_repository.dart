@@ -17,7 +17,9 @@ class ServiceRepository {
     String docsID = await _firebase.pushDocumentWithRandomID(
         SERVICE_TAG, serviceModel.getMap());
     print(docsID);
-    serviceModel.addedTime = TimeUtils.getCurrentTime();
+    serviceModel.addedTime = (serviceModel.addedTime != 0)
+        ? serviceModel.addedTime
+        : TimeUtils.getCurrentTime();
     serviceModel.lastUpdate = TimeUtils.getCurrentTime();
     serviceModel.serviceID = docsID;
     serviceModel.ownerID = UserRepository.mUser.uid;

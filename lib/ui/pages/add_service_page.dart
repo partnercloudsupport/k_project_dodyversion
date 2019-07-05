@@ -24,13 +24,14 @@ class AddServicePage extends StatefulWidget {
 }
 
 class AddServicePageState extends State<AddServicePage> {
-  ServiceModel _serviceModel;
+  ServiceModel _model;
   ServiceBloc _serviceBloc;
 
+  bool enableUpload = true;
   @override
   void initState() {
     super.initState();
-    _serviceModel = ServiceModel(null);
+    _model = ServiceModel(null);
     _serviceBloc = ServiceBloc();
   }
 
@@ -52,6 +53,30 @@ class AddServicePageState extends State<AddServicePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> carouselItems =
+        WidgetUtils.mapListToWidgetList(_model.mediaURLs, (index, img, length) {
+      if (length == 0) {
+        return null;
+      }
+      return Container(
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          child: Image.network(
+            img,
+            fit: BoxFit.cover,
+            width: 1000,
+          ),
+        ),
+      );
+    });
+    if (carouselItems[0] == null) {
+      carouselItems[0] = Center(child: Text("Add new image!"));
+    } else if (carouselItems.length < 5) {
+      carouselItems.add(Center(child: Text("Add new image!")));
+    } else if (carouselItems.length >= 5) {
+      enableUpload = false;
+    }
+
     return BlocListener(
       bloc: _serviceBloc,
       listener: (BuildContext context, ServiceState state) {
@@ -63,7 +88,7 @@ class AddServicePageState extends State<AddServicePage> {
               "Profile is updating!", _scaffoldKey, NotificationTone.POSITIVE);
         } else if (state is AddingMediaSuccessful) {
           setState(() {
-            _serviceModel.mediaURLs.add(state.url);
+            _model.mediaURLs.add(state.url);
           });
           NotificationUtils.showMessage(
               "Image is uploaded successfully", _scaffoldKey);
@@ -86,31 +111,14 @@ class AddServicePageState extends State<AddServicePage> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               children: <Widget>[
                 CarouselSlider(
+                    viewportFraction: 1.0,
+                    aspectRatio: 1 / 1,
                     enableInfiniteScroll: false,
-                    autoPlay: true,
-                    items: WidgetUtils.mapListToWidgetList(
-                        _serviceModel.mediaURLs, (index, img, length) {
-                      if (length == 0) {
-                        return Container(
-                          child: Center(
-                            child: Text("No picture"),
-                          ),
-                        );
-                      }
-                      return Container(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                          child: Image.network(
-                            img,
-                            fit: BoxFit.cover,
-                            width: 1000,
-                          ),
-                        ),
-                      );
-                    })),
+                    // autoPlay: true,
+                    items: carouselItems),
                 RaisedButton(
                   child: Text("Upload Image"),
-                  onPressed: addImage,
+                  onPressed: (enableUpload) ? addImage : null,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -125,7 +133,7 @@ class AddServicePageState extends State<AddServicePage> {
                   validator: (val) => (val == null || val == "")
                       ? "Name cannot be empty"
                       : null,
-                  onSaved: (val) => {_serviceModel.serviceName = val},
+                  onSaved: (val) => {_model.serviceName = val},
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -140,7 +148,7 @@ class AddServicePageState extends State<AddServicePage> {
                       ? "Duration cannot be empty!"
                       : null,
                   onSaved: (duration) {
-                    _serviceModel.serviceDuration = int.parse(duration);
+                    _model.serviceDuration = int.parse(duration);
                   },
                 ),
                 TextFormField(
@@ -156,7 +164,7 @@ class AddServicePageState extends State<AddServicePage> {
                       ? "Price cannot be empty!"
                       : null,
                   onSaved: (price) {
-                    _serviceModel.price = double.parse(price);
+                    _model.price = double.parse(price);
                   },
                 ),
                 TextFormField(
@@ -170,7 +178,7 @@ class AddServicePageState extends State<AddServicePage> {
                   maxLength: 200,
                   inputFormatters: [LengthLimitingTextInputFormatter(200)],
                   onSaved: (desc) {
-                    _serviceModel.description = desc;
+                    _model.description = desc;
                   },
                 ),
                 Container(
@@ -199,7 +207,7 @@ class AddServicePageState extends State<AddServicePage> {
           NotificationTone.NEGATIVE);
     } else {
       form.save(); //This invokes each onSaved event
-      _serviceBloc.dispatch(AddServiceEvent(_serviceModel));
+      _serviceBloc.dispatch(AddServiceEvent(_model));
       print('Form save called,  Contact is now up to date...');
       print('========================================');
       print('Submitting to back end...');
