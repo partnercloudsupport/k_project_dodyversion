@@ -9,6 +9,8 @@ class ServiceModel {
   static const String FIREBASE_SNAME = "serviceName";
   static const String FIREBASE_ONAME = "ownerName";
   static const String FIREBASE_OID = "ownerID";
+  static const String FIREBASE_OWNER_PROFILE_PICTURE_URL =
+      "ownerProfilePictureURL";
   static const String FIREBASE_LOCATION = "location";
   static const String FIREBASE_DESC = "description";
   static const String FIREBASE_DURATION = "serviceDurationInMinutes";
@@ -23,6 +25,7 @@ class ServiceModel {
   String _serviceName;
   String _ownerName;
   String _ownerID;
+  String _ownerProfilePictureURL;
   String _location;
   String _description;
   int _serviceDurationInMinutes;
@@ -56,6 +59,10 @@ class ServiceModel {
     _ownerID = map.containsKey(FIREBASE_OID)
         ? map[FIREBASE_OID]
         : Constant.DEFAULT_STRING;
+    _ownerProfilePictureURL =
+        map.containsKey(FIREBASE_OWNER_PROFILE_PICTURE_URL)
+            ? map[FIREBASE_OWNER_PROFILE_PICTURE_URL]
+            : Constant.DEFAULT_STRING;
     _location = map.containsKey(FIREBASE_LOCATION)
         ? map[FIREBASE_LOCATION]
         : Constant.DEFAULT_STRING;
@@ -98,6 +105,7 @@ class ServiceModel {
       _serviceName = Constant.DEFAULT_STRING;
       _ownerName = Constant.DEFAULT_STRING;
       _ownerID = Constant.DEFAULT_STRING;
+      _ownerProfilePictureURL = Constant.DEFAULT_STRING;
       _location = Constant.DEFAULT_STRING;
       _description = Constant.DEFAULT_STRING;
       _serviceDurationInMinutes = Constant.DEFAULT_INT;
@@ -127,6 +135,7 @@ class ServiceModel {
       FIREBASE_ATIME: _addedTime,
       FIREBASE_CUSTOMERIDS: _customerIDs,
       FIREBASE_LASTUPDATETIME: _lastUpdate,
+      FIREBASE_OWNER_PROFILE_PICTURE_URL: _ownerProfilePictureURL,
     };
   }
 
@@ -159,6 +168,11 @@ class ServiceModel {
   String get ownerID => _ownerID;
   set ownerID(var value) {
     _ownerID = value;
+  }
+
+  String get ownerProfilePictureURL => _ownerProfilePictureURL;
+  set ownerProfilePictureURL(var value) {
+    _ownerProfilePictureURL = value;
   }
 
   String get description => _description;
