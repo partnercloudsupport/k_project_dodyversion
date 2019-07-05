@@ -24,9 +24,26 @@ class UserRepository {
     return _pullUserProfileFromCloud(uid);
   }
 
-  void updateCurrentUser(UserModel um) {
+  Future<void> updateCurrentUser(UserModel um) async {
     UserRepository.mUser = um;
-    _firestoreService.pushDocument('users', um.uid, um.getMap());
+    WriteBatch batchWrite = Firestore.instance.batch();
+
+    batchWrite.updateData(
+        Firestore.instance.collection('users').document(um.uid), um.getMap());
+    Firestore.instance
+        .collection('services')
+        .where(ServiceModel.FIREBASE_OID, isEqualTo: um.uid)
+        .snapshots()
+        .listen((onData) {
+      for (DocumentSnapshot doc in onData.documents) {
+        batchWrite.updateData(doc.reference, {
+          ServiceModel.FIREBASE_ONAME: um.name,
+          ServiceModel.FIREBASE_OWNER_PROFILE_PICTURE_URL: um.profilePictureURL,
+        });
+      }
+      batchWrite.commit();
+      return;
+    });
   }
 
   String getCurrentUserName() {
