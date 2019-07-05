@@ -86,6 +86,9 @@ class _ServicePageState extends State<ServicePage> {
     return {
       Text(widget._model.serviceName),
       Text(widget._model.serviceID),
+      Text(widget._model.description),
+      Text("Per session duration is ${widget._model.serviceDuration} minute"),
+      Text("Cost per session is ${widget._model.price} SGD")
     };
   }
 
