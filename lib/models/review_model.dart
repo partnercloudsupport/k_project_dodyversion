@@ -63,7 +63,7 @@ class ReviewModel {
 
   List<ReviewChild> reviewChilds;
 
-  Review(Map<String, dynamic> map) {
+  ReviewModel(Map<String, dynamic> map) {
     setFromMap(map);
   }
 

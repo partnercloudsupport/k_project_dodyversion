@@ -187,6 +187,7 @@ class _UserProfilePageState extends State<UserProfilePage>
     } else {
       return Text("null");
     }
+    return null;
   }
 
   Widget myServicesSliver(ServiceState state) {
@@ -210,6 +211,7 @@ class _UserProfilePageState extends State<UserProfilePage>
         }),
       );
     }
+    return null;
   }
 
   Widget bioCard(UserLoadedSuccessfully state) {

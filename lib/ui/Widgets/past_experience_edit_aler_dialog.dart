@@ -16,8 +16,8 @@ class PastExperienceAlertDialog extends StatefulWidget {
   PastExperienceAlertDialog(this._userBloc, this.type, this.um, {Key key})
       : super(key: key);
 
-  UserModel um;
-  PastExperienceType type;
+  final UserModel um;
+  final PastExperienceType type;
 
   final UserBloc _userBloc;
   _PastExperienceAlertDialogState createState() =>
@@ -25,9 +25,9 @@ class PastExperienceAlertDialog extends StatefulWidget {
 }
 
 class _PastExperienceAlertDialogState extends State<PastExperienceAlertDialog> {
-  @override
   List<String> data = new List<String>(3);
 
+  @override
   Widget build(BuildContext context) {
     data[0] = (data[0] == null) ? "asd" : data[0];
     return BlocListener(
