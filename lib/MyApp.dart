@@ -4,9 +4,6 @@ import 'package:k_project_dodyversion/ui/themes/theme.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-
-  bool isLoggedIn = false;
-
   MyApp({Key key}) : super(key: key);
 
   @override
@@ -15,11 +12,9 @@ class MyApp extends StatelessWidget {
       title:
           'Flutter Code Sample for services.SystemChrome.setSystemUIOverlayStyle',
       theme: KProjectTheme.getTheme(context),
-      home: defaultHomePage(),
+      home: LogInPage(),
     );
   }
-
-  Widget defaultHomePage() => isLoggedIn ? HomePage() : LogInPage();
 
   kRoute() {
     return {

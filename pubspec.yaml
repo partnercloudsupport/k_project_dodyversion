@@ -50,11 +50,11 @@ dependencies:
   #A nicer bottom navbar
   fancy_bottom_navigation: ^0.3.2 ##import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
   
+  #Image Processor
+  image: ^2.1.4 ## https://pub.dev/packages/image#-readme-tab-
+
   #To pick image from the gallery
   image_picker: ^0.6.0+8 ##import 'package:image_picker/image_picker.dart';
-
-  #Search page
-  material_search: ^0.2.8 ##import 'package:material_search/material_search.dart';
 
   #carousell slider
   carousel_slider: ^1.3.0 ## https://pub.dev/packages/carousel_slider#-installing-tab-
