@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -44,14 +44,14 @@ class UserRepository {
   }
 
   Future<Stream<StorageTaskEvent>> updateProfilePicture(
-      File pictureFile) async {
-    return _firebaseStorageService.uploadFile(pictureFile,
+      Uint8List pictureData) async {
+    return _firebaseStorageService.uploadFile(pictureData,
         UserRepository.mUser.uid, FirebaseStorageType.PROFILEPICTURE);
   }
 
   Future<Stream<StorageTaskEvent>> updatePastExperiencePicture(
-      File pictureFile) async {
-    return _firebaseStorageService.uploadFile(pictureFile,
+      Uint8List pictureData) async {
+    return _firebaseStorageService.uploadFile(pictureData,
         UserRepository.mUser.uid, FirebaseStorageType.PROFILEPICTURE);
   }
 }

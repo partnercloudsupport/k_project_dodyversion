@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image/image.dart' as Img;
 import 'package:image_picker/image_picker.dart';
 import 'package:k_project_dodyversion/blocs/bloc.dart';
 import 'package:k_project_dodyversion/models/models.dart';
@@ -59,13 +61,18 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
 
   Future getImage() async {
     File tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    Uint8List data = Img.encodeJpg(
+        Img.copyResize(Img.decodeImage(tempImage.readAsBytesSync()),
+            height: 720),
+        quality: 80);
+
     if (tempImage == null) {
       NotificationUtils.showMessage(
           "Uploading image cancelled", _scaffoldKey, NotificationTone.NEGATIVE);
       return;
     }
     print(tempImage.toString());
-    _userBloc.dispatch(new UpdateProfilePictureEvent(tempImage));
+    _userBloc.dispatch(new UpdateProfilePictureEvent(data));
   }
 
   @override

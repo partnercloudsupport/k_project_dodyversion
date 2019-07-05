@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 import 'package:k_project_dodyversion/models/models.dart';
@@ -37,8 +38,8 @@ class UpdateUserEvent extends UserEvent {
 }
 
 class UpdateProfilePictureEvent extends UserEvent {
-  final File pictureFile;
-  UpdateProfilePictureEvent(this.pictureFile) : super([pictureFile]);
+  final Uint8List pictureData;
+  UpdateProfilePictureEvent(this.pictureData) : super([pictureData]);
 
   @override
   String toString() {

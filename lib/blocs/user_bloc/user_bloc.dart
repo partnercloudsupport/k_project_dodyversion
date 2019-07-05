@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -25,9 +25,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } else if (event is UpdateUserEvent) {
       yield* mapUpdateUserEvent(event.userModel);
     } else if (event is UpdateProfilePictureEvent) {
-      yield* mapUpdateProfilePictureEvent(event.pictureFile);
+      yield* mapUpdateProfilePictureEvent(event.pictureData);
     } else if (event is UpdatePastExperiencePictureEvent) {
-      yield* mapUpdateProfilePictureEvent(event.pictureFile);
+      // yield* mapUpdateProfilePictureEvent(event.pictureData);
     }
   }
 
@@ -55,11 +55,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     dispatch(LoadUserEvent(true, ""));
   }
 
-  Stream<UserState> mapUpdateProfilePictureEvent(File pictureFile) async* {
+  Stream<UserState> mapUpdateProfilePictureEvent(Uint8List pictureData) async* {
     try {
       yield UpdatingProfilePicture();
       Stream<StorageTaskEvent> eventStream =
-          await _userRepository.updateProfilePicture(pictureFile);
+          await _userRepository.updateProfilePicture(pictureData);
       await for (StorageTaskEvent event in eventStream) {
         print("${event.snapshot.bytesTransferred} + bytes transferrrrred");
         if (event.type == StorageTaskEventType.success) {
@@ -73,11 +73,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  Stream<UserState> mapUpdatePastExperiencesEvent(File pictureFile) async* {
+  Stream<UserState> mapUpdatePastExperiencesEvent(
+      Uint8List pictureData) async* {
     try {
       yield UpdatingPastExperiencesPicture();
       Stream<StorageTaskEvent> eventStream =
-          await _userRepository.updatePastExperiencePicture(pictureFile);
+          await _userRepository.updatePastExperiencePicture(pictureData);
       await for (StorageTaskEvent event in eventStream) {
         print("${event.snapshot.bytesTransferred} + bytes transferrrrred");
         if (event.type == StorageTaskEventType.success) {

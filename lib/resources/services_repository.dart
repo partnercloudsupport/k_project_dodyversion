@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:k_project_dodyversion/models/models.dart';
@@ -36,8 +36,9 @@ class ServiceRepository {
     await _firebase.deleteDocument(_SERVICE_TAG, serviceModel.serviceID);
   }
 
-  Future<Stream<StorageTaskEvent>> uploadMediaFile(File pictureFile) async {
-    return _firebaseStorageService.uploadFile(pictureFile,
+  Future<Stream<StorageTaskEvent>> uploadMediaFile(
+      Uint8List pictureData) async {
+    return _firebaseStorageService.uploadFile(pictureData,
         StringUtils.randomString(), FirebaseStorageType.SERVICEMEDIA);
   }
 }

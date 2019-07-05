@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -37,7 +38,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     } else if (event is LoadAllMyOrders) {
       yield* mapLoadAllMyOrders(event.value);
     } else if (event is AddServiceMedia) {
-      yield* mapAddServiceMedia(event.pictureFile);
+      yield* mapAddServiceMedia(event.pictureData);
     }
     return;
   }
@@ -124,11 +125,11 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     }
   }
 
-  Stream<ServiceState> mapAddServiceMedia(File pictureFile) async* {
+  Stream<ServiceState> mapAddServiceMedia(Uint8List pictureData) async* {
     try {
       yield AddingMedia();
       Stream<StorageTaskEvent> eventStream =
-          await _serviceRepository.uploadMediaFile(pictureFile);
+          await _serviceRepository.uploadMediaFile(pictureData);
       await for (StorageTaskEvent event in eventStream) {
         print("${event.snapshot.bytesTransferred} + bytes transferrrrred");
         if (event.type == StorageTaskEventType.success) {

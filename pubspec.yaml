@@ -50,6 +50,9 @@ dependencies:
   #A nicer bottom navbar
   fancy_bottom_navigation: ^0.3.2 ##import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
   
+  #Image Processor
+  image: ^2.1.4 ## https://pub.dev/packages/image#-readme-tab-
+
   #To pick image from the gallery
   image_picker: ^0.6.0+8 ##import 'package:image_picker/image_picker.dart';
 

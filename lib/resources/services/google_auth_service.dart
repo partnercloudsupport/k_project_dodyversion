@@ -15,7 +15,7 @@ class GoogleAuthService {
     ],
   );
 
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  // static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   static GoogleSignInAuthentication googleAuth;
 
