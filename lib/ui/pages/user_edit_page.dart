@@ -26,7 +26,7 @@ class EditUserProfilePage extends StatefulWidget {
 class _EditUserProfilePageState extends State<EditUserProfilePage> {
   final TextEditingController _controller = new TextEditingController();
   UserModel _userModel;
-  var _userBloc;
+  UserBloc _userBloc;
 
   @override
   void initState() {
