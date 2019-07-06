@@ -47,10 +47,9 @@ class UpdateProfilePictureEvent extends UserEvent {
   }
 }
 
-
 class UpdatePastExperiencePictureEvent extends UserEvent {
-  final File pictureFile;
-  UpdatePastExperiencePictureEvent(this.pictureFile) : super([pictureFile]);
+  final Uint8List pictureData;
+  UpdatePastExperiencePictureEvent(this.pictureData) : super([pictureData]);
 
   @override
   String toString() {

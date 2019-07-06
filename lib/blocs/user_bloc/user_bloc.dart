@@ -27,7 +27,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } else if (event is UpdateProfilePictureEvent) {
       yield* mapUpdateProfilePictureEvent(event.pictureData);
     } else if (event is UpdatePastExperiencePictureEvent) {
-      // yield* mapUpdateProfilePictureEvent(event.pictureData);
+      yield* mapUpdateProfilePictureEvent(event.pictureData);
     }
   }
 

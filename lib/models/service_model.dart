@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:k_project_dodyversion/models/review_model.dart';
 import 'package:k_project_dodyversion/resources/user_repository.dart';
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
 import 'package:k_project_dodyversion/utils/time_utils.dart';
 
 class ServiceModel {
+  static const int LATEST_REVIEW_LIMIT = 5;
+
   static const String FIREBASE_MEDIA = "serviceMediaList";
   static const String FIREBASE_SID = "serviceID";
   static const String FIREBASE_SNAME = "serviceName";
@@ -15,10 +18,12 @@ class ServiceModel {
   static const String FIREBASE_DESC = "description";
   static const String FIREBASE_DURATION = "serviceDurationInMinutes";
   static const String FIREBASE_PRICE = "price";
-  static const String FIREBASE_RID = "reviewID";
   static const String FIREBASE_ATIME = "addedTime";
   static const String FIREBASE_LASTUPDATETIME = "lastUpdate";
   static const String FIREBASE_CUSTOMERIDS = "customerIDs";
+  static const String FIREBASE_LATEST_REVIEWS = "latestReviews";
+  static const String FIREBASE_RATING = "rating";
+  static const String FIREBASE_RATING_COUNT = "ratingCount";
 
   List<dynamic> _mediaURLs;
   String _serviceID;
@@ -30,10 +35,14 @@ class ServiceModel {
   String _description;
   int _serviceDurationInMinutes;
   double _price;
-  String _reviewID;
   int _addedTime;
   int _lastUpdate;
   List<dynamic> _customerIDs;
+  List<dynamic> _latestReviews;
+  double _rating;
+  int _ratingCount;
+
+  /// 5 latest reviews in a form of ReviewModel
 
   bool isMyService;
   bool isBoughtByMe;
@@ -75,20 +84,24 @@ class ServiceModel {
     _price = map.containsKey(FIREBASE_PRICE)
         ? map[FIREBASE_PRICE]
         : Constant.DEFAULT_DOUBLE;
-    _reviewID = map.containsKey(FIREBASE_RID)
-        ? map[FIREBASE_RID]
-        : Constant.DEFAULT_STRING;
-
     _addedTime = map.containsKey(FIREBASE_ATIME)
         ? map[FIREBASE_ATIME]
         : TimeUtils.getCurrentTime();
-
-    // This makes the customerIDs a growable list.
+    _rating = map.containsKey(FIREBASE_RATING)
+        ? map[FIREBASE_RATING]
+        : Constant.DEFAULT_DOUBLE;
+    _ratingCount = map.containsKey(FIREBASE_RATING_COUNT)
+        ? map[FIREBASE_RATING_COUNT]
+        : Constant.DEFAULT_INT;
+    // This makes the customerIDs & latestReviewss a growable list.
     _customerIDs = new List();
     if (map.containsKey(FIREBASE_CUSTOMERIDS)) {
       _customerIDs.addAll(map[FIREBASE_CUSTOMERIDS]);
     }
-
+    _latestReviews = new List();
+    if (map.containsKey(FIREBASE_LATEST_REVIEWS)) {
+      _latestReviews.addAll(map[FIREBASE_LATEST_REVIEWS]);
+    }
     _lastUpdate = TimeUtils.getCurrentTime();
 
     // Check if this is my service;
@@ -110,10 +123,12 @@ class ServiceModel {
       _description = Constant.DEFAULT_STRING;
       _serviceDurationInMinutes = Constant.DEFAULT_INT;
       _price = Constant.DEFAULT_DOUBLE;
-      _reviewID = Constant.DEFAULT_STRING;
+      _latestReviews = new List<String>();
       _addedTime = TimeUtils.getCurrentTime();
       _customerIDs = new List<String>();
       _lastUpdate = TimeUtils.getCurrentTime();
+      _rating = Constant.DEFAULT_DOUBLE;
+      _ratingCount = Constant.DEFAULT_INT;
       return;
     }
     setFromMap(docSnap.data);
@@ -131,12 +146,25 @@ class ServiceModel {
       FIREBASE_DESC: _description,
       FIREBASE_DURATION: _serviceDurationInMinutes,
       FIREBASE_PRICE: _price,
-      FIREBASE_RID: _reviewID,
+      FIREBASE_LATEST_REVIEWS: _latestReviews,
       FIREBASE_ATIME: _addedTime,
       FIREBASE_CUSTOMERIDS: _customerIDs,
       FIREBASE_LASTUPDATETIME: _lastUpdate,
       FIREBASE_OWNER_PROFILE_PICTURE_URL: _ownerProfilePictureURL,
+      FIREBASE_RATING: _rating,
+      FIREBASE_RATING_COUNT: _ratingCount,
     };
+  }
+
+  void addReview(ReviewModel rModel) {
+    _rating = (rModel.rating + _rating * _ratingCount * 0) / (_ratingCount + 1);
+    ++_ratingCount;
+    if (_latestReviews.length < LATEST_REVIEW_LIMIT) {
+      _latestReviews.add(rModel.getMap());
+    } else if (_latestReviews.length == LATEST_REVIEW_LIMIT) {
+      _latestReviews.removeAt(0);
+      _latestReviews.add(rModel.getMap());
+    }
   }
 
   List<String> get mediaURLs => _mediaURLs.cast<String>();
@@ -152,7 +180,7 @@ class ServiceModel {
   String get serviceID => _serviceID;
   set serviceID(var value) {
     _serviceID = value;
-    _reviewID = value;
+    _latestReviews = value;
   }
 
   String get serviceName => _serviceName;
@@ -190,8 +218,6 @@ class ServiceModel {
     _price = value;
   }
 
-  String get reviewID => _reviewID;
-
   int get addedTime => _addedTime;
   set addedTime(var value) {
     _addedTime = value;
@@ -201,4 +227,11 @@ class ServiceModel {
   set lastUpdate(var value) {
     _lastUpdate = value;
   }
+
+  List<String> get latestReviews => _latestReviews;
+  set latestReviews(var val) {
+    _latestReviews = val;
+  }
+
+  double get rating => _rating;
 }

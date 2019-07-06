@@ -62,7 +62,7 @@ class FirebaseRepository {
   ///pull all the reivews of a user.
   Future<Stream<QuerySnapshot>> pullUserReview(String uid) async {
     return _firebase.pullSnapshotsWithQuery(
-        "reviews", ReviewModel.FIREBASE_OID, uid, Condition.IS_EQUAL_TO);
+        "reviews", ReviewModel.FIREBASE_SOID, uid, Condition.IS_EQUAL_TO);
   }
 
   String get uid => FirestoreService.uid;

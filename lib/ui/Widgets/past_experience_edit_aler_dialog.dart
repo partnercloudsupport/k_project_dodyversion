@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as Img;
 import 'package:k_project_dodyversion/blocs/user_bloc/user_bloc.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/utils/utils.dart';
@@ -29,7 +31,7 @@ class _PastExperienceAlertDialogState extends State<PastExperienceAlertDialog> {
 
   @override
   Widget build(BuildContext context) {
-    data[0] = (data[0] == null) ? "asd" : data[0];
+    data[0] = (data[0] == null) ? "" : data[0];
     return BlocListener(
       bloc: widget._userBloc,
       listener: (BuildContext context, UserState state) {
@@ -148,9 +150,13 @@ class _PastExperienceAlertDialogState extends State<PastExperienceAlertDialog> {
 
   Future getImage() async {
     File tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    Uint8List data = Img.encodeJpg(
+        Img.copyResize(Img.decodeImage(tempImage.readAsBytesSync()),
+            height: 720),
+        quality: 80);
 
     print(tempImage.toString());
-    widget._userBloc.dispatch(new UpdatePastExperiencePictureEvent(tempImage));
+    widget._userBloc.dispatch(new UpdatePastExperiencePictureEvent(data));
   }
 
   @override
