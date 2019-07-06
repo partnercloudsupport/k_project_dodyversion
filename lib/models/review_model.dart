@@ -1,4 +1,5 @@
 import 'package:k_project_dodyversion/utils/constant_utils.dart';
+import 'package:k_project_dodyversion/utils/utils.dart';
 
 /// Each review geos here
 
@@ -30,11 +31,26 @@ class ReviewModel {
   String _reviewerID;
   String _reviewerName;
   String _review;
-  int _rating;
+  double _rating;
   int _addedTime;
 
   ReviewModel(Map<String, dynamic> map) {
-    setFromMap(map);
+    if (map == null) {
+      _serviceID = Constant.DEFAULT_STRING;
+      _serviceName = Constant.DEFAULT_STRING;
+      _serviceOwnerName = Constant.DEFAULT_STRING;
+      _serviceOwnerID = Constant.DEFAULT_STRING;
+      _serviceOwnerProfilePictureURL = Constant.DEFAULT_STRING;
+      _reviewID = Constant.DEFAULT_STRING;
+      _reviewerProfilePictureURL = Constant.DEFAULT_STRING;
+      _reviewerID = Constant.DEFAULT_STRING;
+      _reviewerName = Constant.DEFAULT_STRING;
+      _review = Constant.DEFAULT_STRING;
+      _rating = Constant.DEFAULT_DOUBLE;
+      _addedTime = TimeUtils.getCurrentTime();
+    } else {
+      setFromMap(map);
+    }
   }
 
   void setFromMap(Map<String, dynamic> map) {
@@ -115,7 +131,7 @@ class ReviewModel {
     _review = value;
   }
 
-  int get rating => _rating;
+  double get rating => _rating;
   set rating(value) {
     _rating = value;
   }

@@ -1,6 +1,6 @@
 class Constant {
-  static const int DEFAULT_INT = -1;
-  static const double DEFAULT_DOUBLE = -1.0;
+  static const int DEFAULT_INT = 0;
+  static const double DEFAULT_DOUBLE = 0.0;
   static const String DEFAULT_STRING = "";
   static const String NULL_STRING = "NA";
 

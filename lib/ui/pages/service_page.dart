@@ -92,7 +92,12 @@ class _ServicePageState extends State<ServicePage> {
   // Your own service should not have button
   Set<Widget> displayActionButtons() {
     if (widget._model.isMyService) {
-      return {};
+      return {
+        RaisedButton(
+          child: Text("Give Review"),
+          onPressed: _addReview,
+        ),
+      };
     }
     return {
       RaisedButton(
@@ -104,6 +109,20 @@ class _ServicePageState extends State<ServicePage> {
         onPressed: _startChatting,
       )
     };
+  }
+
+  void _addReview() {
+    ReviewModel rModel = new ReviewModel(null);
+    rModel.reviewerID = UserRepository.mUser.uid;
+    rModel.reviewerName = UserRepository.mUser.name;
+    rModel.reviewerProfilePictureURL = UserRepository.mUser.profilePictureURL;
+    rModel.review = "Test Review #1";
+    rModel.serviceID = widget._model.serviceID;
+    rModel.serviceName = widget._model.serviceName;
+    rModel.rating = 3.0;
+
+    ServiceRepository sRep = new ServiceRepository();
+    sRep.addReview(widget._model, rModel);
   }
 
   Widget getOwner() {

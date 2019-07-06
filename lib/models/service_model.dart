@@ -157,7 +157,11 @@ class ServiceModel {
   }
 
   void addReview(ReviewModel rModel) {
-    _rating = (rModel.rating + _rating * _ratingCount * 0) / (_ratingCount + 1);
+    if (_rating.isNaN) {
+      _rating = 0;
+    }
+    _rating = (rModel.rating + _rating * _ratingCount) / (_ratingCount + 1);
+    print("Current Rating ${_rating}");
     ++_ratingCount;
     if (_latestReviews.length < LATEST_REVIEW_LIMIT) {
       _latestReviews.add(rModel.getMap());
