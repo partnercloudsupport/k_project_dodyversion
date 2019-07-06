@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:k_project_dodyversion/models/models.dart';
 import 'package:k_project_dodyversion/resources/services/services.dart';
-import 'package:k_project_dodyversion/ui/pages/pages.dart';
 
 import 'services/services.dart';
 
@@ -48,14 +47,12 @@ class UserRepository {
           .snapshots()
           .listen((onData) {
         for (DocumentSnapshot doc in onData.documents) {
-          List<dynamic> temp = doc.data['members'];
-
-          doc.data['names'][temp.indexOf(um.uid)] = um.name;
-          doc.data['profilePictureURLs'][temp.indexOf(um.uid)] =
-              um.profilePictureURL;
+          doc.data['names'][doc.data['members'].indexOf(um.uid)] = um.name;
+          doc.data['membersProfilePicture']
+              [doc.data['members'].indexOf(um.uid)] = um.profilePictureURL;
           batchWrite.updateData(doc.reference, {
             'names': doc.data['names'],
-            'profilePictureURLs': doc.data['profilePictureURLs'],
+            'membersProfilePicture': doc.data['membersProfilePicture'],
           });
         }
         batchWrite.commit();

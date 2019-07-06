@@ -67,23 +67,39 @@ class _ChatsPageState extends State<ChatsPage> {
         UserRepository.mUser.profilePictureURL
       ];
     }
-    isLoading = false;
-    var documentReference =
-        Firestore.instance.collection('chatrooms').document(groupChatID);
-    Firestore.instance.runTransaction((transaction) async {
-      // Update the last message for quick retrival
-      try {
-        await transaction.update(documentReference, {
+    isLoading = true;
+
+    Firestore.instance
+        .collection('chatrooms')
+        .document(groupChatID)
+        .get()
+        .then((snapshot) {
+      if (snapshot.exists) {
+        Firestore.instance
+            .collection('chatrooms')
+            .document(groupChatID)
+            .updateData({
           'members': members,
           'names': membersName,
           'membersProfilePicture': membersProfilePicture,
+        }).then((onValue) {
+          setState(() {
+            isLoading = false;
+          });
         });
-      } catch (e) {
-        await transaction.set(documentReference, {
+      } else {
+        Firestore.instance
+            .collection('chatrooms')
+            .document(groupChatID)
+            .setData({
           'lastMessage': 'asdfasdf',
           'members': members,
           'names': membersName,
           'membersProfilePicture': membersProfilePicture,
+        }).then((onValue) {
+          setState(() {
+            isLoading = false;
+          });
         });
       }
     });
@@ -217,16 +233,15 @@ class _ChatsPageState extends State<ChatsPage> {
 
   Widget buildLoading() {
     return Positioned(
-      // child: isLoading
-      //     ? Container(
-      //         child: Center(
-      //           child: CircularProgressIndicator(
-      //               valueColor: AlwaysStoppedAnimation<Color>(themeColor)),
-      //         ),
-      //         color: Colors.white.withOpacity(0.8),
-      //       )
-      //     :
-      child: Container(),
+      child: isLoading
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(themeColor)),
+              ),
+              color: Colors.white.withOpacity(0.8),
+            )
+          : Container(),
     );
   }
 
