@@ -10,6 +10,7 @@ class ReviewModel {
   static const String FIREBASE_SOWNER_PROFILE_PICTURE_URL =
       "serviceOwnerProfilePictureURL";
 
+  static const String FIREBASE_ID = "reviewID";
   static const String FIREBASE_RID = "reviewerID";
   static const String FIREBASE_RNAME = "reviewerName";
   static const String FIREBASE_REVIEWER_PROFILE_PICTURE_URL =
@@ -24,6 +25,7 @@ class ReviewModel {
   String _serviceOwnerID;
   String _serviceOwnerProfilePictureURL;
 
+  String _reviewID;
   String _reviewerProfilePictureURL;
   String _reviewerID;
   String _reviewerName;
@@ -38,6 +40,9 @@ class ReviewModel {
   void setFromMap(Map<String, dynamic> map) {
     _reviewerID = map.containsKey(FIREBASE_RID)
         ? map[FIREBASE_RID]
+        : Constant.DEFAULT_STRING;
+    _reviewID = map.containsKey(FIREBASE_ID)
+        ? map[FIREBASE_ID]
         : Constant.DEFAULT_STRING;
     _reviewerName = map.containsKey(FIREBASE_RNAME)
         ? map[FIREBASE_RNAME]
@@ -81,6 +86,7 @@ class ReviewModel {
       FIREBASE_SOID: _serviceOwnerID,
       FIREBASE_SOWNER_PROFILE_PICTURE_URL: _serviceOwnerProfilePictureURL,
       FIREBASE_RID: _reviewerID,
+      FIREBASE_ID: _reviewID,
       FIREBASE_RNAME: _reviewerName,
       FIREBASE_REVIEWER_PROFILE_PICTURE_URL: _reviewerProfilePictureURL,
       FIREBASE_REVIEW: _review,
@@ -92,6 +98,11 @@ class ReviewModel {
   String get reviewerID => _reviewerID;
   set reviewerID(value) {
     _reviewerID = value;
+  }
+
+  String get reviewID => _reviewID;
+  set reviewID(value) {
+    _reviewID = value;
   }
 
   String get reviewerName => _reviewerName;

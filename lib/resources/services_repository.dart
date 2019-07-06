@@ -46,16 +46,22 @@ class ServiceRepository {
 
   void addReview(ServiceModel serviceModel, ReviewModel reviewModel) async {
     WriteBatch batchWrite = Firestore.instance.batch();
+
+    DocumentReference tempReviewDR =
+        Firestore.instance.collection(REVIEW_TAG).document();
+    reviewModel.reviewID = tempReviewDR.documentID;
+
     serviceModel.addReview(reviewModel);
     batchWrite.setData(
         Firestore.instance
             .collection(SERVICE_TAG)
             .document(serviceModel.serviceID),
         serviceModel.getMap());
-
-    batchWrite.setData(Firestore.instance.collection(REVIEW_TAG).document(),
+    batchWrite.setData(
+        Firestore.instance
+            .collection(REVIEW_TAG)
+            .document(reviewModel.reviewID),
         reviewModel.getMap());
-
     batchWrite.commit();
   }
 }
